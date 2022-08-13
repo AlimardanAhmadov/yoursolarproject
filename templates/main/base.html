@@ -1,0 +1,480 @@
+{% load static %}
+{% load countries %}
+{% get_countries as countries %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Inline+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+
+	<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+</head>
+<body>
+<header>
+	<div class="container">
+		<nav class="navbar">
+			<a href="/" class="brand" id="main-logo">
+                <!--<img src="https://assets.website-files.com/5c6c5d537c647f619adce5fc/5c6cd9d0d51c7732ac8771ac_space%20posters%20logo%20WHITE.png" width="170" alt="" class="nav-image">-->
+                <span style="color: #fff;">LOGO</span>
+			</a>
+			<div class="burger" id="burger">
+				<span class="burger-line"></span>
+				<span class="burger-line"></span>
+				<span class="burger-line"></span>
+			</div>
+			<span class="overlay"></span>
+			<div class="menu" id="menu">
+				<ul class="menu-inner">
+					<!--<li class="menu-item brand-item"><a href="/" class="brand"><img loading="lazy" src="https://d3apclsnivitb5.cloudfront.net/static/img/logo.png" alt="LOGO"></a></li>-->
+					<li class="menu-item">
+                        <a href="#" target="_blank" class="menu-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
+                                <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+                            </svg>
+                        </a>
+                    </li>
+					<li class="menu-item">
+                        <a href="#" target="_blank" class="menu-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
+                                <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
+                            </svg>
+                        </a>
+                    </li>
+					<li class="menu-item">
+                        <a href="#" target="_blank" class="menu-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-tiktok" viewBox="0 0 16 16">
+                                <path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3V0Z"/>
+                            </svg>
+                        </a>
+                    </li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+</header>
+<div class="banner-section">
+    <div class="container">
+        <div class="banner-left">
+            <div class="slogan-text">
+                slogan - tbc
+            </div>
+            <div class="seperator-wrapper">
+                <div class="wrapper-block"></div>
+                <div class="wrapper-block"></div>
+            </div>
+            <div class="banner-paragpraph">
+                <h1>
+                    the website's slogan here
+                </h1>
+                <a href="#" class="btn button-light"> <span class="small">Get Quote</span></a>
+            </div>
+        </div>
+        <div class="banner-right">
+            <!--<div class="animated-circle">
+                <div class="circle"></div>
+            </div>
+            <div class="secondory-animated-circle">
+                <div class="circle"></div>
+                <div class="small-circle"></div>
+            </div>-->
+            <div class="fmc-bg-container">
+                <div class="img-layout"></div>
+                <div class="fmc-layout">
+                    <!-- Circle-->
+                    <div class="fmc-circle"></div>
+                    <div class="fmc-circle"></div>
+                    <div class="fmc-circle"></div>
+                    <div class="fmc-circle"></div>
+                    <div class="fmc-circle"></div>
+                    <div class="fmc-circle"></div>
+                    <div class="fmc-circle"></div>
+                    <div class="fmc-circle"></div>
+                    <div class="fmc-circle"></div>
+                    <div class="fmc-circle"></div>
+                    <div class="fmc-circle"></div>
+                    <!-- End Circle-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<div class="container pages">
+    <a class="page-item card" href="">
+        <span class="page-title">Quote Builder</span>
+    </a>
+    <a class="page-item card" href="">
+        <span class="page-title">E-Shop</span>
+    </a>
+    <a class="page-item card" href=""> 
+        <span class="page-title">how to videos</span>
+    </a>
+    <a class="page-item card" href="">
+        <span class="page-title">the science</span>
+    </a>
+</div>
+
+<div class="special-offers">
+    <section id="rotating-section">
+        <div id="rotating-animation">
+            <div>
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+                <div class="rect6"></div>
+                <div class="rect7"></div>
+                <div class="rect8"></div>
+            </div>
+            <div class="cta-content text-center">
+                <span class="wow">Explore The Features</span>
+                <h2 class="wow">Special Offers Content <br> Here</h2>
+                <div class="black-bg"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="slide-container swiper">
+        <div class="slide-content">
+            <div class="card-wrapper swiper-wrapper">
+                <div class="card swiper-slide">
+                    <div class="image-content">
+                        <div class="card-image">
+                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                        <div class="description">
+                            <span class="small price">$145.60 USD</span>
+                            <span class="discount-price">$98 USD</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card swiper-slide">
+                    <div class="image-content">
+                        <div class="card-image">
+                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                        
+                        <div class="description">
+                            <span class="small price">$145.60 USD</span>
+                            <span class="discount-price">$98 USD</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card swiper-slide">
+                    <div class="image-content">
+                        <div class="card-image">
+                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                       
+                        <div class="description">
+                            <span class="small price">$145.60 USD</span>
+                            <span class="discount-price">$98 USD</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card swiper-slide">
+                    <div class="image-content">
+                        <div class="card-image">
+                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                       
+                        <div class="description">
+                            <span class="small price">$145.60 USD</span>
+                            <span class="discount-price">$98 USD</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card swiper-slide">
+                    <div class="image-content">
+                        <div class="card-image">
+                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                        
+                        <div class="description">
+                            <span class="small price">$145.60 USD</span>
+                            <span class="discount-price">$98 USD</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card swiper-slide">
+                    <div class="image-content">
+                        <div class="card-image">
+                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                        
+                        <div class="description">
+                            <span class="small price">$145.60 USD</span>
+                            <span class="discount-price">$98 USD</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card swiper-slide">
+                    <div class="image-content">
+                        <div class="card-image">
+                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                        
+                        <div class="description">
+                            <span class="small price">$145.60 USD</span>
+                            <span class="discount-price">$98 USD</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card swiper-slide">
+                    <div class="image-content">
+                        <div class="card-image">
+                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                        
+                        <div class="description">
+                            <span class="small price">$145.60 USD</span>
+                            <span class="discount-price">$98 USD</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card swiper-slide">
+                    <div class="image-content">
+                        <div class="card-image">
+                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                        
+                        <div class="description">
+                            <span class="small price">$145.60 USD</span>
+                            <span class="discount-price">$98 USD</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="swiper-button-next swiper-navBtn"></div>
+        <div class="swiper-button-prev swiper-navBtn"></div>
+        <div class="swiper-pagination"></div>
+    </div>
+</div>
+
+<div class="services-container">
+    <section class="services">
+        <div class="service-item">
+            <a data-modal="bottle-modal" class="plain-btn">
+                <img src="/static/images/plastic-bottle.png" alt="Plastic Bottle">
+            </a>
+            <div id="bottle-modal" class="modal-window">
+                <div class="modal-block">
+                    <a data-modal="bottle-modal" title="Close" class="modal-close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
+                        </svg>
+                    </a>
+
+                    <div class="modal-content">
+                        <div class="modal-img">
+                            <img src="https://images.unsplash.com/photo-1536939459926-301728717817?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Modal IMG">
+                        </div>
+                        <div class="modal-description">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptatem placeat sit expedita culpa natus harum inventore blanditiis eaque itaque. Veritatis aliquid beatae blanditiis voluptatibus dolore sit perferendis. Necessitatibus, possimus.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="service-item">
+            
+            <a data-modal="leaves-modal" class="plain-btn">
+                <img src="/static/images/leaves.png" alt="Leaves">
+            </a>
+            <div id="leaves-modal" class="modal-window">
+                <div class="modal-block">
+                    <a data-modal="leaves-modal" title="Close" class="modal-close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
+                        </svg>
+                    </a>
+
+                    <div class="modal-content">
+                        <div class="modal-img">
+                            <img src="https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80" alt="Modal IMG">
+                        </div>
+                        <div class="modal-description">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptatem placeat sit expedita culpa natus harum inventore blanditiis eaque itaque. Veritatis aliquid beatae blanditiis voluptatibus dolore sit perferendis. Necessitatibus, possimus.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="service-item">
+            
+            <a data-modal="recycle-modal" class="plain-btn">
+                <img src="/static/images/recycle.png" alt="Recycle">
+            </a>
+            <div id="recycle-modal" class="modal-window">
+                <div class="modal-block">
+                    <a data-modal="recycle-modal" title="Close" class="modal-close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
+                        </svg>
+                    </a>
+
+                    <div class="modal-content">
+                        <div class="modal-img">
+                            <img src="https://images.unsplash.com/photo-1604187351574-c75ca79f5807?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Modal IMG">
+                        </div>
+                        <div class="modal-description">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptatem placeat sit expedita culpa natus harum inventore blanditiis eaque itaque. Veritatis aliquid beatae blanditiis voluptatibus dolore sit perferendis. Necessitatibus, possimus.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="service-item">
+            
+            <a data-modal="co2-modal" class="plain-btn">
+                <img src="/static/images/co2.png" alt="CO2">
+            </a>
+            <div id="co2-modal" class="modal-window">
+                <div class="modal-block">
+                    <a data-modal="co2-modal" title="Close" class="modal-close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
+                        </svg>
+                    </a>
+
+                    <div class="modal-content">
+                        <div class="modal-img">
+                            <img src="https://images.unsplash.com/photo-1615053835734-7752878e939e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2128&q=80" alt="Modal IMG">
+                        </div>
+                        <div class="modal-description">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptatem placeat sit expedita culpa natus harum inventore blanditiis eaque itaque. Veritatis aliquid beatae blanditiis voluptatibus dolore sit perferendis. Necessitatibus, possimus.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+<footer class="border-top">
+	<!-- Footer main -->
+	<section class="ft-main">
+		<div class="ft-main-item">
+			<h2 class="ft-title">Newsletter</h2>
+			<div class="ft-title-border"></div>
+            <form class="newsletter">
+                <label for="newsletter">Subscribe to your newsletter</label>
+                <div class="field">
+                    <input id="newsletter" type="text" name="email" placeholder="Email" autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true">
+                    <button class="plain-btn" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+		</div>
+		<div class="ft-main-item">
+			<h2 class="ft-title">Quick Links</h2>
+			<div class="ft-title-border"></div>
+			<ul>
+                <li><a href="#">Search</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Refund Policy</a></li>
+			</ul>
+		</div>
+		<div class="ft-main-item">
+			<h2 class="ft-title">Contact Us</h2>
+			<div class="ft-title-border"></div>
+			<ul>
+                <li><p href="#">497 Evergreen Rd. Roseville, CA 95673</p></li>
+                <li><p href="#">+44 345 678 903</p></li>
+                <li><p href="#">adobexd@mail.com</p></li> 
+			</ul>
+		</div> 
+	</section>
+  
+	<!-- Footer legal -->
+	<section class="ft-legal border-top">
+        <div class="footer-content__bottom">
+            <div class="select-countries">
+                <label class="small-label" for="">Country/Region</label>
+                <div class="field">
+                    <select name="" id="">
+                        {% for country in countries %}
+                        <option value="">{{ country.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="cards-list">
+                <ul class="list-payment">
+                    <li class="list-payment__item">
+                        <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="35px" height="35px"><path fill="#1565C0" d="M45,35c0,2.209-1.791,4-4,4H7c-2.209,0-4-1.791-4-4V13c0-2.209,1.791-4,4-4h34c2.209,0,4,1.791,4,4V35z"/><path fill="#FFF" d="M15.186 19l-2.626 7.832c0 0-.667-3.313-.733-3.729-1.495-3.411-3.701-3.221-3.701-3.221L10.726 30v-.002h3.161L18.258 19H15.186zM17.689 30L20.56 30 22.296 19 19.389 19zM38.008 19h-3.021l-4.71 11h2.852l.588-1.571h3.596L37.619 30h2.613L38.008 19zM34.513 26.328l1.563-4.157.818 4.157H34.513zM26.369 22.206c0-.606.498-1.057 1.926-1.057.928 0 1.991.674 1.991.674l.466-2.309c0 0-1.358-.515-2.691-.515-3.019 0-4.576 1.444-4.576 3.272 0 3.306 3.979 2.853 3.979 4.551 0 .291-.231.964-1.888.964-1.662 0-2.759-.609-2.759-.609l-.495 2.216c0 0 1.063.606 3.117.606 2.059 0 4.915-1.54 4.915-3.752C30.354 23.586 26.369 23.394 26.369 22.206z"/><path fill="#FFC107" d="M12.212,24.945l-0.966-4.748c0,0-0.437-1.029-1.573-1.029c-1.136,0-4.44,0-4.44,0S10.894,20.84,12.212,24.945z"/></svg>
+                    </li>
+                    <li class="list-payment__item">
+                        <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="35px" height="35px"><linearGradient id="NgmlaCv2fU27PJOuiUvQVa" x1="20.375" x2="28.748" y1="1365.061" y2="1394.946" gradientTransform="translate(0 -1354)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00b3ee"/><stop offset="1" stop-color="#0082d8"/></linearGradient><path fill="url(#NgmlaCv2fU27PJOuiUvQVa)" d="M43.125,9H4.875C3.287,9,2,10.287,2,11.875v24.25C2,37.713,3.287,39,4.875,39h38.25	C44.713,39,46,37.713,46,36.125v-24.25C46,10.287,44.713,9,43.125,9z"/><circle cx="17.053" cy="24.053" r="10.053" fill="#cf1928"/><linearGradient id="NgmlaCv2fU27PJOuiUvQVb" x1="20" x2="40.107" y1="24.053" y2="24.053" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fede00"/><stop offset="1" stop-color="#ffd000"/></linearGradient><circle cx="30.053" cy="24.053" r="10.053" fill="url(#NgmlaCv2fU27PJOuiUvQVb)"/><path fill="#d97218" d="M20,24.053c0,3.072,1.382,5.818,3.553,7.662c2.172-1.844,3.553-4.59,3.553-7.662	s-1.382-5.818-3.553-7.662C21.382,18.235,20,20.981,20,24.053z"/></svg>
+                    </li>
+                    <li class="list-payment__item">
+                        <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="35px" height="35px"><path fill="#1976D2" d="M45,35c0,2.209-1.791,4-4,4H7c-2.209,0-4-1.791-4-4V13c0-2.209,1.791-4,4-4h34c2.209,0,4,1.791,4,4V35z"/><path fill="#FFF" d="M22.255 20l-2.113 4.683L18.039 20h-2.695v6.726L12.341 20h-2.274L7 26.981h1.815l.671-1.558h3.432l.682 1.558h3.465v-5.185l2.299 5.185h1.563l2.351-5.095v5.095H25V20H22.255zM10.135 23.915l1.026-2.44 1.066 2.44H10.135zM37.883 23.413L41 20.018h-2.217l-1.994 2.164L34.86 20H28v6.982h6.635l2.092-2.311L38.767 27h2.21L37.883 23.413zM33.728 25.516h-4.011v-1.381h3.838v-1.323h-3.838v-1.308l4.234.012 1.693 1.897L33.728 25.516z"/></svg>
+                    </li>
+                    <li class="list-payment__item">
+                        <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="35px" height="35px"><path fill="#E1E7EA" d="M45,35c0,2.2-1.8,4-4,4H7c-2.2,0-4-1.8-4-4V13c0-2.2,1.8-4,4-4h34c2.2,0,4,1.8,4,4V35z"/><path fill="#FF6D00" d="M45,35c0,2.2-1.8,4-4,4H16c0,0,23.6-3.8,29-15V35z M22,24c0,1.7,1.3,3,3,3s3-1.3,3-3c0-1.7-1.3-3-3-3S22,22.3,22,24z"/><path d="M11.2,21h1.1v6h-1.1V21z M17.2,24c0,1.7,1.3,3,3,3c0.5,0,0.9-0.1,1.4-0.3v-1.3c-0.4,0.4-0.8,0.6-1.4,0.6c-1.1,0-1.9-0.8-1.9-2c0-1.1,0.8-2,1.9-2c0.5,0,0.9,0.2,1.4,0.6v-1.3c-0.5-0.2-0.9-0.4-1.4-0.4C18.5,21,17.2,22.4,17.2,24z M30.6,24.9L29,21h-1.2l2.5,6h0.6l2.5-6h-1.2L30.6,24.9z M33.9,27h3.2v-1H35v-1.6h2v-1h-2V22h2.1v-1h-3.2V27z M41.5,22.8c0-1.1-0.7-1.8-2-1.8h-1.7v6h1.1v-2.4h0.1l1.6,2.4H42l-1.8-2.5C41,24.3,41.5,23.7,41.5,22.8z M39.2,23.8h-0.3v-1.8h0.3c0.7,0,1.1,0.3,1.1,0.9C40.3,23.4,40,23.8,39.2,23.8z M7.7,21H6v6h1.6c2.5,0,3.1-2.1,3.1-3C10.8,22.2,9.5,21,7.7,21z M7.4,26H7.1v-4h0.4c1.5,0,2.1,1,2.1,2C9.6,24.4,9.5,26,7.4,26z M15.3,23.3c-0.7-0.3-0.9-0.4-0.9-0.7c0-0.4,0.4-0.6,0.8-0.6c0.3,0,0.6,0.1,0.9,0.5l0.6-0.8C16.2,21.2,15.7,21,15,21c-1,0-1.8,0.7-1.8,1.7c0,0.8,0.4,1.2,1.4,1.6c0.6,0.2,1.1,0.4,1.1,0.9c0,0.5-0.4,0.8-0.9,0.8c-0.5,0-1-0.3-1.2-0.8l-0.7,0.7c0.5,0.8,1.1,1.1,2,1.1c1.2,0,2-0.8,2-1.9C16.9,24.2,16.5,23.8,15.3,23.3z"/></svg>
+                    </li>
+                </ul>
+                <div class="footer__copyright caption">
+                    <small class="copyright__content">© 2022, <a href="/" title="">Solar Panels</a></small>
+                    <small class="copyright__content"><a target="_blank" rel="nofollow" href="">Powered by Company</a></small>
+                </div>
+            </div>
+        </div>
+	</section>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script src="/static/js/custom.js"></script>
+</html>
