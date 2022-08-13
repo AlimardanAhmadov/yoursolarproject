@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
@@ -65,7 +66,8 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'product.apps.ProductConfig',
     'cart.apps.CartConfig',
-    'order.apps.OrderConfig'
+    'order.apps.OrderConfig',
+    'quoute_builder.apps.QuouteBuilderConfig'
 ]
 
 MIDDLEWARE = [
