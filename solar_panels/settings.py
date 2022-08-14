@@ -14,6 +14,18 @@ import os, environ, datetime
 from datetime import timedelta
 from pathlib import Path
 
+import django
+from django.utils.encoding import force_str, smart_str
+from django.utils.translation import gettext_lazy
+from django.utils.six import python_2_unicode_compatible
+
+
+django.utils.encoding.force_text = force_str
+django.utils.translation.ugettext_lazy = gettext_lazy
+django.utils.translation.ugettext = gettext_lazy
+django.utils.encoding.python_2_unicode_compatible = python_2_unicode_compatible
+django.utils.encoding.smart_text = smart_str
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -61,6 +73,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+
+    'allauth.socialaccount.providers.google',
 
     'user.apps.UserConfig',
     'main.apps.MainConfig',
@@ -169,6 +183,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+SITE_ID = 1
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -222,9 +238,27 @@ SIMPLE_JWT = {
 }
 
 AUTHENTICATION_BACKENDS = [
+    'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+# GOOGLE SOCIAL LOGIN
+for key in ['GOOGLE_OAUTH2_KEY',
+            'GOOGLE_OAUTH2_SECRET',]:
+    exec("SOCIAL_AUTH_{key} = os.environ.get('{key}')".format(key=key))
+
+SOCIAL_AUTH_PIPELINE = (
+  'social_core.pipeline.social_auth.social_details',
+  'social_core.pipeline.social_auth.social_uid',
+  'social_core.pipeline.social_auth.auth_allowed',
+  'social_core.pipeline.social_auth.social_user',
+  'social_core.pipeline.user.get_username',
+  'social_core.pipeline.social_auth.associate_by_email',
+  'social_core.pipeline.user.create_user',
+  'social_core.pipeline.social_auth.associate_user',
+  'social_core.pipeline.social_auth.load_extra_data',
+  'social_core.pipeline.user.user_details',
+)
 
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
@@ -242,4 +276,3 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 
 REST_USE_JWT = True
-SITE_ID = 1

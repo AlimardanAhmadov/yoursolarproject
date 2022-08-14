@@ -19,6 +19,7 @@ from rest_auth.views import (
 from rest_framework.generics import (
     ListCreateAPIView,
 )
+
 from .models import Customer
 from .send_mail import send_register_mail, send_reset_password_email
 from .serializers import ChangePasswordSerializer, CustomRegisterSerializer, SendResetPasswordSerializer
@@ -304,3 +305,5 @@ class ChangePasswordView(ListCreateAPIView):
                     content_type='application/json')
                 response.status_code = 400
                 return response
+
+
