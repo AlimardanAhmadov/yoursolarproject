@@ -1,0 +1,61 @@
+@media screen and (max-width: 460px) {
+    .newsletter .field {
+        display: flex;
+        justify-content: space-between;
+    }
+    .newsletter input {
+        width: 100%;
+    }
+    .ft-main {
+        display: block;
+    }
+
+    .cta-content h2.wow {
+        font-size: 31px;
+        line-height: 39px;
+    }
+    .slogan-text {
+        left: -10%;
+        bottom: 25%;
+    }
+    .banner-paragpraph {
+        padding: 15px;
+        padding-top: 220px;
+    }
+    .banner-paragpraph h1 {
+        font-size: 56px;
+    }
+    .banner-section{
+        height: 88vh;
+        padding-bottom: 52px;
+        padding-top: 0;
+        padding-bottom: 52px;
+    }
+
+    .seperator-wrapper {
+        padding-top: 109px;
+        height: 80vh;
+        padding-bottom: 0;
+    }
+
+    .img-layout {
+        top: 17%;
+        bottom: 0;
+        right: -23%;
+    }
+    .fmc-bg-container {
+        top: -3%;
+    }
+}
+
+
+@media screen and (max-width: 470px){
+    .footer-content__bottom
+    {
+        display: block;
+    }
+    .cards-list{
+        align-items: flex-start;
+        margin-top: 10px;
+    }
+}
