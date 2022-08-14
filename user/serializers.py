@@ -216,9 +216,8 @@ class ChangePasswordSerializer(serializers.Serializer):
         self.request = self.context.get("request")
         self.user = getattr(self.request, "user", None)
 
-    def validate_old_password(self, value):
+    def validate_old_password(self, value): 
         invalid_password_conditions = (
-            self.old_password_field_enabled,
             self.user,
             not self.user.check_password(value),
         )
