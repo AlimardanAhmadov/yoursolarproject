@@ -19,4 +19,5 @@ urlpatterns = [
         views.PasswordResetConfirmView.as_view(),
         name="password_reset_confirm",
     ),
+    path("google-login/", views.GoogleSocialAuthView.as_view(), name="google_login"),
 ]

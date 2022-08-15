@@ -1,4 +1,3 @@
-import random, string
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
@@ -7,13 +6,9 @@ from phonenumber_field.modelfields import PhoneNumberField
 from djrichtextfield.models import RichTextField
 
 from main.models import TimeStampedModel
-
+from main.utils import id_generator
 
 User = get_user_model()
-
-
-def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
-    return ''.join(random.choice(chars) for _ in range(size))
 
 
 USER_TYPES = (
@@ -21,6 +16,10 @@ USER_TYPES = (
     ("Bussiness", "Bussiness"),
 )
 
+PROVIDER_TYPES = (
+    ("Google", "Google"),
+    ("Email", "Email"),
+)
 
 class Customer(TimeStampedModel):
     user=models.OneToOneField(User, related_name='customer', on_delete=models.CASCADE)
@@ -29,7 +28,7 @@ class Customer(TimeStampedModel):
     full_name=models.CharField(max_length=250)
     address=models.TextField()
     postcode=models.PositiveIntegerField()
-    house_type=models.CharField(max_length=50)
+    property_type=models.CharField(max_length=50)
     no_floors=models.PositiveSmallIntegerField()
     no_bedrooms=models.PositiveSmallIntegerField()
     bill_rate=models.PositiveIntegerField()
@@ -37,6 +36,7 @@ class Customer(TimeStampedModel):
     company_name=models.CharField(max_length=250, unique=True, blank=True, null=True)
     other=RichTextField(blank=True)
     phone=PhoneNumberField()
+    provider=models.CharField(max_length=10, choices=PROVIDER_TYPES)
     
     class Meta:
         verbose_name = 'Customer'

@@ -1,3 +1,4 @@
+import random, string
 from rest_framework.views import exception_handler
 from http import HTTPStatus
 from typing import Any
@@ -28,3 +29,8 @@ def api_exception_handler(exc: Exception, context: dict[str, Any]) -> Response:
         error["details"] = response.data
         response.data = error_payload
     return 
+
+
+
+def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))

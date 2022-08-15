@@ -18,11 +18,12 @@ from rest_auth.views import (
 )
 from rest_framework.generics import (
     ListCreateAPIView,
+    GenericAPIView
 )
 
 from .models import Customer
 from .send_mail import send_register_mail, send_reset_password_email
-from .serializers import ChangePasswordSerializer, CustomRegisterSerializer, SendResetPasswordSerializer
+from .serializers import (ChangePasswordSerializer, CustomRegisterSerializer, SendResetPasswordSerializer, GoogleSocialAuthSerializer)
 
 User = get_user_model()
 
@@ -307,3 +308,21 @@ class ChangePasswordView(ListCreateAPIView):
                 return response
 
 
+class GoogleSocialAuthView(ListCreateAPIView):
+    serializer_class = GoogleSocialAuthSerializer
+    queryset = ""
+
+    @sensitive_post_parameters_m
+    def dispatch(self, *args, **kwargs):
+        return super(GoogleSocialAuthView, self).dispatch(*args, **kwargs)
+
+    def get(self, format=None):
+        users = User.objects.all()
+        serializer = GoogleSocialAuthSerializer(users, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = ((serializer.validated_data)['auth_token'])
+        return Response(data, status=status.HTTP_200_OK)

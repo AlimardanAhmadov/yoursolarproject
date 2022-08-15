@@ -1,4 +1,3 @@
-import random, string
 from django.db import models
 from django.utils.text import slugify
 from django.db.models.signals import post_save, post_delete
@@ -9,7 +8,7 @@ from djrichtextfield.models import RichTextField
 from djmoney.models.fields import MoneyField
 
 from main.models import TimeStampedModel
-
+from main.utils import id_generator
 
 CACHED_PRODUCT_BY_SLUG_KEY = 'product__by_slug__{}'
 CACHED_VARIANT_BY_SLUG_KEY = 'variant__by_slug__{}'
@@ -18,9 +17,6 @@ CACHE_LENGTH = 24 * 3600  # --> aq 24hrs demekdi
 
 class NotFound:
     """ caching """
-
-def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
-    return ''.join(random.choice(chars) for _ in range(size))
 
 
 def image_directory_path(instance, filename):

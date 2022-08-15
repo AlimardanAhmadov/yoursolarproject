@@ -1,3 +1,4 @@
+import os
 from django.contrib.auth import get_user_model, authenticate
 from django.conf import settings
 from django.contrib.auth.forms import SetPasswordForm
@@ -7,6 +8,8 @@ from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework.validators import UniqueValidator 
 from django.utils.translation import gettext_lazy as _
 from .models import Customer
+from . import google_validate
+from .social_register import validate_social_user
 
 # Get the UserModel
 UserModel = get_user_model()
@@ -125,7 +128,7 @@ class CustomRegisterSerializer(RegisterSerializer):
             "last_name": self.validated_data.get("last_name", ""),
             "address": self.validated_data.get("address", ""),
             "postcode": self.validated_data.get("postcode", ""),
-            "house_type": self.validated_data.get("house_type", ""),
+            "property_type": self.validated_data.get("property_type", ""),
             "no_floors": self.validated_data.get("no_floors", ""),
             "no_bedrooms": self.validated_data.get("no_bedrooms", ""),
             "bill_rate": self.validated_data.get("bill_rate", ""),
@@ -179,7 +182,7 @@ class UserSerializer(serializers.ModelSerializer):
             "last_name",
             "address",
             "postcode",
-            "house_type",
+            "property_type",
             "no_floors",
             "no_bedrooms",
             "bill_rate",
@@ -253,3 +256,26 @@ class ChangePasswordSerializer(serializers.Serializer):
             update_session_auth_hash(self.request, self.user)
 
 
+class GoogleSocialAuthSerializer(serializers.Serializer):
+    auth_token = serializers.CharField()
+
+    def validate_auth_token(self, auth_token):
+        user_data = google_validate.Google.validate(auth_token)
+        print("user data: ", user_data)
+        try:
+            user_data['sub']
+        except:
+            raise serializers.ValidationError(
+                'Invalid TOKEN'
+            )
+
+        if user_data['aud'] != os.environ['GOOGLE_CLIENT_ID']:
+            raise serializers.ValidationError("User not found")
+
+        email = user_data['email']
+        name = user_data['name']
+        provider = 'google'
+
+        user = (email, name, provider)
+
+        return validate_social_user(user)

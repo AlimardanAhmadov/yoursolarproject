@@ -198,6 +198,21 @@ USE_L10N = True
 
 USE_TZ = True
 
+SOCIALACCOUNT_PROVIDERS = {
+"google": {
+    "APP": {
+        "client_id": os.environ["GOOGLE_CLIENT_ID"],
+        "secret": os.environ["GOOGLE_CLIENT_SECRET"],
+        "key": ""
+    },
+    "SCOPE": [
+        "profile",
+        "email",
+    ],
+    "AUTH_PARAMS": {
+        "access_type": "online",
+    }
+}}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -241,24 +256,6 @@ AUTHENTICATION_BACKENDS = [
     'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 ]
-
-# GOOGLE SOCIAL LOGIN
-for key in ['GOOGLE_OAUTH2_KEY',
-            'GOOGLE_OAUTH2_SECRET',]:
-    exec("SOCIAL_AUTH_{key} = os.environ.get('{key}')".format(key=key))
-
-SOCIAL_AUTH_PIPELINE = (
-  'social_core.pipeline.social_auth.social_details',
-  'social_core.pipeline.social_auth.social_uid',
-  'social_core.pipeline.social_auth.auth_allowed',
-  'social_core.pipeline.social_auth.social_user',
-  'social_core.pipeline.user.get_username',
-  'social_core.pipeline.social_auth.associate_by_email',
-  'social_core.pipeline.user.create_user',
-  'social_core.pipeline.social_auth.associate_user',
-  'social_core.pipeline.social_auth.load_extra_data',
-  'social_core.pipeline.user.user_details',
-)
 
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
