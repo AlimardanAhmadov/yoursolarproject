@@ -1,4 +1,4 @@
-@media screen and (max-width: 460px) {
+@media screen and (max-width: 470px) {
     .newsletter .field {
         display: flex;
         justify-content: space-between;
@@ -45,6 +45,9 @@
     }
     .fmc-bg-container {
         top: -3%;
+    }
+    .ft-legal .field select {
+        width: 100%;
     }
 }
 

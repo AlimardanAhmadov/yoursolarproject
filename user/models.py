@@ -23,19 +23,18 @@ PROVIDER_TYPES = (
 
 class Customer(TimeStampedModel):
     user=models.OneToOneField(User, related_name='customer', on_delete=models.CASCADE)
-    account_type=models.CharField(max_length=10, choices=USER_TYPES)
     slug=models.SlugField()
     full_name=models.CharField(max_length=250)
-    address=models.TextField()
-    postcode=models.PositiveIntegerField()
-    property_type=models.CharField(max_length=50)
-    no_floors=models.PositiveSmallIntegerField()
-    no_bedrooms=models.PositiveSmallIntegerField()
-    bill_rate=models.PositiveIntegerField()
+    address=models.TextField(blank=True, null=True)
+    postcode=models.PositiveIntegerField(blank=True, null=True)
+    property_type=models.CharField(max_length=50, blank=True, null=True)
+    no_floors=models.PositiveSmallIntegerField(blank=True, null=True)
+    no_bedrooms=models.PositiveSmallIntegerField(blank=True, null=True)
+    bill_rate=models.PositiveIntegerField(blank=True, null=True)
     agreement=models.BooleanField(default=False)
     company_name=models.CharField(max_length=250, unique=True, blank=True, null=True)
     other=RichTextField(blank=True)
-    phone=PhoneNumberField()
+    phone=PhoneNumberField(blank=True, null=True)
     provider=models.CharField(max_length=10, choices=PROVIDER_TYPES)
     
     class Meta:
@@ -56,4 +55,38 @@ class Customer(TimeStampedModel):
             instance.save()
 
 post_save.connect(Customer.post_save, sender=Customer)
+
+
+class Business(TimeStampedModel):
+    user=models.OneToOneField(User, related_name='business', on_delete=models.CASCADE)
+    slug=models.SlugField()
+    address=models.TextField(blank=True, null=True)
+    postcode=models.PositiveIntegerField(blank=True, null=True)
+    property_type=models.CharField(max_length=50, blank=True, null=True)
+    no_floors=models.PositiveSmallIntegerField(blank=True, null=True)
+    bill_rate=models.PositiveIntegerField(blank=True, null=True)
+    agreement=models.BooleanField(default=False)
+    company_name=models.CharField(max_length=250, unique=True, blank=True, null=True)
+    other=RichTextField(blank=True)
+    phone=PhoneNumberField(blank=True, null=True)
+    provider=models.CharField(max_length=10, choices=PROVIDER_TYPES)
+    
+    class Meta:
+        verbose_name = 'Business'
+        verbose_name_plural = 'Businesses'
+        indexes = [models.Index(fields=['user', 'slug',])]
+    
+    def __str__(self):
+        return "%s" % self.user.username
+
+
+    @staticmethod
+    def post_save(sender, **kwargs):
+        instance = kwargs.get('instance')
+        created = kwargs.get('created')
+        if created:
+            instance.slug = slugify(id_generator() + "-" + instance.user.username)
+            instance.save()
+
+post_save.connect(Business.post_save, sender=Business)
 

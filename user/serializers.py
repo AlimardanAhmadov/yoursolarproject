@@ -1,3 +1,4 @@
+from email.policy import default
 import os
 from django.contrib.auth import get_user_model, authenticate
 from django.conf import settings
@@ -7,9 +8,10 @@ from phonenumber_field.serializerfields import PhoneNumberField
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework.validators import UniqueValidator 
 from django.utils.translation import gettext_lazy as _
-from .models import Customer
+from .models import Business, Customer
 from . import google_validate
 from .social_register import validate_social_user
+from main.utils import id_generator
 
 # Get the UserModel
 UserModel = get_user_model()
@@ -101,43 +103,31 @@ class LoginSerializer(serializers.Serializer):
 
 
 class CustomRegisterSerializer(RegisterSerializer):
-    username = serializers.CharField(required=True, write_only=True)
-    first_name = serializers.CharField(required=True, write_only=True)
-    last_name = serializers.CharField(required=True, write_only=True)
+    username = serializers.CharField(required=False, write_only=True)
+    first_name = serializers.CharField(required=False, write_only=True)
+    last_name = serializers.CharField(required=False, write_only=True)
     email = serializers.EmailField(required=True, write_only=True)
-    phone = PhoneNumberField(
-        required=True,
-        write_only=True,
-        validators=[
-            UniqueValidator(
-                queryset=Customer.objects.all(),
-                message=_("A user is already registered with this phone number."),
-            )
-        ],
-    )
-    other = serializers.CharField(required=False, write_only=True)
-    company_name = serializers.CharField(required=False, write_only=True)
+    agreement = serializers.BooleanField(default=False)
+    account_type = serializers.CharField(required=True, write_only=True)
     
-    extra_kwargs = {
-        'company_name': {'required': False},
-    }
 
     def get_cleaned_data_customer(self):
         return {
             "first_name": self.validated_data.get("first_name", ""),
             "last_name": self.validated_data.get("last_name", ""),
-            "address": self.validated_data.get("address", ""),
-            "postcode": self.validated_data.get("postcode", ""),
-            "property_type": self.validated_data.get("property_type", ""),
-            "no_floors": self.validated_data.get("no_floors", ""),
-            "no_bedrooms": self.validated_data.get("no_bedrooms", ""),
-            "bill_rate": self.validated_data.get("bill_rate", ""),
             "agreement": self.validated_data.get("agreement", ""),
-            "other": self.validated_data.get("other", ""),
-            "phone": self.validated_data.get("phone", ""),
-            "account_type": self.validated_data.get("account_type", ""),
-            "company_name": self.validated_data.get("company_name", ""),
         }
+    
+    def get_cleaned_data_business(self):
+        return {
+            "agreement": self.validated_data.get("agreement", ""),
+        }
+    
+    def validate(self, attrs):
+        agreement = attrs['agreement']
+        if agreement is not True:
+            raise serializers.ValidationError({'Agreement': ['You must agree to our terms & conditions']})
+        return attrs
 
     def create_customer(self, user, validated_data):
         user.first_name = self.validated_data.get("first_name")
@@ -146,16 +136,27 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.username = self.validated_data.get("username")
         user.save()
 
-        if self.get_cleaned_data_customer['account_type'] == 'Bussiness' and self.get_cleaned_data_customer['company_name'] is None:
-            raise serializers.ValidationError('Company name is required for bussiness accounts!')
-
         Customer.objects.create(
             user=user,
-            full_name = self.validated_data.get("first_name") + " " + self.validated_data.get("last_name")
+            full_name = self.validated_data.get("first_name") + " " + self.validated_data.get("last_name"),
+            provider='Email'
+        )
+    
+    def create_business(self, user, validated_data):
+        user.email = self.validated_data.get('email')
+        user.username = id_generator()
+        user.save()
+
+        Business.objects.create(
+            user=user, 
+            provider='Email'
         )
 
     def custom_signup(self, request, user):
-        self.create_customer(user, self.get_cleaned_data_customer())
+        if self.validated_data.get('account_type') == 'Business':
+            self.create_bussines(user, self.get_cleaned_data_customer())
+        else:
+            self.create_customer(user, self.get_cleaned_data_business())
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -258,6 +259,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 class GoogleSocialAuthSerializer(serializers.Serializer):
     auth_token = serializers.CharField()
+    account_type = serializers.CharField(required=True, write_only=True)
 
     def validate_auth_token(self, auth_token):
         user_data = google_validate.Google.validate(auth_token)
@@ -276,6 +278,4 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
         name = user_data['name']
         provider = 'google'
 
-        user = (email, name, provider)
-
-        return validate_social_user(user)
+        return validate_social_user(email, name, provider, self.account_type)

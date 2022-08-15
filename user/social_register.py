@@ -4,7 +4,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import serializers
 
 from main.utils import id_generator
-from user.models import Customer
+from user.models import Business, Customer
 
 User = get_user_model()
 
@@ -18,12 +18,12 @@ def random_username(name):
         return random_username(random_username)
 
 
-def validate_social_user(provider, email, name):
+def validate_social_user(provider, email, name, account_type):
     selected_user = User.objects.filter(email=email)
 
     if selected_user.exists():
 
-        if provider == selected_user[0].customer.auth_provider:
+        if provider == selected_user[0].customer.provider:
 
             registered_user = authenticate(
                 email=email, password=os.environ['SECRET_PASSWORD'])
@@ -40,7 +40,7 @@ def validate_social_user(provider, email, name):
 
         else:
             raise serializers.ValidationError(
-                detail='Please sign in using' + selected_user[0].auth_provider)
+                detail="We've found an existing Solar Panels account. Please continue to log in with your account email or username below.")
 
     else:
         args = {
@@ -48,18 +48,22 @@ def validate_social_user(provider, email, name):
             'password': os.environ['SECRET_PASSWORD']}
 
         user = User.objects.create_user(**args)
-        user.customer.provider = provider
         user.save()
-
-        new_customer=Customer(
-            user=user,
-        )
-        new_customer.save()
+        if account_type == 'Business':
+            new_business = Business(
+                provider=provider,
+                user=user
+            )
+            new_business.save()
+        else:
+            new_customer=Customer(
+                user=user,
+                provider=provider,
+            )
+            new_customer.save()
 
         new_user = authenticate(
             email=email, password=os.environ['SECRET_PASSWORD'])
-        
-        #Refresh/generate token on register
 
         token = RefreshToken.for_user(user)
         token = { 

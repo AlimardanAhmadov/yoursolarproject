@@ -156,7 +156,7 @@ class RegisterAPIView(ListCreateAPIView):
         email = EmailAddress.objects.get(email=user.email, user=user)
         confirmation = EmailConfirmationHMAC(email)
         key = confirmation.key
-        send_register_mail.delay(user, key)
+        #send_register_mail.delay(user.id, key)
         print("account-confirm-email/" + key)
         return user
 
