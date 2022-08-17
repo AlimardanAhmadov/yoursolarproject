@@ -164,12 +164,10 @@ class UserSerializer(serializers.ModelSerializer):
     postcode = serializers.CharField(source="customer.postcode")
     account_type = serializers.CharField(source="customer.account_type")
     phone = PhoneNumberField(source="customer.phone")
-    house_type = serializers.CharField(source="customer.house_type")
+    property_type = serializers.CharField(source="customer.property_type")
     no_floors = serializers.CharField(source="customer.no_floors")
-    no_bedrooms = serializers.CharField(source="customer.no_bedrooms")
     bill_rate = serializers.CharField(source="customer.bill_rate")
     agreement = serializers.BooleanField(source="customer.agreement")
-    company_name = serializers.CharField(source="customer.company_name")
     other = serializers.CharField(source="customer.other")
 
     class Meta:
@@ -179,18 +177,39 @@ class UserSerializer(serializers.ModelSerializer):
             "username",
             "email",
             "password",
-            "first_name",
-            "last_name",
             "address",
             "postcode",
             "property_type",
             "no_floors",
-            "no_bedrooms",
             "bill_rate",
             "agreement",
-            "company_name",
             "other",
-            "account_type"
+        ]
+
+class BussinesUserSerializer(serializers.ModelSerializer):
+    address = serializers.ImageField(source="business.address")
+    postcode = serializers.CharField(source="business.postcode")
+    account_type = serializers.CharField(source="business.account_type")
+    phone = PhoneNumberField(source="business.phone")
+    property_type = serializers.CharField(source="business.property_type")
+    no_floors = serializers.CharField(source="business.no_floors")
+    bill_rate = serializers.CharField(source="business.bill_rate")
+    company_name = serializers.BooleanField(source="business.company_name")
+    other = serializers.CharField(source="business.other")
+
+    class Meta:
+        model = get_user_model()
+        fields = [
+            "id",
+            "email",
+            "password",
+            "address",
+            "postcode",
+            "property_type",
+            "no_floors",
+            "bill_rate",
+            "other",
+            "company_name"
         ]
 
 
@@ -198,7 +217,6 @@ class SendResetPasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ["email", ]
-
 
 
 class ChangePasswordSerializer(serializers.Serializer):
