@@ -153,7 +153,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         )
 
     def custom_signup(self, request, user):
-        if self.validated_data.get('account_type') == 'Business':
+        if self.validated_data.get('account_type') == 'Bussines':
             self.create_bussines(user, self.get_cleaned_data_customer())
         else:
             self.create_customer(user, self.get_cleaned_data_business())

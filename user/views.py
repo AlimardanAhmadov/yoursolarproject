@@ -8,7 +8,6 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.contrib.auth.decorators import login_required 
 from rest_framework.response import Response
 from allauth.account.models import EmailAddress, EmailConfirmationHMAC
-from rest_framework.renderers import TemplateHTMLRenderer
 from rest_auth.utils import jwt_encode 
 from rest_auth.serializers import PasswordResetConfirmSerializer
 from rest_auth.app_settings import JWTSerializer
@@ -18,11 +17,10 @@ from rest_auth.views import (
 )
 from rest_framework.generics import (
     ListCreateAPIView,
-    GenericAPIView
 )
-
+from main.html_renderer import MyHTMLRenderer
 from .models import Customer
-from .send_mail import send_register_mail, send_reset_password_email
+from .send_mail import send_reset_password_email
 from .serializers import (ChangePasswordSerializer, CustomRegisterSerializer, SendResetPasswordSerializer, GoogleSocialAuthSerializer)
 
 User = get_user_model()
@@ -41,12 +39,6 @@ def get_prev_url(request):
     return stripped
 
 
-class MyHTMLRenderer(TemplateHTMLRenderer):
-    def get_template_context(self, *args, **kwargs):
-        context = super().get_template_context(*args, **kwargs)
-        if isinstance(context, list):
-            context = {"items": context}
-        return context
 
 class LoginAPIView(LoginView):
     queryset = ""
@@ -157,7 +149,6 @@ class RegisterAPIView(ListCreateAPIView):
         confirmation = EmailConfirmationHMAC(email)
         key = confirmation.key
         #send_register_mail.delay(user.id, key)
-        print("account-confirm-email/" + key)
         return user
 
 

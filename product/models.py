@@ -40,6 +40,9 @@ class Product(TimeStampedModel):
         verbose_name_plural = 'Solar Panels'
         indexes = [models.Index(fields=['title', 'slug', 'id', 'brand', 'category'])]
     
+    def __str__(self):
+        return "%s" % self.title
+    
     @staticmethod
     def cache_by_slug(slug):
         key = CACHED_PRODUCT_BY_SLUG_KEY.format(slug)
@@ -64,7 +67,7 @@ class Product(TimeStampedModel):
         instance = kwargs.get('instance')
         created = kwargs.get('created')
         if created:
-            instance.slug = slugify(instance.title + "-" + id_generator() + "-" + instance.id)
+            instance.slug = slugify(instance.title + "-" + str(id_generator()) + "-" + str(instance.pk))
             instance.save()
 
 post_save.connect(Product.post_save, sender=Product)
@@ -119,7 +122,7 @@ class ProductVariant(TimeStampedModel):
         instance = kwargs.get('instance')
         created = kwargs.get('created')
         if created:
-            instance.slug = slugify(id_generator() + "-" + instance.id)
+            instance.slug = slugify(str(id_generator()) + "-" + str(instance.id))
             instance.save()
 
 post_save.connect(ProductVariant.post_save, sender=ProductVariant)

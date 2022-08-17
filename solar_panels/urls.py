@@ -31,6 +31,7 @@ urlpatterns = [
     path('djrichtextfield/', include('djrichtextfield.urls')),
     path('', include('main.urls')),
     path('', include('user.urls')),
+    path('', include('quoute_builder.urls')),
 ]
 
 if settings.DEBUG:

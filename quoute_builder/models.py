@@ -27,7 +27,7 @@ INSTALLATION = (
 
 class Quote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    selected_product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    selected_panel = models.ForeignKey(Product, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=150)
     address = models.TextField()
     postcode = models.IntegerField()
@@ -41,13 +41,11 @@ class Quote(models.Model):
     agreement = models.BooleanField(default=False)
     installation_type = models.CharField(max_length=150, choices=INSTALLATION)
     standalone_installation = models.CharField(max_length=70, blank=True, null=True)
-    single_phase = models.BooleanField(default=False)
     spare_way = models.BooleanField(default=False)
     roof_style = models.CharField(max_length=20, blank=True, null=True)
     b_no_panels = models.CharField(max_length=4, blank=True, null=True, choices=YES_NO_CHOICE) # yes or no
     width = models.IntegerField(blank=True, null=True)
     height = models.IntegerField(blank=True, null=True)
-    # selected_panel_id = models.CharField(max_legth=200)
     panels_count = models.IntegerField(blank=True, null=True)
     fitting = models.CharField(max_length=50, blank=True, null=True)
     mount_style_no = models.CharField(max_length=200, blank=True, null=True)
@@ -61,10 +59,10 @@ class Quote(models.Model):
     class Meta:
         verbose_name = 'Quote'
         verbose_name_plural = 'Quotes'
-        indexes = [models.Index(fields=['user', 'selected_product', 'id'])]
+        indexes = [models.Index(fields=['user', 'selected_panel', 'id'])]
 
     def __str__(self):
-        return "%s" % self.product.title
+        return "%s" % self.selected_panel.title
 
     
     def confirmation(self):

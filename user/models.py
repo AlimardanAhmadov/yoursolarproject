@@ -51,7 +51,7 @@ class Customer(TimeStampedModel):
         instance = kwargs.get('instance')
         created = kwargs.get('created')
         if created:
-            instance.slug = slugify(id_generator() + "-" + instance.user.username)
+            instance.slug = slugify(str(id_generator()) + "-" + instance.user.username)
             instance.save()
 
 post_save.connect(Customer.post_save, sender=Customer)
@@ -85,7 +85,7 @@ class Business(TimeStampedModel):
         instance = kwargs.get('instance')
         created = kwargs.get('created')
         if created:
-            instance.slug = slugify(id_generator() + "-" + instance.user.username)
+            instance.slug = slugify(str(id_generator()) + "-" + instance.user.username)
             instance.save()
 
 post_save.connect(Business.post_save, sender=Business)
