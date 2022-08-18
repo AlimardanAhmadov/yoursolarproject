@@ -42,7 +42,7 @@ class LoginSerializer(serializers.Serializer):
             user = self.authenticate(username=username, password=password)
         else:
             msg = _(
-                'Must include "username or "email" or "phone number" and "password".'
+                'Must include "username or "email" and "password".'
             )
             raise exceptions.ValidationError(msg)
 
@@ -57,7 +57,7 @@ class LoginSerializer(serializers.Serializer):
             user = self.authenticate(username=username, password=password)
         else:
             msg = _(
-                'Must include either "username" or "email" or "phone number" and "password".'
+                'Must include either "username" or "email" and "password".'
             )
             raise exceptions.ValidationError(msg)
 

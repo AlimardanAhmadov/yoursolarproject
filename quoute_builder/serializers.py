@@ -32,6 +32,8 @@ class QuoteBuilderSerializer(serializers.ModelSerializer):
     storage_system_size = serializers.CharField(required=False)
     storage_cost_option = serializers.CharField(required=False)
     help_with = serializers.CharField(required=False)
+    completed = serializers.BooleanField(default=True)
+    
 
     class Meta:
         model = Quote
@@ -70,6 +72,7 @@ class QuoteBuilderSerializer(serializers.ModelSerializer):
             "storage_system_size": self.validated_data.get("storage_system_size", ""),
             "storage_cost_option": self.validated_data.get("storage_cost_option", ""),
             "help_with": self.validated_data.get("help_with", ""),
+            "completed": self.validated_data.get("completed", ""),
         }
 
 
@@ -78,5 +81,9 @@ class QuoteBuilderSerializer(serializers.ModelSerializer):
         quote.user = self.user
         quote.save()
 
-    def perform_create(self, request, quote):
+        if self.validated_data.get("completed") is False:
+            print("Adding to Cart")
+
+    def perform_create(self, quote, request):
         self.create_quote(quote, self.get_cleaned_data())
+

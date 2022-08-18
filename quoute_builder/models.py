@@ -55,6 +55,7 @@ class Quote(models.Model):
     storage_system_size = models.CharField(max_length=5, blank=True, null=True)
     storage_cost_option = models.CharField(max_length=5, blank=True, null=True)
     help_with = models.CharField(max_length=50, blank=True, null=True)
+    completed = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Quote'
@@ -79,19 +80,30 @@ class Quote(models.Model):
                 getattr(settings, 'EMAIL_USE_TLS'),
             ]
         ):
+            if self.completed:
+                body = """<p>
+                Hello from Solar Panels!<br><br>
+                Confirmation Mail: %s
+                Thank you from Solar Panels! <br><br>
+                <p>""" % (
+                    self.product.title,
+                )
 
-            body = """<p>
-            Hello from Solar Panels!<br><br>
-            Confirmation Mail: %s
-            Thank you from Solar Panels! <br><br>
-            <p>""" % (
-                self.product.title,
-            )
+                subject = "Order Summary"
+                template_name = 'email/summary.html'
+            else:
+                body = """<p>
+                Hello from Solar Panels!<br><br>
+                Complete your order: %s
+                Thank you from Solar Panels! <br><br>
+                <p>""" % (
+                    self.product.title,
+                )
 
-            subject = "Order Summary"
+                subject = "Complete your order"
+                template_name = 'email/order_warning.html'
+
             recipients = [self.email]
-
-            template_name = 'email/summary.html'
 
             send_email(body, subject, recipients, template_name, "html")
         else:
