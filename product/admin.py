@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, ProductVariant
+from .models import Product, ProductVariant, Inverter
 
 
 
@@ -12,3 +12,4 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [VariantInline]
 
 admin.site.register(Product, ProductAdmin)
+admin.site.register(Inverter)

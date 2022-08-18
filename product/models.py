@@ -22,6 +22,9 @@ class NotFound:
 def image_directory_path(instance, filename):
     return "photos/{0}/{1}".format(instance.selected_product.title, filename)
 
+def inverters_img_directory_path(filename):
+    return "photos/inverters/{0}".format(filename)
+
 class Product(TimeStampedModel):
     slug=models.SlugField()
     title=models.CharField(max_length=250)
@@ -33,7 +36,8 @@ class Product(TimeStampedModel):
     availability=models.BooleanField(default=True)
     product_type=models.CharField(max_length=50)
     brand=models.CharField(max_length=100)
-
+    cost = models.FloatField()
+    inverter = models.ForeignKey("Inverter", on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Solar Panel'
@@ -79,6 +83,7 @@ def invalidate_coach_cache(sender, instance, **kwargs):
     Invalidate the product cached data when it is updated or deleted
     """
     cache.delete(CACHED_PRODUCT_BY_SLUG_KEY.format(instance.slug))
+
 
 
 class ProductVariant(TimeStampedModel):
@@ -133,3 +138,17 @@ def invalidate_coach_cache(sender, instance, **kwargs):
     Invalidate the variant cached data when it is updated or deleted
     """
     cache.delete(CACHED_VARIANT_BY_SLUG_KEY.format(instance.slug))
+
+
+
+class Inverter(TimeStampedModel):
+    cost = models.FloatField()
+    title = models.CharField(max_length=200)
+    img = models.ImageField(upload_to=inverters_img_directory_path, default='default.png')
+    wattage_capacity = models.DecimalField(max_digits=5, decimal_places=5)
+
+    class Meta:
+        verbose_name = 'Inverter'
+        verbose_name_plural = 'Inverters'
+        indexes = [models.Index(fields=['wattage_capacity', 'id', ])]
+

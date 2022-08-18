@@ -6,6 +6,7 @@ from rest_framework import serializers
 
 class QuoteBuilderSerializer(serializers.ModelSerializer):    
     product = serializers.SlugRelatedField(slug_field="title", read_only=True)
+    inverter = serializers.SlugRelatedField(slug_field="title", read_only=True)
     full_name = serializers.CharField(required=True)
     address = serializers.CharField(required=True)
     postcode = serializers.IntegerField(required=True)
@@ -78,6 +79,7 @@ class QuoteBuilderSerializer(serializers.ModelSerializer):
 
     def create_quote(self, quote, validated_data):
         quote.product = self.validated_data.get("product")
+        quote.inverter = self.validated_date.get("inverter")
         quote.user = self.user
         quote.save()
 
