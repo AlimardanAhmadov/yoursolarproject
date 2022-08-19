@@ -42,7 +42,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'https://5254-212-47-143-40.eu.ngrok.io']
 
 # Application definition
 
@@ -76,6 +76,7 @@ INSTALLED_APPS = [
 
     'allauth.socialaccount.providers.google',
     'social_django',
+    'geoip2',
 
     'user.apps.UserConfig',
     'main.apps.MainConfig',
@@ -108,6 +109,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'main.context_processors.geoip'
             ],
         },
     },
@@ -201,20 +203,21 @@ USE_L10N = True
 USE_TZ = True
 
 SOCIALACCOUNT_PROVIDERS = {
-"google": {
-    "APP": {
-        "client_id": os.environ["GOOGLE_CLIENT_ID"],
-        "secret": os.environ["GOOGLE_CLIENT_SECRET"],
-        "key": ""
-    },
-    "SCOPE": [
-        "profile",
-        "email",
-    ],
-    "AUTH_PARAMS": {
-        "access_type": "online",
+    "google": {
+        "APP": {
+            "client_id": os.environ["GOOGLE_CLIENT_ID"],
+            "secret": os.environ["GOOGLE_CLIENT_SECRET"],
+            "key": ""
+        },
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        }
     }
-}}
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -275,3 +278,7 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 
 REST_USE_JWT = True
+
+# GEOLOCAITON CONFIGS
+GEOIP_PATH =os.path.join('geoip')
+

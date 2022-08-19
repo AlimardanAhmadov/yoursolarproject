@@ -438,7 +438,11 @@
                 <div class="field">
                     <select name="" id="">
                         {% for country in countries %}
+                        {% if country.name == location_country %}
+                        <option value="{{ country.name }}" selected>{{ country.name }}</option>
+                        {% else %}
                         <option value="">{{ country.name }}</option>
+                        {% endif %}
                         {% endfor %}
                     </select>
                 </div>
