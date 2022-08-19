@@ -1,12 +1,16 @@
+import base64
 from django.db import models
 from django.utils.text import slugify
 from django.db.models.signals import post_save, post_delete
 from django.core.cache import cache
 from django.dispatch import receiver
+from django.core.files.base import ContentFile
 
 from djrichtextfield.models import RichTextField
 from djmoney.models.fields import MoneyField
+from model_utils import FieldTracker
 
+from main.compress_img import compress_image
 from main.models import TimeStampedModel
 from main.utils import id_generator
 
@@ -94,14 +98,31 @@ class ProductVariant(TimeStampedModel):
     price=MoneyField(max_digits=14, decimal_places=2, default_currency='USD')
     discount=MoneyField(max_digits=14, decimal_places=2, default_currency='USD')
     image=models.ImageField(upload_to=image_directory_path, default='default.png')
+    image_url=models.URLField(blank=True, null=True)
     sku=models.CharField(max_length=400)
     active=models.BooleanField(default=True)
+
+    tracker = FieldTracker()
 
     class Meta:
         verbose_name = 'Variant'
         verbose_name_plural = 'Variants'
         indexes = [models.Index(fields=['selected_product', 'slug', 'id', 'active',])]
-    
+
+    def save(self, *args, **kwargs):
+        url_changed = self.tracker.has_changed('image_url')
+        if url_changed:
+            image = self.image
+            if image and image.size > (0.3 * 1024 * 1024):
+                self.image = compress_image(image)
+
+            if ';base64,' in self.image_url:
+                format, imgstr = self.image_url.split(';base64,')
+                ext = format.split('/')[-1]
+                data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+                self.image = data
+        super(ProductVariant, self).save(*args, **kwargs)
+
     @staticmethod
     def cache_by_slug(slug):
         key = CACHED_PRODUCT_BY_SLUG_KEY.format(slug)
