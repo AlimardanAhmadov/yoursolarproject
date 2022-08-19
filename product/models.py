@@ -153,7 +153,7 @@ class ProductVariant(TimeStampedModel):
 post_save.connect(ProductVariant.post_save, sender=ProductVariant)
 
 
-@receiver((post_delete, post_save), sender=Product)
+@receiver((post_delete, post_save), sender=ProductVariant)
 def invalidate_coach_cache(sender, instance, **kwargs):
     """
     Invalidate the variant cached data when it is updated or deleted
