@@ -6,8 +6,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.dispatch import receiver
 from product.models import Product
 
-from quoute_builder.models import Quote
-
 
 User = get_user_model()
 
@@ -61,6 +59,7 @@ def invalidate_coach_cache(sender, instance, **kwargs):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    product = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    model_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=6, decimal_places=5)
+    product_id = models.CharField(max_length=250)

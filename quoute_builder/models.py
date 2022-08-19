@@ -57,6 +57,8 @@ class Quote(models.Model):
     storage_cost_option = models.CharField(max_length=5, blank=True, null=True)
     help_with = models.CharField(max_length=50, blank=True, null=True)
     completed = models.BooleanField(default=True)
+    total_cost = models.FloatField(default=0.0)
+    quantity = models.PositiveIntegerField(default=0)
 
     class Meta:
         verbose_name = 'Quote'

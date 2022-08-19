@@ -1,7 +1,6 @@
-from email.policy import default
 import logging
-from operator import invert
-from smtplib import quoteaddr
+from django.contrib.contenttypes.models import ContentType
+from cart.models import CartItem
 from phonenumber_field.serializerfields import PhoneNumberField
 from product.models import Inverter, Product
 from .models import Quote
@@ -19,6 +18,7 @@ class QuoteBuilderSerializer(serializers.Serializer):
     property_type = serializers.CharField(required=True)
     no_floors = serializers.IntegerField(required=True)
     no_bedrooms = serializers.IntegerField(required=True)
+    phone = PhoneNumberField()
     other = serializers.CharField(required=False)
     bill_rate = serializers.CharField(required=False)
     agreement = serializers.BooleanField(default=False)
@@ -39,12 +39,15 @@ class QuoteBuilderSerializer(serializers.Serializer):
     storage_cost_option = serializers.CharField(required=False)
     help_with = serializers.CharField(required=False)
     completed = serializers.BooleanField(default=True)
+    total_cost = serializers.FloatField(default=0.0)
+    quantity = serializers.IntegerField(default=0)
     
 
     def __init__(self, *args, **kwargs):
         super(QuoteBuilderSerializer, self).__init__(*args, **kwargs)
         self.request = self.context.get("request")
         self.user = getattr(self.request, "user", None)
+        self.cart = self.user.cart
 
     
     def get_cleaned_data(self):
@@ -75,6 +78,8 @@ class QuoteBuilderSerializer(serializers.Serializer):
             "storage_cost_option": self.validated_data.get("storage_cost_option", ""),
             "help_with": self.validated_data.get("help_with", ""),
             "completed": self.validated_data.get("completed", ""),
+            "total_cost": self.validated_data.get("total_cost", ""),
+            "phone": self.validated_data.get("phone", ""),
         }
 
 
@@ -101,8 +106,17 @@ class QuoteBuilderSerializer(serializers.Serializer):
         quote = Quote(**data, selected_panel=selected_product, inverter=selected_inverter, user=self.user)
         quote.save()
 
+        cart_item = CartItem(
+            cart=self.cart,
+            product_id=quote.slug,
+            price=self.validated_data.get("total_cost"),
+            quantity=self.validated_data.get("quantity"),
+            model_type=ContentType.objects.get(app_label='quote_builder', model='Quote')
+        )
+        cart_item.save()
+
         if self.validated_data.get("completed") is False:
             print("Adding to Cart")
-        
+
         return quote
 
