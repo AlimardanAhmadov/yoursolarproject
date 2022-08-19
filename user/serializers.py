@@ -1,4 +1,3 @@
-from email.policy import default
 import os
 from django.contrib.auth import get_user_model, authenticate
 from django.conf import settings
@@ -6,7 +5,7 @@ from django.contrib.auth.forms import SetPasswordForm
 from rest_framework import serializers, exceptions
 from phonenumber_field.serializerfields import PhoneNumberField
 from rest_auth.registration.serializers import RegisterSerializer
-from rest_framework.validators import UniqueValidator 
+from rest_framework.validators import UniqueValidator
 from django.utils.translation import gettext_lazy as _
 from .models import Business, Customer
 from . import google_validate
@@ -106,7 +105,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     username = serializers.CharField(required=False, write_only=True)
     first_name = serializers.CharField(required=False, write_only=True)
     last_name = serializers.CharField(required=False, write_only=True)
-    email = serializers.EmailField(required=True, write_only=True)
+    email = serializers.EmailField(required=True, write_only=True, validators=[UniqueValidator(queryset=UserModel.objects.all())])
     agreement = serializers.BooleanField(default=False)
     account_type = serializers.CharField(required=True, write_only=True)
     

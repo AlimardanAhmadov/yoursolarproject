@@ -1,12 +1,13 @@
 from phonenumber_field.serializerfields import PhoneNumberField
+from product.models import Inverter, Product
 from .models import Quote
 from rest_framework import serializers
 
 
 
-class QuoteBuilderSerializer(serializers.ModelSerializer):    
-    product = serializers.SlugRelatedField(slug_field="title", read_only=True)
-    inverter = serializers.SlugRelatedField(slug_field="title", read_only=True)
+class QuoteBuilderSerializer(serializers.Serializer):    
+    product = serializers.CharField(required=True)
+    inverter = serializers.CharField(required=True)
     full_name = serializers.CharField(required=True)
     address = serializers.CharField(required=True)
     postcode = serializers.IntegerField(required=True)
@@ -36,10 +37,6 @@ class QuoteBuilderSerializer(serializers.ModelSerializer):
     completed = serializers.BooleanField(default=True)
     
 
-    class Meta:
-        model = Quote
-        fields = "__all__"
-       
     def __init__(self, *args, **kwargs):
         super(QuoteBuilderSerializer, self).__init__(*args, **kwargs)
 
@@ -78,14 +75,31 @@ class QuoteBuilderSerializer(serializers.ModelSerializer):
 
 
     def create_quote(self, quote, validated_data):
-        quote.product = self.validated_data.get("product")
-        quote.inverter = self.validated_date.get("inverter")
+        product_slug = self.validated_data.get("product")
+        selected_product = Product.cache_by_slug(product_slug)
+
+        if selected_product:
+            print("using cached data")
+        else:
+            selected_product = Product.objects.filter(slug=self.validated_data.get("product")).first()
+        
+
+        inverter_slug = self.validated_data.get("inverter")
+        selected_inverter = Inverter.cache_by_slug(inverter_slug)
+        
+        if selected_inverter:
+            print("using cached data")
+        else:
+            selected_inverter = Inverter.objects.filter(slug=self.validated_data.get("inverter_slug")).first()
+            
+        quote.product = selected_product
+        quote.inverter = selected_inverter
         quote.user = self.user
         quote.save()
 
         if self.validated_data.get("completed") is False:
             print("Adding to Cart")
 
-    def perform_create(self, quote, request):
-        self.create_quote(quote, self.get_cleaned_data())
+    def save(self):
+        self.create_quote(Quote(), self.get_cleaned_data())
 

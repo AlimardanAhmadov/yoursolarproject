@@ -12,6 +12,7 @@ from main.utils import id_generator
 
 CACHED_PRODUCT_BY_SLUG_KEY = 'product__by_slug__{}'
 CACHED_VARIANT_BY_SLUG_KEY = 'variant__by_slug__{}'
+CACHED_INVERTER_BY_SLUG_KEY = 'inverter__by_slug__{}'
 CACHE_LENGTH = 24 * 3600  # --> aq 24hrs demekdi
 
 
@@ -22,7 +23,7 @@ class NotFound:
 def image_directory_path(instance, filename):
     return "photos/{0}/{1}".format(instance.selected_product.title, filename)
 
-def inverters_img_directory_path(filename):
+def inverters_img_directory_path(instance, filename):
     return "photos/inverters/{0}".format(filename)
 
 class Product(TimeStampedModel):
@@ -36,8 +37,6 @@ class Product(TimeStampedModel):
     availability=models.BooleanField(default=True)
     product_type=models.CharField(max_length=50)
     brand=models.CharField(max_length=100)
-    cost = models.FloatField()
-    inverter = models.ForeignKey("Inverter", on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Solar Panel'
@@ -140,15 +139,43 @@ def invalidate_coach_cache(sender, instance, **kwargs):
     cache.delete(CACHED_VARIANT_BY_SLUG_KEY.format(instance.slug))
 
 
-
 class Inverter(TimeStampedModel):
+    slug=models.SlugField()
     cost = models.FloatField()
     title = models.CharField(max_length=200)
     img = models.ImageField(upload_to=inverters_img_directory_path, default='default.png')
-    wattage_capacity = models.DecimalField(max_digits=5, decimal_places=5)
+    wattage_capacity = models.FloatField()
 
     class Meta:
         verbose_name = 'Inverter'
         verbose_name_plural = 'Inverters'
         indexes = [models.Index(fields=['wattage_capacity', 'id', ])]
 
+    @staticmethod
+    def post_save(sender, **kwargs):
+        instance = kwargs.get('instance')
+        created = kwargs.get('created')
+        if created:
+            instance.slug = slugify(str(id_generator()) + "-" + str(instance.id))
+            instance.save()
+
+    @staticmethod
+    def cache_by_slug(slug):
+        key = CACHED_INVERTER_BY_SLUG_KEY.format(slug)
+
+        inverter = cache.get(key)
+        if inverter:
+            if isinstance(inverter, NotFound):
+                return None
+            return inverter
+
+        inverter = Inverter.objects.filter(slug=slug).first()
+
+        if not inverter:
+            cache.set(key, NotFound(), CACHE_LENGTH)
+            return None
+
+        cache.set(key, inverter, CACHE_LENGTH)
+        return inverter
+
+post_save.connect(Inverter.post_save, sender=Inverter)

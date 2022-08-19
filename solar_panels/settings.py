@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
 
     'allauth.socialaccount.providers.google',
+    'social_django',
 
     'user.apps.UserConfig',
     'main.apps.MainConfig',
@@ -254,8 +255,8 @@ SIMPLE_JWT = {
 }
 
 AUTHENTICATION_BACKENDS = [
-    'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.google.GoogleOAuth2',
 ]
 
 JWT_AUTH = {

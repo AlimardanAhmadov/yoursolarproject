@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from main.utils import send_email
 
 from phonenumber_field.serializerfields import PhoneNumberField
-from product.models import Product
+from product.models import Product, Inverter
 
 User = get_user_model()
 
@@ -28,6 +28,7 @@ INSTALLATION = (
 class Quote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     selected_panel = models.ForeignKey(Product, on_delete=models.CASCADE)
+    inverter = models.ForeignKey(Inverter, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=150)
     address = models.TextField()
     postcode = models.IntegerField()
