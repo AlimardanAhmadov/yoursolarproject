@@ -152,6 +152,7 @@ class ProductVariant(TimeStampedModel):
 
 post_save.connect(ProductVariant.post_save, sender=ProductVariant)
 
+
 @receiver((post_delete, post_save), sender=Product)
 def invalidate_coach_cache(sender, instance, **kwargs):
     """
@@ -165,12 +166,28 @@ class Inverter(TimeStampedModel):
     cost = models.FloatField()
     title = models.CharField(max_length=200)
     img = models.ImageField(upload_to=inverters_img_directory_path, default='default.png')
+    image_url=models.URLField(blank=True, null=True)
     wattage_capacity = models.FloatField()
 
     class Meta:
         verbose_name = 'Inverter'
         verbose_name_plural = 'Inverters'
         indexes = [models.Index(fields=['wattage_capacity', 'id', ])]
+
+    
+    def save(self, *args, **kwargs):
+        url_changed = self.tracker.has_changed('image_url')
+        if url_changed:
+            image = self.img
+            if image and image.size > (0.3 * 1024 * 1024):
+                self.image = compress_image(image)
+
+            if ';base64,' in self.image_url:
+                format, imgstr = self.image_url.split(';base64,')
+                ext = format.split('/')[-1]
+                data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+                self.img = data
+        super(Inverter, self).save(*args, **kwargs)
 
     @staticmethod
     def post_save(sender, **kwargs):
@@ -200,3 +217,10 @@ class Inverter(TimeStampedModel):
         return inverter
 
 post_save.connect(Inverter.post_save, sender=Inverter)
+
+@receiver((post_delete, post_save), sender=Inverter)
+def invalidate_coach_cache(sender, instance, **kwargs):
+    """
+    Invalidate the inverter cached data when it is updated or deleted
+    """
+    cache.delete(CACHED_INVERTER_BY_SLUG_KEY.format(instance.slug))
