@@ -45,8 +45,8 @@ class Quote(models.Model):
     spare_way = models.BooleanField(default=False)
     roof_style = models.CharField(max_length=20, blank=True, null=True)
     b_no_panels = models.CharField(max_length=4, blank=True, null=True, choices=YES_NO_CHOICE) # yes or no
-    width = models.IntegerField(blank=True, null=True)
-    height = models.IntegerField(blank=True, null=True)
+    width = models.FloatField(default=0.0)
+    height = models.FloatField(default=0.0)
     panels_count = models.IntegerField(blank=True, null=True)
     fitting = models.CharField(max_length=50, blank=True, null=True)
     mount_style_no = models.CharField(max_length=200, blank=True, null=True)

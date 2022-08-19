@@ -1,3 +1,7 @@
+from email.policy import default
+import logging
+from operator import invert
+from smtplib import quoteaddr
 from phonenumber_field.serializerfields import PhoneNumberField
 from product.models import Inverter, Product
 from .models import Quote
@@ -6,7 +10,7 @@ from rest_framework import serializers
 
 
 class QuoteBuilderSerializer(serializers.Serializer):    
-    product = serializers.CharField(required=True)
+    selected_panel = serializers.CharField(required=True)
     inverter = serializers.CharField(required=True)
     full_name = serializers.CharField(required=True)
     address = serializers.CharField(required=True)
@@ -23,14 +27,14 @@ class QuoteBuilderSerializer(serializers.Serializer):
     spare_way = serializers.BooleanField(default=False)
     roof_style = serializers.CharField(required=False)
     b_no_panels = serializers.CharField(required=False) # yes or no
-    width = serializers.IntegerField(required=False)
-    height = serializers.IntegerField(required=False)
-    panels_count = serializers.IntegerField(required=False)
+    width = serializers.FloatField(required=False, default=0.0)
+    height = serializers.FloatField(required=False, default=0.0)
+    panels_count = serializers.IntegerField(required=False, default=0)
     fitting = serializers.CharField(required=False)
     mount_style_no = serializers.CharField(required=False)
-    rails_count = serializers.IntegerField(required=False)
-    rails_length = serializers.FloatField(required=False) #2.2M or 3.3M
-    cable_length = serializers.FloatField(required=False)
+    rails_count = serializers.IntegerField(required=False, default=0)
+    rails_length = serializers.FloatField(required=False, default=0.0) #2.2M or 3.3M
+    cable_length = serializers.FloatField(required=False, default=0.0)
     storage_system_size = serializers.CharField(required=False)
     storage_cost_option = serializers.CharField(required=False)
     help_with = serializers.CharField(required=False)
@@ -39,9 +43,9 @@ class QuoteBuilderSerializer(serializers.Serializer):
 
     def __init__(self, *args, **kwargs):
         super(QuoteBuilderSerializer, self).__init__(*args, **kwargs)
-
         self.request = self.context.get("request")
         self.user = getattr(self.request, "user", None)
+
     
     def get_cleaned_data(self):
         return {
@@ -74,32 +78,31 @@ class QuoteBuilderSerializer(serializers.Serializer):
         }
 
 
-    def create_quote(self, quote, validated_data):
-        product_slug = self.validated_data.get("product")
+    def create(self, request):
+        data = self.get_cleaned_data()
+
+        product_slug = self.validated_data.get("selected_panel")
         selected_product = Product.cache_by_slug(product_slug)
 
         if selected_product:
-            print("using cached data")
+            logging.debug("using cached data to get the selected panel: %s " % selected_product)
         else:
-            selected_product = Product.objects.filter(slug=self.validated_data.get("product")).first()
+            selected_product = Product.objects.filter(slug=selected_product).first()
         
 
         inverter_slug = self.validated_data.get("inverter")
         selected_inverter = Inverter.cache_by_slug(inverter_slug)
-        
+
         if selected_inverter:
-            print("using cached data")
+            logging.debug("using cached data to get the selected inverter: %s " % selected_inverter)
         else:
-            selected_inverter = Inverter.objects.filter(slug=self.validated_data.get("inverter_slug")).first()
-            
-        quote.product = selected_product
-        quote.inverter = selected_inverter
-        quote.user = self.user
+            selected_inverter = Inverter.objects.filter(slug=selected_inverter).first()
+        
+        quote = Quote(**data, selected_panel=selected_product, inverter=selected_inverter, user=self.user)
         quote.save()
 
         if self.validated_data.get("completed") is False:
             print("Adding to Cart")
-
-    def save(self):
-        self.create_quote(Quote(), self.get_cleaned_data())
+        
+        return quote
 
