@@ -38,7 +38,7 @@ class Cart(models.Model):
                 return None
             return cart
 
-        cart = Cart.objects.filter(username=username).first()
+        cart = Cart.objects.filter(user__username=username).first()
 
         if not cart:
             cache.set(key, NotFound(), CACHE_LENGTH)

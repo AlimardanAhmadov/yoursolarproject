@@ -59,6 +59,7 @@ class QuoteBuilderSerializer(serializers.Serializer):
             "property_type": self.validated_data.get("property_type", ""),
             "no_floors": self.validated_data.get("no_floors", ""),
             "no_bedrooms": self.validated_data.get("no_bedrooms", ""),
+            "phone": self.validated_data.get("phone", ""),
             "other": self.validated_data.get("other", ""),
             "agreement": self.validated_data.get("agreement", ""),
             "installation_type": self.validated_data.get("installation_type", ""),
@@ -79,7 +80,6 @@ class QuoteBuilderSerializer(serializers.Serializer):
             "help_with": self.validated_data.get("help_with", ""),
             "completed": self.validated_data.get("completed", ""),
             "total_cost": self.validated_data.get("total_cost", ""),
-            "phone": self.validated_data.get("phone", ""),
         }
 
 
@@ -106,17 +106,19 @@ class QuoteBuilderSerializer(serializers.Serializer):
         quote = Quote(**data, selected_panel=selected_product, inverter=selected_inverter, user=self.user)
         quote.save()
 
+        cart = self.cart.cache_by_slug(self.user.username)
+        if cart:
+            print("using cached data")
+        else:
+            cart = self.cart
+
         cart_item = CartItem(
-            cart=self.cart,
+            cart=cart,
             product_id=quote.slug,
             price=self.validated_data.get("total_cost"),
             quantity=self.validated_data.get("quantity"),
-            model_type=ContentType.objects.get(app_label='quote_builder', model='Quote')
-        )
+            model_type=ContentType.objects.get_for_model(Quote))
         cart_item.save()
-
-        if self.validated_data.get("completed") is False:
-            print("Adding to Cart")
 
         return quote
 

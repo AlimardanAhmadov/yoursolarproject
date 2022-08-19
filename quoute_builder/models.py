@@ -1,9 +1,11 @@
 import logging
 from django.conf import settings
 from django.db import models
+from django.utils.text import slugify
 from django.contrib.auth import get_user_model
+from django.db.models.signals import post_save
 
-from main.utils import send_email
+from main.utils import send_email, id_generator
 
 from phonenumber_field.serializerfields import PhoneNumberField
 from product.models import Product, Inverter
@@ -27,13 +29,14 @@ INSTALLATION = (
 
 class Quote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    slug = models.SlugField()
     selected_panel = models.ForeignKey(Product, on_delete=models.CASCADE)
     inverter = models.ForeignKey(Inverter, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=150)
     address = models.TextField()
     postcode = models.IntegerField()
     email = models.EmailField(max_length=250)
-    phone = PhoneNumberField()
+    phone = models.CharField(max_length=50)
     property_type = models.CharField(max_length=50)
     no_floors = models.IntegerField()
     no_bedrooms = models.IntegerField()
@@ -111,3 +114,14 @@ class Quote(models.Model):
             send_email(body, subject, recipients, template_name, "html")
         else:
             logging.warning("Sendgrid credentials are not set")
+
+
+    @staticmethod
+    def post_save(sender, **kwargs):
+        instance = kwargs.get('instance')
+        created = kwargs.get('created')
+        if created:
+            instance.slug = slugify(str(id_generator()) + "-" + str(instance.id))
+            instance.save()
+
+post_save.connect(Quote.post_save, sender=Quote)
