@@ -31,7 +31,7 @@ def inverters_img_directory_path(instance, filename):
     return "photos/inverters/{0}".format(filename)
 
 class Product(TimeStampedModel):
-    slug=models.SlugField()
+    slug=models.SlugField(blank=True, null=True)
     title=models.CharField(max_length=250)
     category=models.CharField(max_length=50)
     description=RichTextField()
@@ -91,7 +91,7 @@ def invalidate_coach_cache(sender, instance, **kwargs):
 
 class ProductVariant(TimeStampedModel):
     selected_product=models.ForeignKey(Product, on_delete=models.CASCADE)
-    slug=models.SlugField()
+    slug=models.SlugField(blank=True, null=True)
     primary_variant=models.BooleanField(default=False)
     dimensions=models.CharField(max_length=50)
     materials=models.CharField(max_length=100)
@@ -162,7 +162,7 @@ def invalidate_coach_cache(sender, instance, **kwargs):
 
 
 class Inverter(TimeStampedModel):
-    slug=models.SlugField()
+    slug=models.SlugField(blank=True, null=True)
     cost = models.FloatField()
     title = models.CharField(max_length=200)
     img = models.ImageField(upload_to=inverters_img_directory_path, default='default.png')

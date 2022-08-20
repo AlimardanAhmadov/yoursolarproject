@@ -41,6 +41,9 @@ def api_exception_handler(exc: Exception, context: dict[str, Any]) -> Response:
 def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
+def no_generator(size=8, chars=string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
 
 def send_email(body, subject, recipients, template_name, body_type="plain"):
     mail_subject = subject

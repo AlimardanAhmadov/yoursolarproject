@@ -76,6 +76,7 @@ social-auth-app-django==5.0.0
 social-auth-core==4.3.0
 sqlparse==0.4.2
 starkbank-ecdsa==2.0.3
+stripe==4.1.0
 typing_extensions==4.3.0
 tzdata==2022.2
 ua-parser==0.15.0
