@@ -9,8 +9,8 @@ from rest_framework.generics import ListCreateAPIView
 from rest_framework import permissions, status
 from rest_framework.response import Response
 
-from .serializers import CartItemSerializer
-from .models import Cart
+from .serializers import CartItemSerializer, UpdateCartSerializer
+from .models import Cart, CartItem
 from product.models import Product
 
 
@@ -41,8 +41,7 @@ class CreateCartItemView(ListCreateAPIView):
 
     def get(self, request, slug, username):
         serializer = CartItemSerializer(
-            self.get_cart(), 
-            data=request.data, 
+            data=request.data,
             context={
                 "request": request, 
                 "product": self.get_product(), 
@@ -54,18 +53,15 @@ class CreateCartItemView(ListCreateAPIView):
     def create(self, request, slug, username):
         with transaction.atomic():
             try:
-                serializer = CartItemSerializer(self.get_cart(), data=request.data, context={"request": request})
+                serializer = CartItemSerializer(
+                    data=request.data, 
+                    context={
+                        "request": request, 
+                        "product": self.get_product(), 
+                        "cart": self.get_cart()
+                    }
+                )
                 if serializer.is_valid():
-
-                    serializer = CartItemSerializer(
-                        self.get_cart(), 
-                        data=request.data, 
-                        context={
-                            "request": request, 
-                            "product": self.get_product(), 
-                            "cart": self.get_cart()
-                        }
-                    )
                     self.perform_create(serializer)
                     return JsonResponse(serializer.data, status=status.HTTP_200_OK)
                 else:
@@ -92,3 +88,68 @@ class CreateCartItemView(ListCreateAPIView):
     def perform_create(self, serializer):
         cart_serializer = serializer.save()
         return cart_serializer
+
+
+class UpdateCartView(ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    allowed_methods = ("POST", "OPTIONS", "HEAD", "GET")
+    serializer_class = UpdateCartSerializer
+
+
+    @method_decorator(login_required(login_url='***'))
+    def dispatch(self, *args, **kwargs):
+        return super(UpdateCartView, self).dispatch(*args, **kwargs)
+
+    def get_object(self, slug):
+        selected_product = get_object_or_404(CartItem, slug=slug)
+        
+        return selected_product
+
+    def get(self, request, slug):
+        serializer = UpdateCartSerializer(
+            data=request.data,
+            context={
+                "request": request, 
+                "product": self.get_object(), 
+            }
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    
+    def create(self, request, slug):
+        with transaction.atomic():
+            try:
+                serializer = CartItemSerializer(
+                    data=request.data, 
+                    context={
+                        "request": request, 
+                        "product": self.get_object(), 
+                    }
+                )
+                if serializer.is_valid():
+                    self.perform_create(serializer)
+                    return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+                else:
+                    data = []
+                    emessage=serializer.errors
+                    for key in emessage:
+                        err_message = str(emessage[key])
+                        err_string = re.search("string='(.*)', ", err_message)
+                        message_value = err_string.group(1)
+                        final_message = f"{key} - {message_value}"
+                        data.append(final_message)
+
+                    response = HttpResponse(json.dumps({'err': data}), 
+                        content_type='application/json')
+                    response.status_code = 400
+                    return response
+            except Exception:
+                transaction.set_rollback(True)
+                response = HttpResponse(json.dumps({'err': ["Something went wrong!"]}), 
+                    content_type='application/json')
+                response.status_code = 400
+                return response
+
+    def perform_create(self, serializer):
+        update_serializer = serializer.save()
+        return update_serializer

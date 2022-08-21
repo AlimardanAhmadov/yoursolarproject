@@ -22,7 +22,7 @@ class QuoteBuilderView(ListCreateAPIView):
     #renderer_classes = [MyHTMLRenderer,]
     serializer_class = QuoteBuilderSerializer
 
-    #@method_decorator(login_required(login_url='***'))
+    @method_decorator(login_required(login_url='***'))
     def dispatch(self, *args, **kwargs):
         return super(QuoteBuilderView, self).dispatch(*args, **kwargs)
 

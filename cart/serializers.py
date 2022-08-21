@@ -41,7 +41,7 @@ class CartItemSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 {"quantity": 'You cannot order more than %s of this item' % quantity}
             )
-            
+
         return attrs    
 
 
@@ -57,3 +57,35 @@ class CartItemSerializer(serializers.Serializer):
         )
         
         return new_cart_item
+
+
+class UpdateCartSerializer(serializers.Serializer):
+    quantity = serializers.IntegerField()
+
+    def __init__(self, *args, **kwargs):
+        super(UpdateCartSerializer, self).__init__(*args, **kwargs)
+
+        self.request = self.context["request"]
+        self.item = self.context["item"]
+    
+
+    def validate(self, attrs):
+        quantity = self.item.content_object.quantity
+        quantity_match = (
+            attrs["quantity"] > quantity,
+        )
+
+        if all(quantity_match):
+            raise serializers.ValidationError(
+                {"quantity": 'You cannot order more than %s of this item' % quantity}
+            )
+        
+        return attrs
+    
+
+    def create(self, attrs):
+        cart_item = self.item
+        cart_item.quantity = attrs['quantity']
+        cart_item
+
+        return cart_item
