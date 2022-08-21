@@ -14,6 +14,7 @@ class QuoteBuilderSerializer(serializers.Serializer):
     full_name = serializers.CharField(required=True)
     address = serializers.CharField(required=True)
     postcode = serializers.IntegerField(required=True)
+    title = serializers.CharField(required=True)
     email = serializers.EmailField(required=True)
     property_type = serializers.CharField(required=True)
     no_floors = serializers.IntegerField(required=True)
@@ -55,6 +56,7 @@ class QuoteBuilderSerializer(serializers.Serializer):
             "full_name": self.validated_data.get("full_name", ""),
             "address": self.validated_data.get("address", ""),
             "postcode": self.validated_data.get("postcode", ""),
+            "title": self.validated_data.get("title", ""),
             "email": self.validated_data.get("email", ""),
             "property_type": self.validated_data.get("property_type", ""),
             "no_floors": self.validated_data.get("no_floors", ""),
@@ -117,7 +119,8 @@ class QuoteBuilderSerializer(serializers.Serializer):
             product_id=quote.slug,
             price=self.validated_data.get("total_cost"),
             quantity=self.validated_data.get("quantity"),
-            model_type=ContentType.objects.get_for_model(Quote))
+            content_object=quote
+        )
         cart_item.save()
 
         return quote

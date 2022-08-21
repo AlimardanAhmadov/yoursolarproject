@@ -51,8 +51,9 @@ class CreateCheckoutSessionView(View):
                     quantity=item.quantity,
                     total=item.price
                 )
-                product = item.model_type.get_object_for_this_type(product_id=item.slug)
                 
+                product = item.model_type.get_object_for_this_type(slug=item.slug)
+
                 line_items.append(
                     {
                         'price_data': {

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db.models.signals import post_save, post_delete
 from django.utils.text import slugify
 from django.core.cache import cache
@@ -55,7 +56,7 @@ class Cart(models.Model):
         instance = kwargs.get('instance')
         created = kwargs.get('created')
         if created:
-            instance.slug = slugify(instance.user.username + "-" + str(id_generator()) + "-" + str(instance.pk))
+            instance.slug = slugify(instance.user.username)
             instance.save()
 
 post_save.connect(Cart.post_save, sender=Cart)
@@ -63,7 +64,7 @@ post_save.connect(Cart.post_save, sender=Cart)
 @receiver((post_delete, post_save), sender=Product)
 def invalidate_coach_cache(sender, instance, **kwargs):
     """
-    Invalidate the product cached data when it is updated or deleted
+    Invalidate the cart cached data when it is updated or deleted
     """
     cache.delete(CACHED_CART_BY_USERNAME_KEY.format(instance.slug))
 
@@ -75,11 +76,18 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=6, decimal_places=5)
     product_id = models.CharField(max_length=250)
-    slug = models.SlugField(blank=True)
+    slug = models.SlugField(blank=True, null=True)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('model_type', 'object_id')
 
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["model_type", "object_id"]),
+        ]
 
     @staticmethod
-    def post_save(sender, **kwargs):
+    def post_save(sender, *args, **kwargs):
         instance = kwargs.get('instance')
         created = kwargs.get('created')
         if created:

@@ -32,6 +32,7 @@ class Quote(models.Model):
     slug = models.SlugField()
     selected_panel = models.ForeignKey(Product, on_delete=models.CASCADE)
     inverter = models.ForeignKey(Inverter, on_delete=models.CASCADE)
+    title = models.CharField(max_length=250)
     full_name = models.CharField(max_length=150)
     address = models.TextField()
     postcode = models.IntegerField()

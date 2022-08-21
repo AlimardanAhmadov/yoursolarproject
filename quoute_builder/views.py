@@ -7,8 +7,8 @@ from rest_framework.generics import (
 from rest_framework import permissions, status
 from rest_framework.response import Response
 
-from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required 
+from django.utils.decorators import method_decorator
 from django.db import transaction
 
 from main.html_renderer import MyHTMLRenderer
