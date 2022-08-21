@@ -89,3 +89,10 @@ class UpdateCartSerializer(serializers.Serializer):
         cart_item
 
         return cart_item
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+    class Mera:
+        model = CartItem
+        fields = "__all__"
+

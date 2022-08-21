@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required 
 from django.db import transaction
 from django.http import JsonResponse, HttpResponse
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import (ListCreateAPIView, DestroyAPIView)
 from rest_framework import permissions, status
 from rest_framework.response import Response
 
@@ -153,3 +153,24 @@ class UpdateCartView(ListCreateAPIView):
     def perform_create(self, serializer):
         update_serializer = serializer.save()
         return update_serializer
+
+
+
+class DestroyCartItemAPIView(DestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = CartItemSerializer
+    queryset = ""
+
+    @method_decorator(login_required(login_url='***'))
+    def dispatch(self, *args, **kwargs):
+        return super(DestroyCartItemAPIView, self).dispatch(*args, **kwargs)
+
+    def get_object(self, slug):
+        selected_item = get_object_or_404(CartItem, slug=slug)    
+        return selected_item
+    
+    def destroy(self, request, *args, **kwargs):
+        slug = kwargs.get('slug')
+        instance = self.get_object(slug)
+        instance.delete()
+        return JsonResponse({"detail": "Product deleted"})

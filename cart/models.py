@@ -75,6 +75,7 @@ class CartItem(models.Model):
     model_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=6, decimal_places=5)
+    total_cost = models.DecimalField(max_digits=6, decimal_places=5)
     product_id = models.CharField(max_length=250)
     slug = models.SlugField(blank=True, null=True)
     object_id = models.PositiveIntegerField()
@@ -95,3 +96,9 @@ class CartItem(models.Model):
             instance.save()
 
 post_save.connect(CartItem.post_save, sender=CartItem)
+
+
+
+@receiver(post_delete, sender=CartItem)
+def update_cart_on_delete(sender, instance, **kwargs):
+    """updating total cost"""
