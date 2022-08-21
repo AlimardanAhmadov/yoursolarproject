@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
-from .models import CartItem
+from .models import Cart, CartItem
 from product.models import ProductVariant
 
 
@@ -25,7 +25,13 @@ class CartItemSerializer(serializers.Serializer):
 
         return selected_variant
 
-    def _validate_quantity(self, attrs):
+    def validate(self, attrs):
+        cart_item = CartItem.objects.filter(cart=self.cart).exists()
+        if cart_item:
+            raise serializers.ValidationError(
+                {"cart": 'You already have this item in your shopping cart'}
+            )
+
         quantity = self.get_variant(self, attrs).quantity
         quantity_match = (
             attrs["quantity"] > quantity,
@@ -35,10 +41,10 @@ class CartItemSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 {"quantity": 'You cannot order more than %s of this item' % quantity}
             )
-        
-        return attrs
+            
+        return attrs    
 
-    
+
     def create(self, attrs):
         selected_variant=self.get_variant(self, attrs)
 
