@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.dispatch import receiver
 from main.utils import id_generator
 from product.models import Product
+from model_utils import FieldTracker
 
 
 User = get_user_model()
@@ -31,7 +32,7 @@ class Cart(models.Model):
 
     def __str__(self):
         return self.user.username
-
+    
     @staticmethod
     def cache_by_slug(slug):
         key = CACHED_CART_BY_USERNAME_KEY.format(slug)
@@ -81,11 +82,31 @@ class CartItem(models.Model):
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('model_type', 'object_id')
 
+    tracker = FieldTracker()
 
     class Meta:
         indexes = [
             models.Index(fields=["model_type", "object_id"]),
         ]
+    
+    def get_related_cart_total(self):
+        grand_total = float(self.cart.grand_total) - float(self.total_cost)
+        total_cost = float(self.cart.total_cost) - float(self.total_cost)
+        context = {
+            'grand_total': grand_total,
+            'total_cost': total_cost
+        }
+        return context
+    
+
+    def save(self, *args, **kwargs):
+        quantity = self.tracker.has_changed('quantity')
+        if quantity:
+            self.cart.grand_total = self.get_related_cart_total['grand_total']
+            self.cart.total_cost = self.get_related_cart_total['total_cost']
+
+        super(CartItem, self).save(*args, **kwargs)
+
 
     @staticmethod
     def post_save(sender, *args, **kwargs):
@@ -102,3 +123,6 @@ post_save.connect(CartItem.post_save, sender=CartItem)
 @receiver(post_delete, sender=CartItem)
 def update_cart_on_delete(sender, instance, **kwargs):
     """updating total cost"""
+    instance.cart.grand_total = instance.get_related_cart['grand_total']
+    instance.cart.total_cost = instance.get_related_cart['total_cost']
+    instance.save()

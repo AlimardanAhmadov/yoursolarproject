@@ -86,7 +86,7 @@ class UpdateCartSerializer(serializers.Serializer):
     def create(self, attrs):
         cart_item = self.item
         cart_item.quantity = attrs['quantity']
-        cart_item
+        cart_item.save()
 
         return cart_item
 
