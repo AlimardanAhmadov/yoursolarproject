@@ -7,7 +7,7 @@ from product.models import ProductVariant
 
 class CartItemSerializer(serializers.Serializer):
     quantity = serializers.IntegerField()
-    price = serializers.FLoatField()
+    price = serializers.CharField()
     slug = serializers.SlugField()
 
     def __init__(self, *args, **kwargs):
@@ -92,7 +92,7 @@ class UpdateCartSerializer(serializers.Serializer):
 
 
 class CartItemSerializer(serializers.ModelSerializer):
-    class Mera:
+    class Meta:
         model = CartItem
-        fields = "__all__"
+        fields = ('slug',)
 

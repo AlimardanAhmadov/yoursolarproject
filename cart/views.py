@@ -8,6 +8,7 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework.generics import (ListCreateAPIView, DestroyAPIView)
 from rest_framework import permissions, status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .serializers import CartItemSerializer, UpdateCartSerializer
 from .models import Cart, CartItem
@@ -23,7 +24,8 @@ class CreateCartItemView(ListCreateAPIView):
     def dispatch(self, *args, **kwargs):
         return super(CreateCartItemView, self).dispatch(*args, **kwargs)
 
-    def get_product(self, slug):
+    def get_product(self, *args, **kwargs):
+        slug = kwargs.get('slug')
         selected_product = Product.cache_by_slug(slug)
 
         if not selected_product:
@@ -31,7 +33,8 @@ class CreateCartItemView(ListCreateAPIView):
         
         return selected_product
     
-    def get_cart(self, username):
+    def get_cart(self, *args, **kwargs):
+        username = kwargs.get('username')
         current_cart = Cart.cache_by_slug(slugify(username))
 
         if not current_cart:
@@ -39,7 +42,7 @@ class CreateCartItemView(ListCreateAPIView):
         
         return current_cart
 
-    def get(self, request, slug, username):
+    def get(self, request, *args, **kwargs):
         serializer = CartItemSerializer(
             data=request.data,
             context={
@@ -50,7 +53,7 @@ class CreateCartItemView(ListCreateAPIView):
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def create(self, request, slug, username):
+    def create(self, request, *args, **kwargs):
         with transaction.atomic():
             try:
                 serializer = CartItemSerializer(
@@ -100,7 +103,8 @@ class UpdateCartView(ListCreateAPIView):
     def dispatch(self, *args, **kwargs):
         return super(UpdateCartView, self).dispatch(*args, **kwargs)
 
-    def get_object(self, slug):
+    def get_object(self, *args, **kwargs):
+        slug = kwargs.get('slug')
         selected_product = get_object_or_404(CartItem, slug=slug)
         
         return selected_product
@@ -116,7 +120,7 @@ class UpdateCartView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     
-    def create(self, request, slug):
+    def create(self, request, *args, **kwargs):
         with transaction.atomic():
             try:
                 serializer = CartItemSerializer(
@@ -156,20 +160,23 @@ class UpdateCartView(ListCreateAPIView):
 
 
 
-class DestroyCartItemAPIView(DestroyAPIView):
+class DestroyCartItemAPIView(ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CartItemSerializer
     queryset = ""
+    allowed_methods = ("POST", "OPTIONS", "HEAD")
 
     @method_decorator(login_required(login_url='***'))
     def dispatch(self, *args, **kwargs):
         return super(DestroyCartItemAPIView, self).dispatch(*args, **kwargs)
 
-    def get_object(self, slug):
+    def get_object(self, *args, **kwargs):
+        slug = kwargs.get('slug')
         selected_item = get_object_or_404(CartItem, slug=slug)    
         return selected_item
     
-    def destroy(self, request, *args, **kwargs):
+    
+    def create(self, request, *args, **kwargs):
         slug = kwargs.get('slug')
         instance = self.get_object(slug)
         instance.delete()
