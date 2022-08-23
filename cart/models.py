@@ -22,10 +22,10 @@ class NotFound:
 
 class Cart(models.Model):
     user = models.OneToOneField(User, related_name='cart', on_delete=models.CASCADE)
-    total_cost = models.DecimalField(max_digits=5, decimal_places=4)
-    grand_total = models.DecimalField(max_digits=5, decimal_places=4, blank=True, null=True)
-    tax = models.DecimalField(max_digits=5, decimal_places=4, blank=True, null=True)
-    shipping_cost = models.DecimalField(max_digits=5, decimal_places=4, blank=True, null=True)
+    total_cost = models.FloatField(default=0.0)
+    grand_total = models.FloatField(default=0.0)
+    tax = models.FloatField(default=0.0)
+    shipping_cost = models.FloatField(default=0.0)
     qty = models.PositiveIntegerField(blank=True, null=True)
     products = models.ManyToManyField("CartItem", related_name='products', blank=True)
     slug = models.SlugField(blank=True, null=True)
@@ -75,8 +75,8 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     model_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
-    price = models.DecimalField(max_digits=6, decimal_places=5)
-    total_cost = models.DecimalField(max_digits=6, decimal_places=5)
+    price = models.FloatField(default=0.0)
+    total_cost = models.FloatField(default=0.0)
     product_id = models.CharField(max_length=250)
     slug = models.SlugField(blank=True, null=True)
     object_id = models.PositiveIntegerField()
@@ -99,14 +99,6 @@ class CartItem(models.Model):
         return context
     
 
-    def save(self, *args, **kwargs):
-        quantity = self.tracker.has_changed('quantity')
-        if quantity:
-            self.cart.grand_total = self.get_related_cart_total['grand_total']
-            self.cart.total_cost = self.get_related_cart_total['total_cost']
-
-        super(CartItem, self).save(*args, **kwargs)
-
 
     @staticmethod
     def post_save(sender, *args, **kwargs):
@@ -114,15 +106,20 @@ class CartItem(models.Model):
         created = kwargs.get('created')
         if created:
             instance.slug = slugify(str(id_generator()) + "-" + str(instance.pk))
+            instance.total_cost = float(instance.price) + float(instance.content_object.shipping_price) + float(instance.content_object.tax)
             instance.save()
+        
+        quantity = instance.tracker.has_changed('quantity')
+        if quantity:
+            instance.cart.grand_total = instance.get_related_cart_total()['grand_total']
+            instance.cart.total_cost = instance.get_related_cart_total()['total_cost']
 
 post_save.connect(CartItem.post_save, sender=CartItem)
-
 
 
 @receiver(post_delete, sender=CartItem)
 def update_cart_on_delete(sender, instance, **kwargs):
     """updating total cost"""
-    instance.cart.grand_total = instance.get_related_cart['grand_total']
-    instance.cart.total_cost = instance.get_related_cart['total_cost']
-    instance.save()
+    instance.cart.grand_total = instance.get_related_cart_total()['grand_total']
+    instance.cart.total_cost = instance.get_related_cart_total()['total_cost']
+    instance.cart.save()

@@ -35,7 +35,6 @@ class Product(TimeStampedModel):
     title=models.CharField(max_length=250)
     category=models.CharField(max_length=50)
     description=RichTextField()
-    tax=models.FloatField(default=0.0)
     return_policy=models.TextField(blank=True, default='This product has no return policy')
     shipping_policy=models.TextField(blank=True, default='This product has no shipping policy')
     availability=models.BooleanField(default=True)
@@ -101,6 +100,9 @@ class ProductVariant(TimeStampedModel):
     image_url=models.URLField(blank=True, null=True)
     sku=models.CharField(max_length=400)
     active=models.BooleanField(default=True)
+    quantity=models.PositiveIntegerField(default=0)
+    shipping_price=models.FloatField(default=0.0)
+    tax=models.FloatField(default=0.0)
 
     tracker = FieldTracker()
 

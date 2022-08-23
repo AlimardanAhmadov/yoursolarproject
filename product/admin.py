@@ -6,7 +6,7 @@ from .models import Product, ProductVariant, Inverter
 class VariantInline(admin.StackedInline):
     model = ProductVariant
     extra = 0
-    fields = ['primary_variant', 'price', 'discount', 'sku', 'active']
+    fields = ['primary_variant', 'price', 'discount', 'sku', 'active', 'slug', 'quantity']
 
 class ProductAdmin(admin.ModelAdmin):
     inlines = [VariantInline]

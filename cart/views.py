@@ -5,12 +5,12 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required 
 from django.db import transaction
 from django.http import JsonResponse, HttpResponse
-from rest_framework.generics import (ListCreateAPIView, DestroyAPIView)
+from rest_framework.generics import (ListCreateAPIView,)
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import CartItemSerializer, UpdateCartSerializer
+from .serializers import CartDetailsItemSerializer, CartItemSerializer, UpdateCartSerializer
 from .models import Cart, CartItem
 from product.models import Product
 
@@ -19,22 +19,20 @@ class CreateCartItemView(ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     allowed_methods = ("POST", "OPTIONS", "HEAD", "GET")
     serializer_class = CartItemSerializer
+    queryset = ""
 
     @method_decorator(login_required(login_url='***'))
     def dispatch(self, *args, **kwargs):
         return super(CreateCartItemView, self).dispatch(*args, **kwargs)
 
-    def get_product(self, *args, **kwargs):
-        slug = kwargs.get('slug')
+    def get_product(self, slug):
         selected_product = Product.cache_by_slug(slug)
 
         if not selected_product:
             selected_product = get_object_or_404(Product, slug=slug)
-        
         return selected_product
     
-    def get_cart(self, *args, **kwargs):
-        username = kwargs.get('username')
+    def get_cart(self, username):
         current_cart = Cart.cache_by_slug(slugify(username))
 
         if not current_cart:
@@ -42,26 +40,16 @@ class CreateCartItemView(ListCreateAPIView):
         
         return current_cart
 
-    def get(self, request, *args, **kwargs):
-        serializer = CartItemSerializer(
-            data=request.data,
-            context={
-                "request": request, 
-                "product": self.get_product(), 
-                "cart": self.get_cart()
-            }
-        )
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request, slug, username):
         with transaction.atomic():
             try:
                 serializer = CartItemSerializer(
                     data=request.data, 
                     context={
                         "request": request, 
-                        "product": self.get_product(), 
-                        "cart": self.get_cart()
+                        "product": self.get_product(slug), 
+                        "cart": self.get_cart(username)
                     }
                 )
                 if serializer.is_valid():
@@ -81,7 +69,8 @@ class CreateCartItemView(ListCreateAPIView):
                         content_type='application/json')
                     response.status_code = 400
                     return response
-            except Exception:
+            except Exception as e:
+                print(e)
                 transaction.set_rollback(True)
                 response = HttpResponse(json.dumps({'err': ["Something went wrong!"]}), 
                     content_type='application/json')
@@ -94,40 +83,27 @@ class CreateCartItemView(ListCreateAPIView):
 
 
 class UpdateCartView(ListCreateAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
     allowed_methods = ("POST", "OPTIONS", "HEAD", "GET")
     serializer_class = UpdateCartSerializer
+    queryset = ""
 
-
-    @method_decorator(login_required(login_url='***'))
+    #@method_decorator(login_required(login_url='***'))
     def dispatch(self, *args, **kwargs):
         return super(UpdateCartView, self).dispatch(*args, **kwargs)
 
-    def get_object(self, *args, **kwargs):
-        slug = kwargs.get('slug')
+    def get_object(self, slug):
         selected_product = get_object_or_404(CartItem, slug=slug)
-        
         return selected_product
-
-    def get(self, request, slug):
-        serializer = UpdateCartSerializer(
-            data=request.data,
-            context={
-                "request": request, 
-                "product": self.get_object(), 
-            }
-        )
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
     
-    def create(self, request, *args, **kwargs):
+    def create(self, request, slug):
         with transaction.atomic():
             try:
-                serializer = CartItemSerializer(
+                serializer = UpdateCartSerializer(
                     data=request.data, 
                     context={
                         "request": request, 
-                        "product": self.get_object(), 
+                        "product": self.get_object(slug), 
                     }
                 )
                 if serializer.is_valid():
@@ -147,7 +123,8 @@ class UpdateCartView(ListCreateAPIView):
                         content_type='application/json')
                     response.status_code = 400
                     return response
-            except Exception:
+            except Exception as e:
+                print(e)
                 transaction.set_rollback(True)
                 response = HttpResponse(json.dumps({'err': ["Something went wrong!"]}), 
                     content_type='application/json')
@@ -162,7 +139,7 @@ class UpdateCartView(ListCreateAPIView):
 
 class DestroyCartItemAPIView(ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = CartItemSerializer
+    serializer_class = CartDetailsItemSerializer
     queryset = ""
     allowed_methods = ("POST", "OPTIONS", "HEAD")
 
@@ -170,14 +147,12 @@ class DestroyCartItemAPIView(ListCreateAPIView):
     def dispatch(self, *args, **kwargs):
         return super(DestroyCartItemAPIView, self).dispatch(*args, **kwargs)
 
-    def get_object(self, *args, **kwargs):
-        slug = kwargs.get('slug')
+    def get_object(self, slug):
         selected_item = get_object_or_404(CartItem, slug=slug)    
         return selected_item
     
     
-    def create(self, request, *args, **kwargs):
-        slug = kwargs.get('slug')
+    def create(self, request, slug):
         instance = self.get_object(slug)
         instance.delete()
         return JsonResponse({"detail": "Product deleted"})

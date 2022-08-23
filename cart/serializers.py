@@ -6,22 +6,22 @@ from product.models import ProductVariant
 
 
 class CartItemSerializer(serializers.Serializer):
-    quantity = serializers.IntegerField()
-    price = serializers.CharField()
+    quantity = serializers.IntegerField(write_only=True)
+    price = serializers.CharField(write_only=True)
     slug = serializers.SlugField()
 
     def __init__(self, *args, **kwargs):
         super(CartItemSerializer, self).__init__(*args, **kwargs)
 
-        self.request = self.context["request"]
-        self.product = self.context["product"]
-        self.cart = self.context["cart"]
+        self.request = self.context.get("request")
+        self.product = self.context.get("product")
+        self.cart = self.context.get("cart")
         self.user = getattr(self.request, "user", None)
     
     def get_variant(self, attrs):
         selected_variant = ProductVariant.cache_by_slug(attrs['slug'])
         if not selected_variant:
-            selected_variant = ProductVariant.objects.filter(slug=attrs['slug'], product=self.product).first()
+            selected_variant = ProductVariant.objects.filter(slug=attrs['slug'], selected_product=self.product).first()
 
         return selected_variant
 
@@ -32,7 +32,7 @@ class CartItemSerializer(serializers.Serializer):
                 {"cart": 'You already have this item in your shopping cart'}
             )
 
-        quantity = self.get_variant(self, attrs).quantity
+        quantity = self.get_variant(attrs).quantity
         quantity_match = (
             attrs["quantity"] > quantity,
         )
@@ -46,7 +46,7 @@ class CartItemSerializer(serializers.Serializer):
 
 
     def create(self, attrs):
-        selected_variant=self.get_variant(self, attrs)
+        selected_variant=self.get_variant(attrs)
 
         new_cart_item =CartItem.objects.create(
             cart=self.cart,
@@ -66,8 +66,7 @@ class UpdateCartSerializer(serializers.Serializer):
         super(UpdateCartSerializer, self).__init__(*args, **kwargs)
 
         self.request = self.context["request"]
-        self.item = self.context["item"]
-    
+        self.item = self.context.get("product")
 
     def validate(self, attrs):
         quantity = self.item.content_object.quantity
@@ -82,16 +81,15 @@ class UpdateCartSerializer(serializers.Serializer):
         
         return attrs
     
-
-    def create(self, attrs):
+    def create(self, validated_data):
         cart_item = self.item
-        cart_item.quantity = attrs['quantity']
+        cart_item.quantity = self.validated_data.get('quantity')
         cart_item.save()
 
         return cart_item
 
 
-class CartItemSerializer(serializers.ModelSerializer):
+class CartDetailsItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
         fields = ('slug',)
