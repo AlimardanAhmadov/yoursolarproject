@@ -2,7 +2,7 @@ import logging
 from django.contrib.contenttypes.models import ContentType
 from cart.models import CartItem
 from phonenumber_field.serializerfields import PhoneNumberField
-from product.models import Inverter, Product
+from product.models import Product
 from .models import Quote
 from rest_framework import serializers
 
@@ -82,6 +82,7 @@ class QuoteBuilderSerializer(serializers.Serializer):
             "help_with": self.validated_data.get("help_with", ""),
             "completed": self.validated_data.get("completed", ""),
             "total_cost": self.validated_data.get("total_cost", ""),
+            "inverter": self.validated_data.get("inverter", "")
         }
 
 
@@ -96,16 +97,7 @@ class QuoteBuilderSerializer(serializers.Serializer):
         else:
             selected_product = Product.objects.filter(slug=selected_product).first()
         
-
-        inverter_slug = self.validated_data.get("inverter")
-        selected_inverter = Inverter.cache_by_slug(inverter_slug)
-
-        if selected_inverter:
-            logging.debug("using cached data to get the selected inverter: %s " % selected_inverter)
-        else:
-            selected_inverter = Inverter.objects.filter(slug=selected_inverter).first()
-        
-        quote = Quote(**data, selected_panel=selected_product, inverter=selected_inverter, user=self.user)
+        quote = Quote(**data, selected_panel=selected_product, user=self.user)
         quote.save()
 
         cart = self.cart.cache_by_slug(self.user.username)

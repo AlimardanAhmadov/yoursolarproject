@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('cost', models.FloatField()),
                 ('title', models.CharField(max_length=200)),
-                ('img', models.ImageField(default='default.png', upload_to=product.models.inverters_img_directory_path)),
+                ('img', models.ImageField(default='default.png')),
                 ('wattage_capacity', models.DecimalField(decimal_places=5, max_digits=5)),
             ],
             options={

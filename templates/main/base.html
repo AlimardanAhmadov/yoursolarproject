@@ -13,11 +13,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+	<link rel='stylesheet' href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 	<link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
 </head>
-<body>
+
 <header>
 	<div class="container">
 		<nav class="navbar">
@@ -60,6 +63,8 @@
 		</nav>
 	</div>
 </header>
+<body>
+{% block content %}
 <div class="banner-section">
     <div class="container">
         <div class="banner-left">
@@ -97,12 +102,11 @@
         </div>
     </div>
 </div>
- 
 <div class="container pages">
     <a class="page-item card" href="">
         <span class="page-title">Quote Builder</span>
     </a>
-    <a class="page-item card" href="">
+    <a class="page-item card" href="{% url 'shop' %}">
         <span class="page-title">E-Shop</span>
     </a>
     <a class="page-item card" href=""> 
@@ -112,7 +116,6 @@
         <span class="page-title">the science</span>
     </a>
 </div>
-
 <div class="special-offers">
     <section id="rotating-section">
         <div id="rotating-animation">
@@ -137,7 +140,7 @@
     <div class="slide-container swiper">
         <div class="slide-content">
             <div class="card-wrapper swiper-wrapper">
-                <div class="card swiper-slide">
+                <div class="card product-card swiper-slide">
                     <div class="image-content">
                         <div class="card-image">
                             <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
@@ -152,7 +155,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card swiper-slide">
+                <div class="card product-card swiper-slide">
                     <div class="image-content">
                         <div class="card-image">
                             <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
@@ -168,7 +171,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card swiper-slide">
+                <div class="card product-card swiper-slide">
                     <div class="image-content">
                         <div class="card-image">
                             <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
@@ -184,7 +187,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card swiper-slide">
+                <div class="card product-card swiper-slide">
                     <div class="image-content">
                         <div class="card-image">
                             <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
@@ -200,7 +203,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card swiper-slide">
+                <div class="card product-card swiper-slide">
                     <div class="image-content">
                         <div class="card-image">
                             <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
@@ -216,7 +219,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card swiper-slide">
+                <div class="card product-card swiper-slide">
                     <div class="image-content">
                         <div class="card-image">
                             <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
@@ -232,7 +235,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card swiper-slide">
+                <div class="card product-card swiper-slide">
                     <div class="image-content">
                         <div class="card-image">
                             <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
@@ -248,7 +251,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card swiper-slide">
+                <div class="card product-card swiper-slide">
                     <div class="image-content">
                         <div class="card-image">
                             <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
@@ -264,7 +267,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card swiper-slide">
+                <div class="card product-card swiper-slide">
                     <div class="image-content">
                         <div class="card-image">
                             <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
@@ -288,7 +291,6 @@
         <div class="swiper-pagination"></div>
     </div>
 </div>
-
 <div class="services-container">
     <section class="services">
         <div class="service-item">
@@ -391,6 +393,7 @@
         </div>
     </section>
 </div>
+{% endblock %}
 </body>
 <footer class="border-top">
 	<!-- Footer main -->
@@ -472,5 +475,19 @@
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+<script src="{% static 'js/waypoints/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'js/waypoints/infinite.min.js' %}"></script>
+<script>
+    const infinite = new Waypoint.Infinite({
+        element: $('.infinite-container')[0],
+
+        offset: 'bottom-in-view',
+        handler: function(direction) {
+            alert('You have scrolled to a thing')
+        },
+    });
+</script>
 <script src="/static/js/custom.js"></script>
+
 </html>

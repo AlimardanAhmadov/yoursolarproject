@@ -48,7 +48,7 @@ class CartItemSerializer(serializers.Serializer):
     def create(self, attrs):
         selected_variant=self.get_variant(attrs)
 
-        new_cart_item =CartItem.objects.create(
+        new_cart_item = CartItem.objects.create(
             cart=self.cart,
             quantity=self.validated_data.get("quantity"),
             price=self.validated_data.get("price"),

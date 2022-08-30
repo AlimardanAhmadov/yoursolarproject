@@ -8,7 +8,7 @@ from django.db.models.signals import post_save
 from main.utils import send_email, id_generator
 
 from phonenumber_field.serializerfields import PhoneNumberField
-from product.models import Product, Inverter
+from product.models import Product
 
 User = get_user_model()
 
@@ -31,7 +31,7 @@ class Quote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     slug = models.SlugField()
     selected_panel = models.ForeignKey(Product, on_delete=models.CASCADE)
-    inverter = models.ForeignKey(Inverter, on_delete=models.CASCADE)
+    inverter = models.CharField(max_length=250)
     title = models.CharField(max_length=250)
     full_name = models.CharField(max_length=150)
     address = models.TextField()
@@ -62,6 +62,8 @@ class Quote(models.Model):
     help_with = models.CharField(max_length=50, blank=True, null=True)
     completed = models.BooleanField(default=True)
     total_cost = models.FloatField(default=0.0)
+    shipping_price = models.FloatField(default=0.0)
+    tax = models.FloatField(default=0.0)
     quantity = models.PositiveIntegerField(default=0)
 
     class Meta:

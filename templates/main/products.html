@@ -1,0 +1,257 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+<section class="page-header padding">
+    <div class="container">
+        <div class="page-content">
+            <h2>E-SHOP</h2>
+        </div>
+    </div>
+</section>
+
+<div class="container" id="eShop">
+    <div class="collection__header">
+        <div class="collection__type">
+            <h2>Products</h2>
+        </div>
+    </div>
+    <div class="filter-products">
+        <div class="form-group">
+            <div class="field">
+                <input type="text" name="title" value="{{ request.GET.q }}" placeholder="Search product title..." autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true">
+                <button class="plain-btn search-button" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="search-bottom">
+            <div class="extra-filters">
+                <div class="dropdown">
+                    <a class="plain-btn small">
+                        Availability
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </a>
+                    <div class="dropdown-box right">
+                        <div class="dropdown-card border">
+                            <ul class="choice-list choice-type-checkbox">
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="In Stock" name="availability" id="1">
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                In stock
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="Out of Stock" name="availability" id="2">
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                Out of stock
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <span class="button clear-button small">
+                                <button class="plain-btn" type="button" tabindex="-1">Clear</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <a class="plain-btn small">
+                        Brand
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </a>
+                    <div class="dropdown-box right">
+                        <div class="dropdown-card border">
+                            <ul class="choice-list choice-type-checkbox">
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="Canadian Solar" name="brand" id="Canadian Solar">
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                Canadian Solar
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="Fox ESS" name="brand" id="Fox ESS">
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                Fox ESS
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="GivEnergy" name="brand" id="GivEnergy">
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                GivEnergy
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="Growatt" name="brand" id="Growatt">
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                Growatt
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="HDMSolar" name="brand" id="HDMSolar">
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                HDMSolar
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <span class="button clear-button small">
+                                <button class="plain-btn" type="button" tabindex="-1">Clear</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <a class="plain-btn small">
+                        Wattage
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </a>
+                    <div class="dropdown-box right">
+                        <div class="dropdown-card border">
+                            <ul class="choice-list choice-type-checkbox">
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="800-1000 Watt" name="wattage" id="800-1000 Watt-1" autocomplete="off"/>
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                800-1000 Watt
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="800-1000 Watt" name="wattage" id="800-1000 Watt-2">
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                800-1000 Watt
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="800-1000 Watt" name="wattage" id="800-1000 Watt-3">
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                800-1000 Watt
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="800-1000 Watt" name="wattage" id="800-1000 Watt-4">
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                800-1000 Watt
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <span class="button clear-button small">
+                                <button class="plain-btn" type="button" tabindex="-1">Clear</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="filter-tags">
+        </div>
+    </div>
+
+    <div class="category-cards">
+        <div class="category-item" data-val="Panels" id="Panels">
+            <div class="category-title">
+                <h4>Panels</h4>
+            </div>
+        </div>
+        <div class="category-item" data-val="Batteries" id="Batteries">
+            <div class="category-title">
+                <h4>Batteries</h4>
+            </div>
+        </div>
+        <div class="category-item" data-val="Rails" id="Rails">
+            <div class="category-title">
+                <h4>Rails</h4>
+            </div>
+        </div>
+        <div class="category-item" data-val="Clips" id="Clips">
+            <div class="category-title">
+                <h4>Clips</h4>
+            </div>
+        </div>
+        <div class="category-item" data-val="Other" id="Other">
+            <div class="category-title">
+                <h4>Other</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-list infinite-container">
+        {% for item in products %}
+        <div class="card product-card infinite-item">
+            <div class="image-content">
+                <div class="card-image">
+                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                </div>
+            </div>
+        
+            <div class="card-content">
+                <a href="{% url 'selected_product' item.slug %}" class="small">{{ item.title }}</a>
+                <div class="description">
+                    {% if item.primary_discount %}
+                    <span class="small price">{{ item.primary_price }}</span>
+                    <span class="discount-price">$98 USD</span>
+                    {% else %}
+                    <span class="discount-price">{{ item.primary_price }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="pagination">
+        {% if has_next %}
+        <a class="infinite-more-link" href="?page={{ products.next_page_number }}"></a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
