@@ -57,10 +57,6 @@
             {% endif %}
         </div>
         <div class="product__tax small-label">Tax included. <a href="#"> Shipping</a> calculated at checkout.</div>
-        <div class="product__size">
-            <label class="small-label">Size</label>
-            <span class="size__value badge">6m</span>
-        </div>
         <span class="small-label">Quantity</span>
         <div class="quantity-control" data-quantity="">
             <button class="quantity-btn" data-quantity-minus="">
@@ -80,7 +76,7 @@
             </button>
         </div>
         <div class="form__buttons">
-            <button class="btn add-to-cart">Add to Cart</button>
+            <button class="btn primary-btn">Add to Cart</button>
             <button class="btn button-black">Buy Now</button>
         </div>
         <div class="description">
@@ -117,7 +113,9 @@
                     </button>
                 </h2>
                 <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-Dimensions">
-                    <div class="accordion-body"></div>
+                    <div class="accordion-body">
+                        {{ selected_variant.dimensions }}
+                    </div>
                 </div>
             </div>
         </div>

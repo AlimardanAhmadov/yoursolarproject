@@ -48,7 +48,7 @@ function getCookie(name) {
   
 const csrftoken = getCookie('csrftoken');
 
-$(document).on('click', '.service-item .plain-btn', function(){
+$(document).on('click', '.modal-btn', function(){
     var id = '#' + $(this).data('modal');
     $(id).css({
         'visibility': 'visible',

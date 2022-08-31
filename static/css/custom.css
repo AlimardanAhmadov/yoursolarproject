@@ -1214,7 +1214,7 @@ input:focus{
     margin-top: 30px;
 }
 
-.add-to-cart{
+.primary-btn{
     background-color: #fff;
     color: #000;
     padding: 12px 27px;
@@ -1222,7 +1222,7 @@ input:focus{
     border: 1px solid #000;
 }
 
-.add-to-cart:hover {
+.primary-button:hover {
     background-color: #000;
     border: 1px solid #000;
     color: #fff;
