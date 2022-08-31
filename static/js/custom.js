@@ -339,7 +339,7 @@ function hasQueryParams(url) {
 $(window).on('load', function(){
     // Initialize current url
     const url = new URL(window.location);
-    
+
     if (hasQueryParams(url.href)) {
         var title = $('input[name="title"]').val();
 
@@ -408,10 +408,9 @@ $(window).on('load', function(){
             clearTimeout(scheduled_function)
         } 
         window.history.pushState({}, '', url);
-        scheduled_function = setTimeout(ajax_call_1, delay_by_in_ms, endpoint, request_parameters)
+        scheduled_function = setTimeout(ajax_call_1, delay_by_in_ms, endpoint, request_parameters);
     }
 })
-
 
 var checkboxes = document.querySelectorAll('.form-check-input');
 var categories = document.querySelectorAll('.category-item');
@@ -484,7 +483,6 @@ thumbnails.forEach(function (thumbnail) {
     thumbnail.addEventListener('click', function () {
         var newSelection = thumbnail.dataset.big;
         $('.thumbnail').removeClass('selected');
-    
         $(this).addClass('selected');
         var $img = $('.primary').css("background-image","url(" + newSelection + ")");
         $('.primary').empty().append($img.hide().fadeIn('slow'));
@@ -539,4 +537,65 @@ thumbnails.forEach(function (thumbnail) {
 })();
   
 
+$(document).on('click', '#down-slide', function(event){
+	$('.img-list').animate({
+		scrollTop: "+=200px"
+	}, "slow");
+}) 
+
+$(document).on('click', '#up-slide', function(event){
+	event.preventDefault();
+	$('.img-list').animate({
+		scrollTop: "-=200px"
+	}, "slow");
+}) 
 // QUANTITY INCREMENT CONTROLS END
+
+function updateVariantDetails(event) {
+
+    $('.product').addClass('disabled');
+
+    var url = new URL(window.location);
+
+    var id = url.href.substring(url.href.lastIndexOf('/') + 1);
+
+    var selected_product = $('.thumbnail.selected').data('slug');
+
+    url.searchParams.set('variant', selected_product);
+
+    var request_parameters = {
+        "variant_slug": selected_product,
+    }
+
+    window.history.pushState({}, '', url);
+
+    $('#overlay').css('display', 'block');
+
+    $.post({
+		type: 'GET',
+		url: '/products/' + id,
+		data: request_parameters,
+		headers: {'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"},
+		success: function (response) {
+            setTimeout(function() {
+                $('#overlay').css('display', 'none');
+                $('.product').removeClass('disabled');
+                $('.product-info__wrapper').html(response['html_from_view']);
+            }, delay_by_in_ms);
+		},
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.log("not working")
+		}
+	});
+}
+
+$(document).on('click', '.thumbnail', function(event){
+	event.preventDefault(); 
+    updateVariantDetails(event);
+})
+
+$(window).on('load', function(event){
+    if (url.includes('products')){
+        updateVariantDetails(event);
+    }
+})

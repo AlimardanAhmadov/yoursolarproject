@@ -18,33 +18,43 @@
     <div class="wrapper">
         <div class="image-gallery">
             <aside class="thumbnails">
-                <a class="selected thumbnail" data-slug="1" data-big="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/Screenshot2022-06-25134140_89430392-60a7-420f-9fbc-e576abda701e.png?v=1656163373">
-                    <div class="thumbnail-image" style="background-image: url(https://cdn.shopify.com/s/files/1/0573/9439/7257/products/Screenshot2022-06-25134140_89430392-60a7-420f-9fbc-e576abda701e.png?v=1656163373)"></div>
-                </a>
-                <a class="thumbnail" data-slug="2" data-big="http://127.0.0.1:8000/static/images/panel-batteries.webp">
-                    <div class="thumbnail-image" style="background-image: url(/static/images/panel-batteries.webp)"></div>
-                </a>
-                <a class="thumbnail" data-slug="3" data-big="http://127.0.0.1:8000/static/images/panel-batteries.webp">
-                    <div class="thumbnail-image" style="background-image: url(/static/images/panel-batteries.webp)"></div>
-                </a>
+                <button class="btn slider-btn" id="up-slide">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                    </svg>
+                </button>
+                <div class="img-list">
+                    {% for item in product_variants %}
+                    <a class="selected thumbnail" data-slug="{{ item.slug }}" data-big="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/Screenshot2022-06-25134140_89430392-60a7-420f-9fbc-e576abda701e.png?v=1656163373">
+                        <div class="thumbnail-image" style="background-image: url(https://cdn.shopify.com/s/files/1/0573/9439/7257/products/Screenshot2022-06-25134140_89430392-60a7-420f-9fbc-e576abda701e.png?v=1656163373)"></div>
+                    </a>
+                    {% endfor %}
+                </div>
+                <button class="btn slider-btn" id="down-slide">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </button>
             </aside>
             
             <main class="primary" style="background-image: url('https://cdn.shopify.com/s/files/1/0573/9439/7257/products/Screenshot2022-06-25134140_89430392-60a7-420f-9fbc-e576abda701e.png?v=1656163373');"></main>
         </div>
     </div>
     <div class="product-info__wrapper">
-        <p class="small" style="color: #121212BF; margin-bottom: 5px;">Canadian Solar</p>
+        <p class="small" style="color: #121212BF; margin-bottom: 5px;">{{ product.brand }}</p>
         <div class="product__title">
-            <h1>410w JA Solar - Solar Panel - Black frame</h1>
+            <h1>{{ product.title }}</h1>
         </div>
         <div class="price__sale">
             <span class="price-item--regular">
-                $44.6
+                {{ product.price }}
             </span>
+            {% if product.discount %}
             <span class="price-item--discount">
-                $22.5
+                {{ product.discount }}
             </span>
             <div class="badge--sales">Sale</div>
+            {% endif %}
         </div>
         <div class="product__tax small-label">Tax included. <a href="#"> Shipping</a> calculated at checkout.</div>
         <div class="product__size">
@@ -63,13 +73,18 @@
                 </svg>
             </button>
             <input type="number" class="quantity-input" data-quantity-target="" value="1" step="1" min="1" max="" name="quantity">
-            <button class="quantity-btn" data-quantity-plus=""><svg viewBox="0 0 426.66667 426.66667">
-                <path d="m405.332031 192h-170.664062v-170.667969c0-11.773437-9.558594-21.332031-21.335938-21.332031-11.773437 0-21.332031 9.558594-21.332031 21.332031v170.667969h-170.667969c-11.773437 0-21.332031 9.558594-21.332031 21.332031 0 11.777344 9.558594 21.335938 21.332031 21.335938h170.667969v170.664062c0 11.777344 9.558594 21.335938 21.332031 21.335938 11.777344 0 21.335938-9.558594 21.335938-21.335938v-170.664062h170.664062c11.777344 0 21.335938-9.558594 21.335938-21.335938 0-11.773437-9.558594-21.332031-21.335938-21.332031zm0 0" /></svg>
+            <button class="quantity-btn" data-quantity-plus="">
+                <svg viewBox="0 0 426.66667 426.66667">
+                    <path d="m405.332031 192h-170.664062v-170.667969c0-11.773437-9.558594-21.332031-21.335938-21.332031-11.773437 0-21.332031 9.558594-21.332031 21.332031v170.667969h-170.667969c-11.773437 0-21.332031 9.558594-21.332031 21.332031 0 11.777344 9.558594 21.335938 21.332031 21.335938h170.667969v170.664062c0 11.777344 9.558594 21.335938 21.332031 21.335938 11.777344 0 21.335938-9.558594 21.335938-21.335938v-170.664062h170.664062c11.777344 0 21.335938-9.558594 21.335938-21.335938 0-11.773437-9.558594-21.332031-21.335938-21.332031zm0 0" />
+                </svg>
             </button>
         </div>
         <div class="form__buttons">
             <button class="btn add-to-cart">Add to Cart</button>
             <button class="btn button-black">Buy Now</button>
+        </div>
+        <div class="description">
+            {{ selected_variant.description|safe }}
         </div>
         <div class="accordion accordion-flush">
             <div class="accordion-item border-top">
@@ -82,7 +97,13 @@
                     </button>
                 </h2>
                 <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-Shipping">
-                    <div class="accordion-body"></div>
+                    <div class="accordion-body">
+                        <ul>
+                            <li class="small"><strong style="font-weight: 700;">Shipping Policy:</strong> {{ selected_variant.shipping_policy }}</li>
+                            <br>
+                            <li class="small"><strong style="font-weight: 700;">Return Policy:</strong> {{ selected_variant.return_policy }}</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="accordion-item">
@@ -102,9 +123,10 @@
         </div>
     </div>
 </div>
-<div class="container">
-    <div class="card-list related-products">
-        <div class="card product-card infinite-item">
+<div class="container related-products">
+    <h3 class="section__title">Related Products</h3>
+    <div class="card-list" style="margin-top: 40px;grid-gap: 1rem;">
+        <div class="card product-card">
             <div class="image-content">
                 <div class="card-image">
                     <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
@@ -121,7 +143,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="card product-card infinite-item">
             <div class="image-content">
                 <div class="card-image">
@@ -139,7 +160,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="card product-card infinite-item">
             <div class="image-content">
                 <div class="card-image">

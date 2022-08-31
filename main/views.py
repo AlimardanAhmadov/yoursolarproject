@@ -1,10 +1,7 @@
 from django.shortcuts import render
 from django.db.models import Q
-from django.template import loader
-from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from product.serializers import ProductSerializer
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework import permissions, status

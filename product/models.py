@@ -34,11 +34,9 @@ class Product(TimeStampedModel):
     slug=models.SlugField(blank=True, null=True)
     title=models.CharField(max_length=250)
     category=models.CharField(max_length=50)
-    description=RichTextField()
     return_policy=models.TextField(blank=True, default='This product has no return policy')
     shipping_policy=models.TextField(blank=True, default='This product has no shipping policy')
     availability=models.CharField(max_length=15, choices=AV_CHOICES)
-    product_type=models.CharField(max_length=50)
     brand=models.CharField(max_length=100)
     primary_price=MoneyField(max_digits=14, decimal_places=2, default_currency='USD', blank=True, null=True)
     primary_discount=MoneyField(max_digits=14, decimal_places=2, default_currency='USD', blank=True, null=True)
@@ -89,13 +87,13 @@ def invalidate_coach_cache(sender, instance, **kwargs):
     cache.delete(CACHED_PRODUCT_BY_SLUG_KEY.format(instance.slug))
 
 
-
 class ProductVariant(TimeStampedModel):
-    selected_product=models.ForeignKey(Product, on_delete=models.CASCADE)
+    selected_product=models.ForeignKey(Product, on_delete=models.CASCADE, related_name='related_product')
     slug=models.SlugField(blank=True, null=True)
     primary_variant=models.BooleanField(default=False)
+    description=RichTextField()
     dimensions=models.CharField(max_length=50)
-    materials=models.CharField(max_length=100)
+    materials=models.TextField(blank=True, null=True)
     price=MoneyField(max_digits=14, decimal_places=2, default_currency='USD')
     discount=MoneyField(max_digits=14, decimal_places=2, default_currency='USD')
     image=models.ImageField(upload_to=image_directory_path, default='default.png')
@@ -164,5 +162,6 @@ def invalidate_coach_cache(sender, instance, **kwargs):
     """
     Invalidate the variant cached data when it is updated or deleted
     """
+    print("deleting cache")
     cache.delete(CACHED_VARIANT_BY_SLUG_KEY.format(instance.slug))
 
