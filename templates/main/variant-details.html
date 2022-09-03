@@ -4,11 +4,11 @@
 </div>
 <div class="price__sale">
     <span class="price-item--regular">
-        {{ selected_variant.price }}
+        ${{ selected_variant.price }}
     </span>
     {% if selected_variant.discount %}
     <span class="price-item--discount">
-        {{ selected_variant.discount }}
+        ${{ selected_variant.discount }}
     </span>
     <div class="badge--sales">Sale</div>
     {% endif %}
@@ -31,13 +31,21 @@
             </g>
         </svg>
     </button>
-    <input type="number" class="quantity-input" data-quantity-target="" value="1" step="1" min="1" max="" name="quantity">
+    <input type="number" class="quantity-input" data-quantity-target="" value="1" step="1" min="1" max="{{ selected_variant.quantity }}" name="quantity">
     <button class="quantity-btn" data-quantity-plus=""><svg viewBox="0 0 426.66667 426.66667">
         <path d="m405.332031 192h-170.664062v-170.667969c0-11.773437-9.558594-21.332031-21.335938-21.332031-11.773437 0-21.332031 9.558594-21.332031 21.332031v170.667969h-170.667969c-11.773437 0-21.332031 9.558594-21.332031 21.332031 0 11.777344 9.558594 21.335938 21.332031 21.335938h170.667969v170.664062c0 11.777344 9.558594 21.335938 21.332031 21.335938 11.777344 0 21.335938-9.558594 21.335938-21.335938v-170.664062h170.664062c11.777344 0 21.335938-9.558594 21.335938-21.335938 0-11.773437-9.558594-21.332031-21.335938-21.332031zm0 0" /></svg>
     </button>
 </div>
 <div class="form__buttons">
-    <button class="btn primary-btn">Add to Cart</button>
+    <div class="form__error small" role="alert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="red" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+        </svg>
+        <span class="error__content">
+            Custom form error
+        </span>
+    </div>
+    <button class="btn primary-btn" id="addCart">Add to Cart</button>
     <button class="btn button-black">Buy Now</button>
 </div>
 <div class="product-description">
@@ -75,6 +83,7 @@
         </h2>
         <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-Dimensions">
             <div class="accordion-body">
+                {{ selected_variant.dimensions }}
             </div>
         </div>
     </div>

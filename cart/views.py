@@ -25,23 +25,23 @@ class CreateCartItemView(ListCreateAPIView):
     def dispatch(self, *args, **kwargs):
         return super(CreateCartItemView, self).dispatch(*args, **kwargs)
 
-    def get_product(self, slug):
+    def get_product(self, slug, variant=None):
         selected_product = Product.cache_by_slug(slug)
 
         if not selected_product:
             selected_product = get_object_or_404(Product, slug=slug)
         return selected_product
     
-    def get_cart(self, username):
+    def get_cart(self, variant=None):
+        username = self.request.user.username
         current_cart = Cart.cache_by_slug(slugify(username))
 
         if not current_cart:
             current_cart = get_object_or_404(Cart, slug=slugify(username))
-        
         return current_cart
 
 
-    def create(self, request, slug, username):
+    def create(self, request, slug, variant=None):
         with transaction.atomic():
             try:
                 serializer = CartItemSerializer(
@@ -49,15 +49,21 @@ class CreateCartItemView(ListCreateAPIView):
                     context={
                         "request": request, 
                         "product": self.get_product(slug), 
-                        "cart": self.get_cart(username)
+                        "variant_slug": request.POST.get('variant_slug'),
+                        "cart": self.get_cart()
                     }
                 )
                 if serializer.is_valid():
                     self.perform_create(serializer)
-                    return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+                    context = {
+                        'serializer': serializer.data,
+                        'status': status.HTTP_200_OK,
+                    }
+                    return JsonResponse(context)
                 else:
                     data = []
                     emessage=serializer.errors
+                    print(emessage)
                     for key in emessage:
                         err_message = str(emessage[key])
                         err_string = re.search("string='(.*)', ", err_message)
@@ -70,7 +76,7 @@ class CreateCartItemView(ListCreateAPIView):
                     response.status_code = 400
                     return response
             except Exception as e:
-                print(e)
+                print("Error: ", e)
                 transaction.set_rollback(True)
                 response = HttpResponse(json.dumps({'err': ["Something went wrong!"]}), 
                     content_type='application/json')

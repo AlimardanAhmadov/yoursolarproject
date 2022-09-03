@@ -1,3 +1,4 @@
+import random
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.http import JsonResponse
@@ -30,9 +31,20 @@ class ProductDetailView(APIView):
 
         product_serializer = ProductSerializer(selected_product)
         variant_serializer = ProductVariantSerializer(product_variants, many=True)
-        
+
+        #related products
+        products = list(Product.objects.filter(category=selected_product.category).exclude(slug=slug))
+
+        list_length = len(products)
+
+        if list_length < 4:
+            related_products = random.sample(products, list_length)
+        else:
+            related_products = random.sample(products, 4)
+
         context = {
             'product_variants': variant_serializer.data,
+            'related_products': related_products,
             'product': product_serializer.data,
             'status': status.HTTP_200_OK,
         }

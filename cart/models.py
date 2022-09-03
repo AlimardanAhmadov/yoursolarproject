@@ -7,13 +7,12 @@ from django.core.cache import cache
 from django.contrib.contenttypes.models import ContentType
 from django.dispatch import receiver
 from main.utils import id_generator
-from product.models import Product
 from model_utils import FieldTracker
 
 
 User = get_user_model()
 
-CACHED_CART_BY_USERNAME_KEY = 'cart__by_username__{}'
+CACHED_CART_BY_SLUG_KEY = 'cart__by_slug__{}'
 CACHE_LENGTH = 24 * 3600  # --> aq 24hrs demekdi
 
 
@@ -35,7 +34,7 @@ class Cart(models.Model):
     
     @staticmethod
     def cache_by_slug(slug):
-        key = CACHED_CART_BY_USERNAME_KEY.format(slug)
+        key = CACHED_CART_BY_SLUG_KEY.format(slug)
 
         cart = cache.get(key)
         if cart:
@@ -53,6 +52,13 @@ class Cart(models.Model):
         return cart
 
     @staticmethod
+    def invalidate_coach_cache(sender, instance, **kwargs):
+        """
+        Invalidate the cart cached data when it is updated or deleted
+        """
+        cache.delete(CACHED_CART_BY_SLUG_KEY.format(instance.slug))
+
+    @staticmethod
     def post_save(sender, **kwargs):
         instance = kwargs.get('instance')
         created = kwargs.get('created')
@@ -61,14 +67,8 @@ class Cart(models.Model):
             instance.save()
 
 post_save.connect(Cart.post_save, sender=Cart)
-
-@receiver((post_delete, post_save), sender=Product)
-def invalidate_coach_cache(sender, instance, **kwargs):
-    """
-    Invalidate the cart cached data when it is updated or deleted
-    """
-    cache.delete(CACHED_CART_BY_USERNAME_KEY.format(instance.slug))
-
+post_save.connect(Cart.invalidate_coach_cache, sender=Cart)
+post_delete.connect(Cart.invalidate_coach_cache, sender=Cart)
 
 
 class CartItem(models.Model):
@@ -78,6 +78,7 @@ class CartItem(models.Model):
     price = models.FloatField(default=0.0)
     total_cost = models.FloatField(default=0.0)
     product_id = models.CharField(max_length=250)
+    variant_id = models.CharField(max_length=250)
     slug = models.SlugField(blank=True, null=True)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('model_type', 'object_id')
@@ -97,8 +98,6 @@ class CartItem(models.Model):
             'total_cost': total_cost
         }
         return context
-    
-
 
     @staticmethod
     def post_save(sender, *args, **kwargs):

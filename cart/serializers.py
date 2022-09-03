@@ -1,14 +1,12 @@
 from rest_framework import serializers
-from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
-from .models import Cart, CartItem
+from .models import CartItem
 from product.models import ProductVariant
 
 
 class CartItemSerializer(serializers.Serializer):
-    quantity = serializers.IntegerField(write_only=True)
-    price = serializers.CharField(write_only=True)
-    slug = serializers.SlugField()
+    quantity = serializers.CharField(write_only=True)
+    variant_slug = serializers.CharField(write_only=True)
 
     def __init__(self, *args, **kwargs):
         super(CartItemSerializer, self).__init__(*args, **kwargs)
@@ -19,9 +17,9 @@ class CartItemSerializer(serializers.Serializer):
         self.user = getattr(self.request, "user", None)
     
     def get_variant(self, attrs):
-        selected_variant = ProductVariant.cache_by_slug(attrs['slug'])
+        selected_variant = ProductVariant.cache_by_slug(attrs['variant_slug'])
         if not selected_variant:
-            selected_variant = ProductVariant.objects.filter(slug=attrs['slug'], selected_product=self.product).first()
+            selected_variant = ProductVariant.objects.filter(slug=attrs['variant_slug'], selected_product=self.product).first()
 
         return selected_variant
 
@@ -34,12 +32,20 @@ class CartItemSerializer(serializers.Serializer):
 
         quantity = self.get_variant(attrs).quantity
         quantity_match = (
-            attrs["quantity"] > quantity,
+            int(attrs["quantity"]) > quantity,
+        )
+        quantity_min = (
+            int(attrs["quantity"]) < 1,
         )
 
         if all(quantity_match):
             raise serializers.ValidationError(
                 {"quantity": 'You cannot order more than %s of this item' % quantity}
+            )
+        
+        if all(quantity_min):
+            raise serializers.ValidationError(
+                {"min quantity": 'You cannot order less than 1 item'}
             )
 
         return attrs    
@@ -51,8 +57,9 @@ class CartItemSerializer(serializers.Serializer):
         new_cart_item = CartItem.objects.create(
             cart=self.cart,
             quantity=self.validated_data.get("quantity"),
-            price=self.validated_data.get("price"),
+            price=self.get_variant(attrs).price,
             product_id=self.product.slug,
+            variant_id=self.get_variant(attrs).slug,
             content_object=selected_variant
         )
         

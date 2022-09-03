@@ -13,8 +13,33 @@
         padding-top: 0;
     }
 </style>
-
 <div class="container product">
+    <div class="cart-notification">
+        <div class="card border">
+            <div class="notification__header">
+                <div class="notification-caption small">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+                        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                    </svg>
+                    Item added to your cart
+                </div>
+                <button class="plain-btn remove__notification">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="notification__body">
+                <div class="cart-notification__product">
+                </div>
+
+                <div class="form__buttons">
+                    <button class="btn primary-btn">Go to Cart</button>
+                    <button class="btn button-black">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="wrapper">
         <div class="image-gallery">
             <aside class="thumbnails">
@@ -25,9 +50,15 @@
                 </button>
                 <div class="img-list">
                     {% for item in product_variants %}
-                    <a class="selected thumbnail" data-slug="{{ item.slug }}" data-big="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/Screenshot2022-06-25134140_89430392-60a7-420f-9fbc-e576abda701e.png?v=1656163373">
-                        <div class="thumbnail-image" style="background-image: url(https://cdn.shopify.com/s/files/1/0573/9439/7257/products/Screenshot2022-06-25134140_89430392-60a7-420f-9fbc-e576abda701e.png?v=1656163373)"></div>
+                    {% if forloop.first %}
+                    <a class="selected thumbnail" data-slug="{{ item.slug }}" data-big="{{ item.image }}">
+                        <div class="thumbnail-image" style="background-image: url({{ item.image }})"></div>
                     </a>
+                    {% else %}
+                    <a class="thumbnail" data-slug="{{ item.slug }}" data-big="{{ item.image }}">
+                        <div class="thumbnail-image" style="background-image: url({{ item.image }})"></div>
+                    </a>
+                    {% endif %}
                     {% endfor %}
                 </div>
                 <button class="btn slider-btn" id="down-slide">
@@ -37,7 +68,7 @@
                 </button>
             </aside>
             
-            <main class="primary" style="background-image: url('https://cdn.shopify.com/s/files/1/0573/9439/7257/products/Screenshot2022-06-25134140_89430392-60a7-420f-9fbc-e576abda701e.png?v=1656163373');"></main>
+            <main class="primary"></main>
         </div>
     </div>
     <div class="product-info__wrapper">
@@ -47,11 +78,11 @@
         </div>
         <div class="price__sale">
             <span class="price-item--regular">
-                {{ product.price }}
+                ${{ product.price }}
             </span>
             {% if product.discount %}
             <span class="price-item--discount">
-                {{ product.discount }}
+                ${ product.discount }}
             </span>
             <div class="badge--sales">Sale</div>
             {% endif %}
@@ -76,7 +107,7 @@
             </button>
         </div>
         <div class="form__buttons">
-            <button class="btn primary-btn">Add to Cart</button>
+            <button class="btn primary-btn" id="addCart">Add to Cart</button>
             <button class="btn button-black">Buy Now</button>
         </div>
         <div class="description">
@@ -114,7 +145,6 @@
                 </h2>
                 <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-Dimensions">
                     <div class="accordion-body">
-                        {{ selected_variant.dimensions }}
                     </div>
                 </div>
             </div>
@@ -124,74 +154,26 @@
 <div class="container related-products">
     <h3 class="section__title">Related Products</h3>
     <div class="card-list" style="margin-top: 40px;grid-gap: 1rem;">
+        {% for item in related_products %}
         <div class="card product-card">
             <div class="image-content">
                 <div class="card-image">
-                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                    <img src="{{ item.primary_image_url }}" alt="{{ item.title }}" class="card-img">
                 </div>
             </div>
         
             <div class="card-content">
-                <a href="/products/1-0ippfxyu-23" class="small">1</a>
+                <a href="{% url 'selected_product' item.slug %}" class="small">{{ item.title }}</a>
                 <div class="description">
                     
-                    <span class="small price">$1.00</span>
-                    <span class="discount-price">$98 USD</span>
-                    
+                    <span class="small price">${{ item.primary_price }}</span>
+                    {% if item.primary_discount %}
+                    <span class="discount-price">${{ item.primary_discount }}</span>
+                    {% endif %}
                 </div>
             </div>
         </div>
-        <div class="card product-card infinite-item">
-            <div class="image-content">
-                <div class="card-image">
-                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                </div>
-            </div>
-        
-            <div class="card-content">
-                <a href="/products/1-t1dfo563-22" class="small">1</a>
-                <div class="description">
-                    
-                    <span class="small price">$1.00</span>
-                    <span class="discount-price">$98 USD</span>
-                    
-                </div>
-            </div>
-        </div>
-        <div class="card product-card infinite-item">
-            <div class="image-content">
-                <div class="card-image">
-                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                </div>
-            </div>
-        
-            <div class="card-content">
-                <a href="/products/1-7qtf7tea-21" class="small">1</a>
-                <div class="description">
-                    
-                    <span class="small price">$1.00</span>
-                    <span class="discount-price">$98 USD</span>
-                    
-                </div>
-            </div>
-        </div>
-        <div class="card product-card infinite-item">
-            <div class="image-content">
-                <div class="card-image">
-                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                </div>
-            </div>
-        
-            <div class="card-content">
-                <a href="/products/1-7qtf7tea-21" class="small">1</a>
-                <div class="description">
-                    
-                    <span class="small price">$1.00</span>
-                    <span class="discount-price">$98 USD</span>
-                    
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

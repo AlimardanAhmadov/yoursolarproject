@@ -1,4 +1,5 @@
 import base64
+from django.conf import settings
 from django.db import models
 from django.utils.text import slugify
 from django.db.models.signals import post_save, post_delete
@@ -38,8 +39,9 @@ class Product(TimeStampedModel):
     shipping_policy=models.TextField(blank=True, default='This product has no shipping policy')
     availability=models.CharField(max_length=15, choices=AV_CHOICES)
     brand=models.CharField(max_length=100)
-    primary_price=MoneyField(max_digits=14, decimal_places=2, default_currency='USD', blank=True, null=True)
-    primary_discount=MoneyField(max_digits=14, decimal_places=2, default_currency='USD', blank=True, null=True)
+    primary_price=models.FloatField(default=0.0)
+    primary_discount=models.FloatField(default=0.0)
+    primary_image_url=models.TextField(blank=True, null=True)
 
     class Meta:
         verbose_name = 'Product'
@@ -94,10 +96,9 @@ class ProductVariant(TimeStampedModel):
     description=RichTextField()
     dimensions=models.CharField(max_length=50)
     materials=models.TextField(blank=True, null=True)
-    price=MoneyField(max_digits=14, decimal_places=2, default_currency='USD')
-    discount=MoneyField(max_digits=14, decimal_places=2, default_currency='USD')
+    price=models.FloatField(default=0.0)
+    discount=models.FloatField(default=0.0)
     image=models.ImageField(upload_to=image_directory_path, default='default.png')
-    image_url=models.URLField(blank=True, null=True)
     sku=models.CharField(max_length=400)
     active=models.BooleanField(default=True)
     quantity=models.PositiveIntegerField(default=0)
@@ -111,20 +112,35 @@ class ProductVariant(TimeStampedModel):
         verbose_name = 'Variant'
         verbose_name_plural = 'Variants'
         indexes = [models.Index(fields=['selected_product', 'slug', 'id', 'active',])]
+    
 
+    @staticmethod
+    def invalidate_coach_cache(sender, instance, **kwargs):
+        """
+        Invalidate the variant cached data when it is updated or deleted
+        """
+        print("deleting cache")
+        cache.delete(CACHED_VARIANT_BY_SLUG_KEY.format(instance.slug))
+    
     def save(self, *args, **kwargs):
-        url_changed = self.tracker.has_changed('image_url')
-        if url_changed:
-            image = self.image
+        image_changed = self.tracker.has_changed('image')
+        primary_variant_changed = self.tracker.has_changed('primary_variant')
+
+        image = self.image
+
+        print(image.url)
+
+        if not image_changed:
+            if primary_variant_changed and self.primary_variant is True:
+                self.selected_product.primary_image_url = self.image.url
+                self.selected_product.save()
+                print(self.image.url)
+
+        if image_changed:
             if image and image.size > (0.3 * 1024 * 1024):
                 self.image = compress_image(image)
-
-            if ';base64,' in self.image_url:
-                format, imgstr = self.image_url.split(';base64,')
-                ext = format.split('/')[-1]
-                data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
-                self.image = data
         super(ProductVariant, self).save(*args, **kwargs)
+ 
 
     @staticmethod
     def cache_by_slug(slug):
@@ -150,18 +166,18 @@ class ProductVariant(TimeStampedModel):
     def post_save(sender, **kwargs):
         instance = kwargs.get('instance')
         created = kwargs.get('created')
+
+        image_changed = instance.tracker.has_changed('image')
+
+        if image_changed:
+            if instance.primary_variant is True:
+
+                instance.selected_product.primary_image_url = instance.image.url
+                instance.selected_product.save()
         if created:
             instance.slug = slugify(str(id_generator()) + "-" + str(instance.id))
             instance.save()
 
 post_save.connect(ProductVariant.post_save, sender=ProductVariant)
-
-
-@receiver((post_delete, post_save), sender=ProductVariant)
-def invalidate_coach_cache(sender, instance, **kwargs):
-    """
-    Invalidate the variant cached data when it is updated or deleted
-    """
-    print("deleting cache")
-    cache.delete(CACHED_VARIANT_BY_SLUG_KEY.format(instance.slug))
-
+post_save.connect(ProductVariant.invalidate_coach_cache, sender=ProductVariant)
+post_delete.connect(ProductVariant.invalidate_coach_cache, sender=ProductVariant)
