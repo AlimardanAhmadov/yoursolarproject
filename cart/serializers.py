@@ -1,15 +1,15 @@
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
-from .models import CartItem
+from .models import Cart, CartItem
 from product.models import ProductVariant
 
 
-class CartItemSerializer(serializers.Serializer):
+class CreateCartItemSerializer(serializers.Serializer):
     quantity = serializers.CharField(write_only=True)
     variant_slug = serializers.CharField(write_only=True)
 
     def __init__(self, *args, **kwargs):
-        super(CartItemSerializer, self).__init__(*args, **kwargs)
+        super(CreateCartItemSerializer, self).__init__(*args, **kwargs)
 
         self.request = self.context.get("request")
         self.product = self.context.get("product")
@@ -24,10 +24,15 @@ class CartItemSerializer(serializers.Serializer):
         return selected_variant
 
     def validate(self, attrs):
-        cart_item = CartItem.objects.filter(cart=self.cart).exists()
+        cart_item = CartItem.objects.filter(variant_id=attrs['variant_slug']).exists()
         if cart_item:
             raise serializers.ValidationError(
                 {"cart": 'You already have this item in your shopping cart'}
+            )
+        
+        if attrs["variant_slug"] is None:
+            raise serializers.ValidationError(
+                {"variant": 'Please select a product variant'}
             )
 
         quantity = self.get_variant(attrs).quantity
@@ -48,8 +53,7 @@ class CartItemSerializer(serializers.Serializer):
                 {"min quantity": 'You cannot order less than 1 item'}
             )
 
-        return attrs    
-
+        return attrs
 
     def create(self, attrs):
         selected_variant=self.get_variant(attrs)
@@ -101,3 +105,22 @@ class CartDetailsItemSerializer(serializers.ModelSerializer):
         model = CartItem
         fields = ('slug',)
 
+
+class CartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cart
+        fields = '__all__'
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CartItem
+        fields = (
+            'quantity',
+            'price',
+            'total_cost',
+            'variant_id',
+            'slug',
+            'content_object',
+            'cart',
+        )

@@ -91,6 +91,7 @@ def invalidate_coach_cache(sender, instance, **kwargs):
 
 class ProductVariant(TimeStampedModel):
     selected_product=models.ForeignKey(Product, on_delete=models.CASCADE, related_name='related_product')
+    title=models.CharField(max_length=200, blank=True, null=True)
     slug=models.SlugField(blank=True, null=True)
     primary_variant=models.BooleanField(default=False)
     description=RichTextField()

@@ -10,7 +10,7 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import CartDetailsItemSerializer, CartItemSerializer, UpdateCartSerializer
+from .serializers import CartDetailsItemSerializer, CreateCartItemSerializer, UpdateCartSerializer
 from .models import Cart, CartItem
 from product.models import Product
 
@@ -18,7 +18,7 @@ from product.models import Product
 class CreateCartItemView(ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     allowed_methods = ("POST", "OPTIONS", "HEAD", "GET")
-    serializer_class = CartItemSerializer
+    serializer_class = CreateCartItemSerializer
     queryset = ""
 
     @method_decorator(login_required(login_url='***'))
@@ -44,7 +44,7 @@ class CreateCartItemView(ListCreateAPIView):
     def create(self, request, slug, variant=None):
         with transaction.atomic():
             try:
-                serializer = CartItemSerializer(
+                serializer = CreateCartItemSerializer(
                     data=request.data, 
                     context={
                         "request": request, 

@@ -10,7 +10,6 @@
     }
     .navbar {
         border-bottom: none;
-        padding-top: 0;
     }
 </style>
 <div class="container product">
@@ -68,9 +67,13 @@
                 </button>
             </aside>
             
-            <main class="primary"></main>
+            {% for item in product_variants %}
+            {% if forloop.first %}
+            <main class="primary" style="background-image: url({{item.image}});"></main>
+            {% endif %}
+            {% endfor %}
         </div>
-    </div>
+
     <div class="product-info__wrapper">
         <p class="small" style="color: #121212BF; margin-bottom: 5px;">{{ product.brand }}</p>
         <div class="product__title">
@@ -149,6 +152,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </div>
 <div class="container related-products">

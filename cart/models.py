@@ -87,7 +87,7 @@ class CartItem(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=["model_type", "object_id"]),
+            models.Index(fields=["model_type", "object_id", "cart"]),
         ]
     
     def get_related_cart_total(self):

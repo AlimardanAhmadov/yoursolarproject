@@ -61,7 +61,6 @@ let ajax_call_1 = function (endpoint, request_parameters) {
         results_div.fadeTo('fast', 1);
     })
 }
-
 function updateVariantDetails(event) {
     $('.product').addClass('disabled');
 
@@ -70,7 +69,7 @@ function updateVariantDetails(event) {
     var selected_product = $('.thumbnail.selected').data('slug');
 
     url.searchParams.set('variant', selected_product);
-
+    
     var request_parameters = {
         "variant_slug": selected_product,
     }
@@ -137,6 +136,16 @@ $(document).on('click', '.modal-close', function(){
 
 $(document).on('click', '.remove__notification', function(){
     $(this).parents('.card').removeClass('active');
+})
+
+$(document).on('click', '.cart-btn', function(){
+    $('.cart-wrapper').css({'opacity': '1','z-index': '10'});
+    $('.cart.card').addClass('open');
+})
+
+$(document).on('click', '.hide__cart', function(){
+    $('.cart-wrapper').css({'opacity': '0','z-index': '-1'});
+    $('.cart.card').removeClass('open');
 })
 
 // SAVE THE CHECKED CHECKBOX INPUTS TO THE LOCAL STORAGE
@@ -451,81 +460,6 @@ $(window).on('load', function(){
     }
 })
 
-document.addEventListener('DOMContentLoaded', function () {
-    checkboxes.forEach(function (checkbox) {
-        if (url.includes(checkbox.value)) {
-            document.getElementById(checkbox.id).checked = true;
-            html = '<button class="badge plain-btn" data-val="' + checkbox.value + '"><span>' + checkbox.value +'</span><div class="close close-badge"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></div></button>';
-            $('.filter-tags').append(html);
-        }
-        else{
-            window.localStorage.removeItem(checkbox.id);
-            $('.badge[data-val="' + checkbox.value + '"]').remove();
-        }
-    });
-
-    categories.forEach(function (category) {
-        if (url.includes(category.dataset.val)) {
-            document.getElementById(category.id).classList.add('selected');
-            document.getElementById(category.id).style.setProperty("--card-gradient", "35%");
-            html = '<button class="badge plain-btn" data-val="' + category.dataset.val + '"><span>' + category.dataset.val +'</span><div class="close close-badge"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></div></button>';
-            $('.filter-tags').append(html);
-        }
-        else{
-            window.localStorage.removeItem(category.id);
-            $('.badge[data-val="' + category.dataset.val + '"]').remove();
-        }
-    });
-
-    thumbnails.forEach(function (el, i) {
-        if (url.includes(el.dataset.slug)) {
-            el.classList.add('selected');
-
-            var newSelection = el.dataset.big;
-            var $img = $('.primary').css("background-image","url(" + newSelection + ")");
-            $('.primary').empty().append($img.hide().fadeIn('slow'));
-
-            if ( i !== 0) {
-                $('.thumbnail:first').removeClass('selected');
-            }
-        }
-        else {
-            window.localStorage.removeItem(el.id);
-        }
-    });
-});
-
-
-checkboxes.forEach(function (checkbox) {
-    checkbox.addEventListener('change', function () {
-        if (url.includes(this.value)) {
-            window.localStorage.setItem(this.id, this.value);
-        }
-        if ($('.badge[data-val="' + this.value + '"]').length){
-            $('.badge[data-val="' + this.value + '"]').remove();
-        }
-        else {
-            html = '<button class="badge plain-btn" data-val="' + this.value + '"><span>' + this.value +'</span><div class="close close-badge"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></div></button>';
-            $('.filter-tags').append(html);
-        }
-    });
-});
-
-
-categories.forEach(function (category) {
-    category.addEventListener('click', function () {
-        if (url.includes(this.dataset.val)) {
-            window.localStorage.setItem(this.id, this.value);
-        }
-        if ($('.badge[data-val="' + this.dataset.val + '"]').length){
-            $('.badge[data-val="' + this.dataset.val + '"]').remove();
-        }
-        else {
-            html = '<button class="badge plain-btn" data-val="' + this.dataset.val + '"><span>' + this.dataset.val +'</span><div class="close close-badge"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></div></button>';
-            $('.filter-tags').append(html);
-        }
-    });
-});
 
 // PRODUCT DETAILS
 
@@ -692,3 +626,82 @@ $(document).on('click', '#addCart', function(event){
 	});
 });
 // ADD TO CART END
+
+// DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function () {
+    checkboxes.forEach(function (checkbox) {
+        if (url.includes(checkbox.value)) {
+            document.getElementById(checkbox.id).checked = true;
+            html = '<button class="badge plain-btn" data-val="' + checkbox.value + '"><span>' + checkbox.value +'</span><div class="close close-badge"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></div></button>';
+            $('.filter-tags').append(html);
+        }
+        else{
+            window.localStorage.removeItem(checkbox.id);
+            $('.badge[data-val="' + checkbox.value + '"]').remove();
+        }
+    });
+
+    categories.forEach(function (category) {
+        if (url.includes(category.dataset.val)) {
+            document.getElementById(category.id).classList.add('selected');
+            document.getElementById(category.id).style.setProperty("--card-gradient", "35%");
+            html = '<button class="badge plain-btn" data-val="' + category.dataset.val + '"><span>' + category.dataset.val +'</span><div class="close close-badge"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></div></button>';
+            $('.filter-tags').append(html);
+        }
+        else{
+            window.localStorage.removeItem(category.id);
+            $('.badge[data-val="' + category.dataset.val + '"]').remove();
+        }
+    });
+
+    thumbnails.forEach(function (el, i) {
+        if (url.includes(el.dataset.slug)) {
+            el.classList.add('selected');
+            var newSelection = el.dataset.big;
+            var $img = $('.primary').css("background-image","url(" + newSelection + ")");
+            $('.primary').empty().append($img.hide().fadeIn('slow'));
+            if ( i !== 0) {
+                $('.thumbnail:first').removeClass('selected');
+            }
+        }
+        else {
+            window.localStorage.removeItem(el.id);
+        }
+    });
+});
+
+// DOMContentLoaded END
+
+// LOCAL STORAGE 
+
+checkboxes.forEach(function (checkbox) {
+    checkbox.addEventListener('change', function () {
+        if (url.includes(this.value)) {
+            window.localStorage.setItem(this.id, this.value);
+        }
+        if ($('.badge[data-val="' + this.value + '"]').length){
+            $('.badge[data-val="' + this.value + '"]').remove();
+        }
+        else {
+            html = '<button class="badge plain-btn" data-val="' + this.value + '"><span>' + this.value +'</span><div class="close close-badge"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></div></button>';
+            $('.filter-tags').append(html);
+        }
+    });
+});
+
+
+categories.forEach(function (category) {
+    category.addEventListener('click', function () {
+        if (url.includes(this.dataset.val)) {
+            window.localStorage.setItem(this.id, this.value);
+        }
+        if ($('.badge[data-val="' + this.dataset.val + '"]').length){
+            $('.badge[data-val="' + this.dataset.val + '"]').remove();
+        }
+        else {
+            html = '<button class="badge plain-btn" data-val="' + this.dataset.val + '"><span>' + this.dataset.val +'</span><div class="close close-badge"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></div></button>';
+            $('.filter-tags').append(html);
+        }
+    });
+});
+// LOCAL STORAGE END
