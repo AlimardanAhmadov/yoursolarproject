@@ -7,8 +7,6 @@ from django.db import transaction
 from django.http import JsonResponse, HttpResponse
 from rest_framework.generics import (ListCreateAPIView,)
 from rest_framework import permissions, status
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from .serializers import CartDetailsItemSerializer, CreateCartItemSerializer, UpdateCartSerializer
 from .models import Cart, CartItem
@@ -156,7 +154,6 @@ class DestroyCartItemAPIView(ListCreateAPIView):
     def get_object(self, slug):
         selected_item = get_object_or_404(CartItem, slug=slug)    
         return selected_item
-    
     
     def create(self, request, slug):
         instance = self.get_object(slug)

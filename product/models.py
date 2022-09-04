@@ -1,14 +1,10 @@
-import base64
-from django.conf import settings
 from django.db import models
 from django.utils.text import slugify
 from django.db.models.signals import post_save, post_delete
 from django.core.cache import cache
 from django.dispatch import receiver
-from django.core.files.base import ContentFile
 
 from djrichtextfield.models import RichTextField
-from djmoney.models.fields import MoneyField
 from model_utils import FieldTracker
 
 from main.compress_img import compress_image
@@ -106,7 +102,7 @@ class ProductVariant(TimeStampedModel):
     shipping_price=models.FloatField(default=0.0)
     tax=models.FloatField(default=0.0)
     size = models.CharField(max_length=10, blank=True, null=True, help_text='For cables')
-
+    
     tracker = FieldTracker()
 
     class Meta:
@@ -129,13 +125,10 @@ class ProductVariant(TimeStampedModel):
 
         image = self.image
 
-        print(image.url)
-
         if not image_changed:
             if primary_variant_changed and self.primary_variant is True:
                 self.selected_product.primary_image_url = self.image.url
                 self.selected_product.save()
-                print(self.image.url)
 
         if image_changed:
             if image and image.size > (0.3 * 1024 * 1024):

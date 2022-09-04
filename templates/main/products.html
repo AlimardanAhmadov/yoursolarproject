@@ -10,7 +10,8 @@
     </div>
 </section>
 
-<div class="container" id="eShop">
+<div class="container eshop">
+    <div id="overlay"><div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>
     <div class="collection__header">
         <div class="collection__type">
             <h2>Products</h2>
@@ -225,6 +226,29 @@
     </div>
 
     <div class="card-list infinite-container">
+        {% if results %}
+        {% for item in results %}
+        <div class="card product-card infinite-item">
+            <div class="image-content">
+                <div class="card-image">
+                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                </div>
+            </div>
+        
+            <div class="card-content">
+                <a href="{% url 'selected_product' item.slug %}" class="small">{{ item.title }}</a>
+                <div class="description">
+                    {% if item.primary_discount %}
+                    <span class="small price">$ {{ item.primary_price }} USD</span>
+                    <span class="discount-price">$ {{ item.primary_discount }} USD</span>
+                    {% else %}
+                    <span class="discount-price">$ {{ item.primary_price }} USD</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
         {% for item in products %}
         <div class="card product-card infinite-item">
             <div class="image-content">
@@ -237,15 +261,16 @@
                 <a href="{% url 'selected_product' item.slug %}" class="small">{{ item.title }}</a>
                 <div class="description">
                     {% if item.primary_discount %}
-                    <span class="small price">{{ item.primary_price }}</span>
-                    <span class="discount-price">$98 USD</span>
+                    <span class="small price">$ {{ item.primary_price }} USD</span>
+                    <span class="discount-price">$ {{ item.primary_discount }} USD</span>
                     {% else %}
-                    <span class="discount-price">{{ item.primary_price }}</span>
+                    <span class="discount-price">$ {{ item.primary_price }} USD</span>
                     {% endif %}
                 </div>
             </div>
         </div>
         {% endfor %}
+        {% endif %}
     </div>
     <div class="pagination">
         {% if has_next %}

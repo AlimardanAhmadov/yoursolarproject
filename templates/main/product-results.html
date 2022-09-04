@@ -1,4 +1,4 @@
-{% for item in products %}
+{% for item in results %}
 <div class="card product-card">
     <div class="image-content">
         <div class="card-image">
@@ -10,10 +10,10 @@
         <a href="{% url 'selected_product' item.slug %}" class="small">{{ item.title }}</a>
         <div class="description">
             {% if item.primary_discount %}
-            <span class="small price">{{ item.primary_price }}</span>
-            <span class="discount-price">$98 USD</span>
+            <span class="small price">$ {{ item.primary_price }} USD</span>
+            <span class="discount-price">$ {{ item.primary_discount }} USD</span>
             {% else %}
-            <span class="discount-price">{{ item.primary_price }}</span>
+            <span class="discount-price">$ {{ item.primary_price }} USD</span>
             {% endif %}
         </div>
     </div>

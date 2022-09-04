@@ -6,6 +6,7 @@ from django.utils.text import slugify
 from django.core.cache import cache
 from django.contrib.contenttypes.models import ContentType
 from django.dispatch import receiver
+from django.db.models import Sum
 from main.utils import id_generator
 from model_utils import FieldTracker
 
@@ -13,7 +14,7 @@ from model_utils import FieldTracker
 User = get_user_model()
 
 CACHED_CART_BY_SLUG_KEY = 'cart__by_slug__{}'
-CACHE_LENGTH = 24 * 3600  # --> aq 24hrs demekdi
+CACHE_LENGTH = 24 * 3600  # --> 24hrs
 
 
 class NotFound:
@@ -25,8 +26,6 @@ class Cart(models.Model):
     grand_total = models.FloatField(default=0.0)
     tax = models.FloatField(default=0.0)
     shipping_cost = models.FloatField(default=0.0)
-    qty = models.PositiveIntegerField(blank=True, null=True)
-    products = models.ManyToManyField("CartItem", related_name='products', blank=True)
     slug = models.SlugField(blank=True, null=True)
 
     def __str__(self):
@@ -77,6 +76,7 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     price = models.FloatField(default=0.0)
     total_cost = models.FloatField(default=0.0)
+    grand_total = models.FloatField(default=0.0)
     product_id = models.CharField(max_length=250)
     variant_id = models.CharField(max_length=250)
     slug = models.SlugField(blank=True, null=True)
@@ -89,36 +89,40 @@ class CartItem(models.Model):
         indexes = [
             models.Index(fields=["model_type", "object_id", "cart"]),
         ]
-    
-    def get_related_cart_total(self):
-        grand_total = float(self.cart.grand_total) - float(self.total_cost)
-        total_cost = float(self.cart.total_cost) - float(self.total_cost)
-        context = {
-            'grand_total': grand_total,
-            'total_cost': total_cost
-        }
-        return context
+
+    def save(self, *args, **kwargs):
+        quantity = self.tracker.has_changed('quantity')
+        if quantity:
+            total_cost = float(self.price) * int(self.quantity)
+            grand_total = total_cost + float(self.content_object.shipping_price) + float(self.content_object.tax)
+            self.total_cost = total_cost
+            self.grand_total = grand_total
+        super(CartItem, self).save(*args, **kwargs)
 
     @staticmethod
     def post_save(sender, *args, **kwargs):
         instance = kwargs.get('instance')
         created = kwargs.get('created')
+        total_cost = float(instance.price) * int(instance.quantity)
+        grand_total = total_cost + float(instance.content_object.shipping_price) + float(instance.content_object.tax)
         if created:
             instance.slug = slugify(str(id_generator()) + "-" + str(instance.pk))
-            instance.total_cost = float(instance.price) + float(instance.content_object.shipping_price) + float(instance.content_object.tax)
+            instance.total_cost = total_cost
+            instance.grand_total = grand_total
             instance.save()
         
         quantity = instance.tracker.has_changed('quantity')
         if quantity:
-            instance.cart.grand_total = instance.get_related_cart_total()['grand_total']
-            instance.cart.total_cost = instance.get_related_cart_total()['total_cost']
+            instance.cart.grand_total = CartItem.objects.filter(cart=instance.cart).aggregate(Sum('grand_total'))['grand_total__sum']
+            instance.cart.total_cost = CartItem.objects.filter(cart=instance.cart).aggregate(Sum('total_cost'))['total_cost__sum']
+            instance.cart.save()
 
 post_save.connect(CartItem.post_save, sender=CartItem)
 
 
 @receiver(post_delete, sender=CartItem)
 def update_cart_on_delete(sender, instance, **kwargs):
-    """updating total cost"""
-    instance.cart.grand_total = instance.get_related_cart_total()['grand_total']
-    instance.cart.total_cost = instance.get_related_cart_total()['total_cost']
-    instance.cart.save()
+    if CartItem.objects.filter(cart=instance.cart).exists():
+        instance.cart.grand_total = CartItem.objects.filter(cart=instance.cart).aggregate(Sum('grand_total'))['grand_total__sum']
+        instance.cart.total_cost = CartItem.objects.filter(cart=instance.cart).aggregate(Sum('total_cost'))['total_cost__sum']
+        instance.cart.save()

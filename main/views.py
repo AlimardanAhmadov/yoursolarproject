@@ -48,16 +48,15 @@ class ProductsAPIView(APIView):
             product_lookup = Q(title__icontains=q) & Q(brand__in=brand) & Q(availability__in=availability) & Q(category__in=categories)
             matching_items = Product.objects.filter(product_lookup)
 
-        #if is_ajax(request=request):
         if is_ajax == 'True':
             html = render_to_string(
                 template_name="main/product-results.html",
-                context={"products": matching_items}
+                context={"results": matching_items}
             )
             
             data_dict = {"html_from_view": html}
-
             return JsonResponse(data=data_dict, safe=False)
+     
         else:
             paginator = Paginator(matching_items, 10)
 
@@ -73,6 +72,5 @@ class ProductsAPIView(APIView):
                 'has_next': products.has_next(),
                 'has_prev': products.has_previous(),
                 'status': status.HTTP_200_OK,
-                'count': matching_items.count(),
             }
             return Response(context)

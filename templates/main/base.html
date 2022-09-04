@@ -58,6 +58,13 @@
                         </a>
                     </li>
 					<li class="menu-item">
+                        <a href="#" class="menu-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                             </svg>
+                        </a>
+                    </li>
+					<li class="menu-item">
                         <button class="menu-link plain-btn cart-btn">
                             <img src="https://assets.website-files.com/5c6c5d537c647f619adce5fc/5c6cec0bd51c77695d8796d5_Cart%20White.svg" alt="cart" class="cart-icon" width="20" height="auto">
                             <span class="cart-quantity">{{ qty }}</span>
@@ -69,372 +76,387 @@
 	</div>
 </header>
 <body>
-<div class="cart-wrapper">
-    <div class="cart card">
-        <div class="cart__header border-bottom">
-            <span>Your Cart</span>
-            <button class="plain-btn hide__cart">
-                <svg width="16px" height="16px" viewBox="0 0 16 16"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g fill-rule="nonzero" fill="#333333"><polygon points="6.23223305 8 0.616116524 13.6161165 2.38388348 15.3838835 8 9.76776695 13.6161165 15.3838835 15.3838835 13.6161165 9.76776695 8 15.3838835 2.38388348 13.6161165 0.616116524 8 6.23223305 2.38388348 0.616116524 0.616116524 2.38388348 6.23223305 8"></polygon></g></g></svg>
-            </button>
-        </div>
-        <div class="cart__body">
-            {% for item in items %}
-            <div class="cart-notification__product">
-                <div class="cart-product__img">
-                    <img src="{{ item.content_object.image }}" alt="{{ item.content_object.title }}" width="80" height="auto" loading="lazy">
+    <div class="cart-wrapper">
+        <div class="cart card">
+            <div class="cart__header border-bottom">
+                <span>Your Cart</span>
+                <button class="plain-btn hide__cart">
+                    <svg width="16px" height="16px" viewBox="0 0 16 16"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g fill-rule="nonzero" fill="#333333"><polygon points="6.23223305 8 0.616116524 13.6161165 2.38388348 15.3838835 8 9.76776695 13.6161165 15.3838835 15.3838835 13.6161165 9.76776695 8 15.3838835 2.38388348 13.6161165 0.616116524 8 6.23223305 2.38388348 0.616116524 0.616116524 2.38388348 6.23223305 8"></polygon></g></g></svg>
+                </button>
+            </div>
+            <div class="cart__body">
+                <div class="form__error small" role="alert">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="red" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                    </svg>
+                    <span class="error__content">
+                    </span>
                 </div>
-                <div class="cart-notification__product-info">
-                    <h6>{{ item.content_object.title }}</h6>
-                    <div class="cartitem-info">
-                        <div class="quantity-control" data-quantity="">
-                            <input type="number" class="quantity-input" data-quantity-target="" value="{{ item.quantity }}" step="1" min="1" max="22" name="quantity">
+                {% if items %}
+                {% for item in items %}
+                <div class="cart-notification__product">
+                    <div class="cart-product__img">
+                        <img src="{{ item.content_object.image.url }}" alt="{{ item.content_object.title }}" width="80" height="auto" loading="lazy">
+                    </div>
+                    <div class="cart-notification__product-info">
+                        <h6>{{ item.content_object.title }}</h6>
+                        <div class="cartitem-info">
+                            <div class="quantity-control" data-quantity="">
+                                <input type="number" class="quantity-input" data-update-quantity="{{ item.slug }}" value="{{ item.quantity }}" step="1" min="1" name="quantity">
+                            </div>
+                            <span class="notification-product__feature">Price: ${{ item.content_object.price }}</span>
+                            <button class="plain-btn notification__product-remove" data-remove-cart-item="{{ item.slug }}">Remove</button>
                         </div>
-                        <span class="notification-product__feature">Price: ${{ item.content_object.price }}</span>
-                        <button class="plain-btn notification__product-remove">Remove</button>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
-        </div>
-        <div class="cart__footer border-top">
-            <div class="cart__line-item">
-                <span>Subtotal</span>
-                <span>$ 2000.0 USD</span>
-            </div>
-            <a href="#" class="btn primary-btn">CHECKOUT</a>
-        </div>
-    </div>
-</div>
-{% block content %}
-<div class="banner-section">
-    <div class="container">
-        <div class="banner-left">
-            <div class="slogan-text">
-                slogan - tbc
-            </div>
-            <div class="seperator-wrapper">
-                <div class="wrapper-block"></div>
-                <div class="wrapper-block"></div>
-            </div>
-            <div class="banner-paragpraph">
-                <h1>
-                    the website's slogan here
-                </h1>
-                <a href="#" class="btn button-light"> <span class="small">Get Quote</span></a>
-            </div>
-        </div>
-        <div class="banner-right">
-            <div class="fmc-bg-container">
-                <div class="img-layout"></div>
-                <div class="fmc-layout">
-                    <div class="fmc-circle"></div>
-                    <div class="fmc-circle"></div>
-                    <div class="fmc-circle"></div>
-                    <div class="fmc-circle"></div>
-                    <div class="fmc-circle"></div>
-                    <div class="fmc-circle"></div>
-                    <div class="fmc-circle"></div>
-                    <div class="fmc-circle"></div>
-                    <div class="fmc-circle"></div>
-                    <div class="fmc-circle"></div>
-                    <div class="fmc-circle"></div>
+                {% endfor %}
+                {% else %}
+                <div class="cart__empty-state">
+                    NO CHECKOUT ITEMS FOUND
                 </div>
+                {% endif %}
             </div>
+            {% if items %}
+            <div class="cart__footer border-top">
+                <div class="cart__line-item">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal">$ {{ total_cost }} USD</span>
+                </div>
+                <a href="#" class="btn primary-btn">CHECKOUT</a>
+            </div>
+            {% endif %}
         </div>
     </div>
-</div>
-<div class="container pages">
-    <a class="page-item card" href="">
-        <span class="page-title">Quote Builder</span>
-    </a>
-    <a class="page-item card" href="{% url 'shop' %}">
-        <span class="page-title">E-Shop</span>
-    </a>
-    <a class="page-item card" href=""> 
-        <span class="page-title">how to videos</span>
-    </a>
-    <a class="page-item card" href="">
-        <span class="page-title">the science</span>
-    </a>
-</div>
-<div class="special-offers">
-    <section id="rotating-section">
-        <div id="rotating-animation">
-            <div>
-                <div class="rect1"></div>
-                <div class="rect2"></div>
-                <div class="rect3"></div>
-                <div class="rect4"></div>
-                <div class="rect5"></div>
-                <div class="rect6"></div>
-                <div class="rect7"></div>
-                <div class="rect8"></div>
+    {% block content %}
+    <div class="banner-section">
+        <div class="container">
+            <div class="banner-left">
+                <div class="slogan-text">
+                    slogan - tbc
+                </div>
+                <div class="seperator-wrapper">
+                    <div class="wrapper-block"></div>
+                    <div class="wrapper-block"></div>
+                </div>
+                <div class="banner-paragpraph">
+                    <h1>
+                        the website's slogan here
+                    </h1>
+                    <a href="#" class="btn button-light"> <span class="small">Get Quote</span></a>
+                </div>
             </div>
-            <div class="cta-content text-center">
-                <span class="wow">Explore The Features</span>
-                <h2 class="wow">Special Offers Content <br> Here</h2>
-                <div class="black-bg"></div>
-            </div>
-        </div>
-    </section>
-
-    <div class="slide-container swiper">
-        <div class="slide-content">
-            <div class="card-wrapper swiper-wrapper">
-                <div class="card product-card swiper-slide">
-                    <div class="image-content">
-                        <div class="card-image">
-                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                        </div>
-                    </div>
-
-                    <div class="card-content">
-                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                        <div class="description">
-                            <span class="small price">$145.60 USD</span>
-                            <span class="discount-price">$98 USD</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card product-card swiper-slide">
-                    <div class="image-content">
-                        <div class="card-image">
-                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                        </div>
-                    </div>
-
-                    <div class="card-content">
-                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                        
-                        <div class="description">
-                            <span class="small price">$145.60 USD</span>
-                            <span class="discount-price">$98 USD</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card product-card swiper-slide">
-                    <div class="image-content">
-                        <div class="card-image">
-                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                        </div>
-                    </div>
-
-                    <div class="card-content">
-                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                       
-                        <div class="description">
-                            <span class="small price">$145.60 USD</span>
-                            <span class="discount-price">$98 USD</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card product-card swiper-slide">
-                    <div class="image-content">
-                        <div class="card-image">
-                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                        </div>
-                    </div>
-
-                    <div class="card-content">
-                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                       
-                        <div class="description">
-                            <span class="small price">$145.60 USD</span>
-                            <span class="discount-price">$98 USD</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card product-card swiper-slide">
-                    <div class="image-content">
-                        <div class="card-image">
-                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                        </div>
-                    </div>
-
-                    <div class="card-content">
-                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                        
-                        <div class="description">
-                            <span class="small price">$145.60 USD</span>
-                            <span class="discount-price">$98 USD</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card product-card swiper-slide">
-                    <div class="image-content">
-                        <div class="card-image">
-                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                        </div>
-                    </div>
-
-                    <div class="card-content">
-                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                        
-                        <div class="description">
-                            <span class="small price">$145.60 USD</span>
-                            <span class="discount-price">$98 USD</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card product-card swiper-slide">
-                    <div class="image-content">
-                        <div class="card-image">
-                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                        </div>
-                    </div>
-
-                    <div class="card-content">
-                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                        
-                        <div class="description">
-                            <span class="small price">$145.60 USD</span>
-                            <span class="discount-price">$98 USD</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card product-card swiper-slide">
-                    <div class="image-content">
-                        <div class="card-image">
-                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                        </div>
-                    </div>
-
-                    <div class="card-content">
-                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                        
-                        <div class="description">
-                            <span class="small price">$145.60 USD</span>
-                            <span class="discount-price">$98 USD</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card product-card swiper-slide">
-                    <div class="image-content">
-                        <div class="card-image">
-                            <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                        </div>
-                    </div>
-
-                    <div class="card-content">
-                        <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                        
-                        <div class="description">
-                            <span class="small price">$145.60 USD</span>
-                            <span class="discount-price">$98 USD</span>
-                        </div>
+            <div class="banner-right">
+                <div class="fmc-bg-container">
+                    <div class="img-layout"></div>
+                    <div class="fmc-layout">
+                        <div class="fmc-circle"></div>
+                        <div class="fmc-circle"></div>
+                        <div class="fmc-circle"></div>
+                        <div class="fmc-circle"></div>
+                        <div class="fmc-circle"></div>
+                        <div class="fmc-circle"></div>
+                        <div class="fmc-circle"></div>
+                        <div class="fmc-circle"></div>
+                        <div class="fmc-circle"></div>
+                        <div class="fmc-circle"></div>
+                        <div class="fmc-circle"></div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="swiper-button-next swiper-navBtn"></div>
-        <div class="swiper-button-prev swiper-navBtn"></div>
-        <div class="swiper-pagination"></div>
     </div>
-</div>
-<div class="services-container">
-    <section class="services">
-        <div class="service-item">
-            <a data-modal="bottle-modal" class="plain-btn modal-btn">
-                <img src="/static/images/plastic-bottle.png" alt="Plastic Bottle">
-            </a>
-            <div id="bottle-modal" class="modal-window">
-                <div class="modal-block">
-                    <a data-modal="bottle-modal" title="Close" class="modal-close">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
-                        </svg>
-                    </a>
+    <div class="container pages">
+        <a class="page-item card" href="">
+            <span class="page-title">Quote Builder</span>
+        </a>
+        <a class="page-item card" href="{% url 'shop' %}">
+            <span class="page-title">E-Shop</span>
+        </a>
+        <a class="page-item card" href=""> 
+            <span class="page-title">how to videos</span>
+        </a>
+        <a class="page-item card" href="">
+            <span class="page-title">the science</span>
+        </a>
+    </div>
+    <div class="special-offers">
+        <section id="rotating-section">
+            <div id="rotating-animation">
+                <div>
+                    <div class="rect1"></div>
+                    <div class="rect2"></div>
+                    <div class="rect3"></div>
+                    <div class="rect4"></div>
+                    <div class="rect5"></div>
+                    <div class="rect6"></div>
+                    <div class="rect7"></div>
+                    <div class="rect8"></div>
+                </div>
+                <div class="cta-content text-center">
+                    <span class="wow">Explore The Features</span>
+                    <h2 class="wow">Special Offers Content <br> Here</h2>
+                    <div class="black-bg"></div>
+                </div>
+            </div>
+        </section>
 
-                    <div class="modal-content">
-                        <div class="modal-img">
-                            <img src="https://images.unsplash.com/photo-1536939459926-301728717817?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Modal IMG">
+        <div class="slide-container swiper">
+            <div class="slide-content">
+                <div class="card-wrapper swiper-wrapper">
+                    <div class="card product-card swiper-slide">
+                        <div class="image-content">
+                            <div class="card-image">
+                                <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                            </div>
                         </div>
-                        <div class="modal-description">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptatem placeat sit expedita culpa natus harum inventore blanditiis eaque itaque. Veritatis aliquid beatae blanditiis voluptatibus dolore sit perferendis. Necessitatibus, possimus.
+
+                        <div class="card-content">
+                            <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                            <div class="description">
+                                <span class="small price">$145.60 USD</span>
+                                <span class="discount-price">$98 USD</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card product-card swiper-slide">
+                        <div class="image-content">
+                            <div class="card-image">
+                                <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                            </div>
+                        </div>
+
+                        <div class="card-content">
+                            <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                            
+                            <div class="description">
+                                <span class="small price">$145.60 USD</span>
+                                <span class="discount-price">$98 USD</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card product-card swiper-slide">
+                        <div class="image-content">
+                            <div class="card-image">
+                                <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                            </div>
+                        </div>
+
+                        <div class="card-content">
+                            <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                        
+                            <div class="description">
+                                <span class="small price">$145.60 USD</span>
+                                <span class="discount-price">$98 USD</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card product-card swiper-slide">
+                        <div class="image-content">
+                            <div class="card-image">
+                                <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                            </div>
+                        </div>
+
+                        <div class="card-content">
+                            <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                        
+                            <div class="description">
+                                <span class="small price">$145.60 USD</span>
+                                <span class="discount-price">$98 USD</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card product-card swiper-slide">
+                        <div class="image-content">
+                            <div class="card-image">
+                                <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                            </div>
+                        </div>
+
+                        <div class="card-content">
+                            <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                            
+                            <div class="description">
+                                <span class="small price">$145.60 USD</span>
+                                <span class="discount-price">$98 USD</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card product-card swiper-slide">
+                        <div class="image-content">
+                            <div class="card-image">
+                                <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                            </div>
+                        </div>
+
+                        <div class="card-content">
+                            <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                            
+                            <div class="description">
+                                <span class="small price">$145.60 USD</span>
+                                <span class="discount-price">$98 USD</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card product-card swiper-slide">
+                        <div class="image-content">
+                            <div class="card-image">
+                                <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                            </div>
+                        </div>
+
+                        <div class="card-content">
+                            <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                            
+                            <div class="description">
+                                <span class="small price">$145.60 USD</span>
+                                <span class="discount-price">$98 USD</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card product-card swiper-slide">
+                        <div class="image-content">
+                            <div class="card-image">
+                                <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                            </div>
+                        </div>
+
+                        <div class="card-content">
+                            <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                            
+                            <div class="description">
+                                <span class="small price">$145.60 USD</span>
+                                <span class="discount-price">$98 USD</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card product-card swiper-slide">
+                        <div class="image-content">
+                            <div class="card-image">
+                                <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                            </div>
+                        </div>
+
+                        <div class="card-content">
+                            <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                            
+                            <div class="description">
+                                <span class="small price">$145.60 USD</span>
+                                <span class="discount-price">$98 USD</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="swiper-button-next swiper-navBtn"></div>
+            <div class="swiper-button-prev swiper-navBtn"></div>
+            <div class="swiper-pagination"></div>
         </div>
-        
-        <div class="service-item">
+    </div>
+    <div class="services-container">
+        <section class="services">
+            <div class="service-item">
+                <a data-modal="bottle-modal" class="plain-btn modal-btn">
+                    <img src="/static/images/plastic-bottle.png" alt="Plastic Bottle">
+                </a>
+                <div id="bottle-modal" class="modal-window">
+                    <div class="modal-block">
+                        <a data-modal="bottle-modal" title="Close" class="modal-close">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
+                            </svg>
+                        </a>
+
+                        <div class="modal-content">
+                            <div class="modal-img">
+                                <img src="https://images.unsplash.com/photo-1536939459926-301728717817?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Modal IMG">
+                            </div>
+                            <div class="modal-description">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptatem placeat sit expedita culpa natus harum inventore blanditiis eaque itaque. Veritatis aliquid beatae blanditiis voluptatibus dolore sit perferendis. Necessitatibus, possimus.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
-            <a data-modal="leaves-modal" class="plain-btn modal-btn">
-                <img src="/static/images/leaves.png" alt="Leaves">
-            </a>
-            <div id="leaves-modal" class="modal-window">
-                <div class="modal-block">
-                    <a data-modal="leaves-modal" title="Close" class="modal-close">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
-                        </svg>
-                    </a>
+            <div class="service-item">
+                
+                <a data-modal="leaves-modal" class="plain-btn modal-btn">
+                    <img src="/static/images/leaves.png" alt="Leaves">
+                </a>
+                <div id="leaves-modal" class="modal-window">
+                    <div class="modal-block">
+                        <a data-modal="leaves-modal" title="Close" class="modal-close">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
+                            </svg>
+                        </a>
 
-                    <div class="modal-content">
-                        <div class="modal-img">
-                            <img src="https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80" alt="Modal IMG">
-                        </div>
-                        <div class="modal-description">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptatem placeat sit expedita culpa natus harum inventore blanditiis eaque itaque. Veritatis aliquid beatae blanditiis voluptatibus dolore sit perferendis. Necessitatibus, possimus.
+                        <div class="modal-content">
+                            <div class="modal-img">
+                                <img src="https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80" alt="Modal IMG">
+                            </div>
+                            <div class="modal-description">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptatem placeat sit expedita culpa natus harum inventore blanditiis eaque itaque. Veritatis aliquid beatae blanditiis voluptatibus dolore sit perferendis. Necessitatibus, possimus.
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="service-item">
-            
-            <a data-modal="recycle-modal" class="plain-btn modal-btn">
-                <img src="/static/images/recycle.png" alt="Recycle">
-            </a>
-            <div id="recycle-modal" class="modal-window">
-                <div class="modal-block">
-                    <a data-modal="recycle-modal" title="Close" class="modal-close">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
-                        </svg>
-                    </a>
+            <div class="service-item">
+                
+                <a data-modal="recycle-modal" class="plain-btn modal-btn">
+                    <img src="/static/images/recycle.png" alt="Recycle">
+                </a>
+                <div id="recycle-modal" class="modal-window">
+                    <div class="modal-block">
+                        <a data-modal="recycle-modal" title="Close" class="modal-close">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
+                            </svg>
+                        </a>
 
-                    <div class="modal-content">
-                        <div class="modal-img">
-                            <img src="https://images.unsplash.com/photo-1604187351574-c75ca79f5807?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Modal IMG">
-                        </div>
-                        <div class="modal-description">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptatem placeat sit expedita culpa natus harum inventore blanditiis eaque itaque. Veritatis aliquid beatae blanditiis voluptatibus dolore sit perferendis. Necessitatibus, possimus.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="service-item">
-            
-            <a data-modal="co2-modal" class="plain-btn modal-btn">
-                <img src="/static/images/co2.png" alt="CO2">
-            </a>
-            <div id="co2-modal" class="modal-window">
-                <div class="modal-block">
-                    <a data-modal="co2-modal" title="Close" class="modal-close">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
-                        </svg>
-                    </a>
-
-                    <div class="modal-content">
-                        <div class="modal-img">
-                            <img src="https://images.unsplash.com/photo-1615053835734-7752878e939e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2128&q=80" alt="Modal IMG">
-                        </div>
-                        <div class="modal-description">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptatem placeat sit expedita culpa natus harum inventore blanditiis eaque itaque. Veritatis aliquid beatae blanditiis voluptatibus dolore sit perferendis. Necessitatibus, possimus.
+                        <div class="modal-content">
+                            <div class="modal-img">
+                                <img src="https://images.unsplash.com/photo-1604187351574-c75ca79f5807?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Modal IMG">
+                            </div>
+                            <div class="modal-description">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptatem placeat sit expedita culpa natus harum inventore blanditiis eaque itaque. Veritatis aliquid beatae blanditiis voluptatibus dolore sit perferendis. Necessitatibus, possimus.
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-</div>
-{% endblock %}
+
+            <div class="service-item">
+                
+                <a data-modal="co2-modal" class="plain-btn modal-btn">
+                    <img src="/static/images/co2.png" alt="CO2">
+                </a>
+                <div id="co2-modal" class="modal-window">
+                    <div class="modal-block">
+                        <a data-modal="co2-modal" title="Close" class="modal-close">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
+                            </svg>
+                        </a>
+
+                        <div class="modal-content">
+                            <div class="modal-img">
+                                <img src="https://images.unsplash.com/photo-1615053835734-7752878e939e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2128&q=80" alt="Modal IMG">
+                            </div>
+                            <div class="modal-description">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptatem placeat sit expedita culpa natus harum inventore blanditiis eaque itaque. Veritatis aliquid beatae blanditiis voluptatibus dolore sit perferendis. Necessitatibus, possimus.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    {% endblock %}
 </body>
 <footer class="border-top">
 	<!-- Footer main -->
@@ -530,5 +552,4 @@
     });
 </script>
 <script src="/static/js/custom.js"></script>
-
 </html>

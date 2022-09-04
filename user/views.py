@@ -94,8 +94,8 @@ class LoginAPIView(LoginView):
 
 
 class RegisterAPIView(ListCreateAPIView):
-    #renderer_classes = [MyHTMLRenderer,]
-    #template_name = "user/signup.html"
+    renderer_classes = [MyHTMLRenderer,]
+    template_name = "user/signup.html"
     queryset = Customer.objects.all()
     permission_classes = (permissions.AllowAny,)
     serializer_class = CustomRegisterSerializer

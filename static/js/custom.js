@@ -43,24 +43,12 @@ const endpoint = '/e-shop/';
 let ajax_call = function (endpoint, request_parameters) {
     $.getJSON(endpoint, request_parameters)
     .done(response => {  
-        $("#product-counter").load(location.href + " #product-counter");
-        // remove loader class
-        $('.search-button').html('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>')
-        // Remove disabled class
-        $('#eShop').removeClass('disabled');
+        $('.search-button').html('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>');
+        $('.infinite-container').css('display', 'grid');
         results_div.html(response['html_from_view']);
     })
 }
 
-let ajax_call_1 = function (endpoint, request_parameters) {
-    $.getJSON(endpoint, request_parameters)
-    .done(response => {  
-        // remove loader class
-        $('.search-button').html('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>')
-        // Remove disabled class
-        results_div.fadeTo('fast', 1);
-    })
-}
 function updateVariantDetails(event) {
     $('.product').addClass('disabled');
 
@@ -172,9 +160,13 @@ $(document).on('click', '.close-badge', function(e){
     e.preventDefault();
     var value = $(this).parents('button').attr('data-val');
     var checked_input = $('input').filter(function() { return this.value == value });
+    var selected_category = $('.category-item').filter(function() { return this.dataset.val == value });
     var unchecked = checked_input.prop("checked", false);
+    selected_category.removeClass('selected');
+    selected_category.css("--card-gradient", "66%");
+
     if (unchecked){
-        $(this).parents('button').remove()
+        $(this).parents('button').remove();
     }
 })
 
@@ -199,7 +191,8 @@ $(document).on('click', '.category-item, .close-badge', function(event){
     $('.search-button').html('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
 
     // Disable eShop
-    $('#eShop').addClass('disabled');
+    $('.infinite-container').css("display", 'block');
+    $('.infinite-container').html('<div class="lds-ellipsis" style="display: flex;-webkit-box-pack: center;justify-content: center;margin: auto;"><div></div><div></div><div></div><div></div></div>');
 
     // Initialize current url
     const url = new URL(window.location);
@@ -293,11 +286,15 @@ $(document).on('change', '.choice-input-wrapper .form-check-input, input[name="t
     // Add button loader
     $('.search-button').html('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
 
+    // Disable eShop
+    $('.infinite-container').css("display", 'block');
+    $('.infinite-container').html('<div class="lds-ellipsis" style="display: flex;-webkit-box-pack: center;justify-content: center;margin: auto;"><div></div><div></div><div></div><div></div></div>');
+
     // Initialize current url
     const url = new URL(window.location);
 
     // Disable eShop
-    $('#eShop').addClass('disabled');
+    $('infinite-container').append('<div id="overlay"><div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>');
 
 	var title = $('input[name="title"]').val();
 
@@ -389,6 +386,10 @@ $(window).on('load', function(){
     const url = new URL(window.location);
 
     if (url.href.includes('?')){
+        // Disable eShop
+        $('.infinite-container').css("display", 'block');
+        $('.infinite-container').html('<div class="lds-ellipsis" style="display: flex;-webkit-box-pack: center;justify-content: center;margin: auto;"><div></div><div></div><div></div><div></div></div>');
+
         var title = $('input[name="title"]').val();
 
         var c_checkboxes = $('.category-item.selected').map(function(_, el) {
@@ -449,17 +450,16 @@ $(window).on('load', function(){
             "wattage[]": wattage,
             "category[]": category,
             "q": title,
-            "is_ajax": "False"
+            "is_ajax": "True"
         }
 
         if (scheduled_function) {
             clearTimeout(scheduled_function)
         } 
         window.history.pushState({}, '', url);
-        scheduled_function = setTimeout(ajax_call_1, delay_by_in_ms, endpoint, request_parameters);
+        scheduled_function = setTimeout(ajax_call, delay_by_in_ms, endpoint, request_parameters);
     }
 })
-
 
 // PRODUCT DETAILS
 
@@ -626,6 +626,92 @@ $(document).on('click', '#addCart', function(event){
 	});
 });
 // ADD TO CART END
+
+// UPDATE CART
+$(document).on('change', 'input[data-update-quantity]', function(event){
+    event.preventDefault();
+    var new_quantity = $(this).val();
+    var request_parameters = {'quantity': new_quantity}
+    var slug = $(this).attr('data-update-quantity');
+
+    // disable selected product
+    $(this).parents('.cart-notification__product').addClass('disabled');
+
+    $.post({
+		type: 'POST',
+		url: '/update-cart/' + slug,
+		data: JSON.stringify(request_parameters),
+		dataType: 'json',
+		headers: {'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"},
+		success: function (data) {
+            setTimeout(function() {
+                $('.cart-notification__product').removeClass('disabled');
+                $("#cart-subtotal").load(location.href + " #cart-subtotal");
+
+                // if error message length is more than 0
+                $('.form__error').fadeOut('slow');
+                $('.form__error').removeClass('active');
+            }, delay_by_in_ms);
+		},
+        error: function (xhr, ajaxOptions, thrownError) {
+            $('.cart-notification__product').removeClass('disabled');
+            setTimeout(function() {
+                $('.form__error').fadeIn('slow');
+                $('.form__error').addClass('active');
+                $('.error__content').html(xhr.responseJSON['err']);
+            }, delay_by_in_ms);
+            setTimeout(function() {
+                $('.form__error').fadeOut('slow');
+                $('.form__error').removeClass('active');
+            }, 10000); 
+		}
+	});
+})
+
+$(document).on('click', 'button[data-remove-cart-item]', function(event){
+    event.preventDefault();
+    var $this = $(this);
+    var slug = $this.attr('data-remove-cart-item');
+    var request_parameters = {'slug': slug};
+    $this.html('<div class="lds-ring" style="margin: auto"><div></div><div></div><div></div><div></div></div>');
+
+    $.ajax({
+		type: 'POST',
+		url: '/remove-item/' + slug,
+		data: JSON.stringify(request_parameters),
+		dataType: 'json',
+		headers: {'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"},
+		success: function (data) {
+            setTimeout(function() {
+                $this.parents('.cart-notification__product').remove();
+                $(".cart-quantity").load(location.href + " .cart-quantity");
+                $("#cart-subtotal").load(location.href + " #cart-subtotal");
+
+                if (!$('.cart-notification__product').length) {
+                    $('.cart__body').html('<div class="cart__empty-state">NO ITEMS FOUND</div>');
+                    $('.cart__footer').remove();
+                }
+
+                // if error message length is more than 0
+                $('.form__error').fadeOut('slow');
+                $('.form__error').removeClass('active');
+            }, delay_by_in_ms);
+		},
+        error: function (xhr, ajaxOptions, thrownError) {
+            $('.cart-notification__product').removeClass('disabled');
+            setTimeout(function() {
+                $('.form__error').fadeIn('slow');
+                $('.form__error').addClass('active');
+                $('.error__content').html("Something went wrong! Please try again.");
+            }, delay_by_in_ms);
+            setTimeout(function() {
+                $('.form__error').fadeOut('slow');
+                $('.form__error').removeClass('active');
+            }, 10000); 
+		}
+	});
+})
+// UPDATE CART END
 
 // DOMContentLoaded
 document.addEventListener('DOMContentLoaded', function () {
