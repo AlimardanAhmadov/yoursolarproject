@@ -737,32 +737,8 @@ footer a {
     margin-bottom: 10px;
 }
 
-.field {
-    background: #fff;
-    padding-left: 6px;
-    padding-right: 17px;
-    border: 1px solid rgb(146, 146, 146);
-    transition: outline 0.1s ease;
-    display: flex;
-}
-
-.field:hover {
-    outline: 1px solid rgb(146, 146, 146);
-}
-
 .newsletter input{
     width: 300px;
-}
-
-input {
-    padding: 10px;
-    background: none;
-    border: none;
-    width: 100%;
-}
-
-input:focus{
-    outline: none;
 }
 
 .newsletter label{
@@ -1233,11 +1209,7 @@ input:focus{
 
 .form__error {
     display: none;
-}
-
-.form__error.active {
-    display: flex;
-    align-items: flex-start;
+    text-align: left;
 }
 
 .form__error svg {
@@ -1245,7 +1217,6 @@ input:focus{
     margin-top: 0.2rem;
 }
 /* CART NOTIFICATION END */
-
 
 /* CART */
 .cart-wrapper {
@@ -1384,3 +1355,49 @@ input:focus{
     flex-basis: 0%;
 }
 /* CART END */
+
+/* SIGN UP & SIGN IN */
+.user {
+    margin: 6rem auto 9rem;
+    max-width: 28rem;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    text-align: center;
+    font-family: 'Nunito', sans-serif;
+}
+
+.user h1 {
+    font-weight: 900;
+}
+
+.user .input-group {
+    display: block;
+}
+
+.field input:not(:placeholder-shown) + label, 
+input[name="password"]:focus + label,
+input[name="username"]:focus + label{
+    font-size: .8rem;
+    left: calc(1px + .7rem);
+    top: calc(0.17rem - 12px);
+    background: #fff;
+    padding: 0 7px;
+}
+.signup__recover {
+    display: flex;
+    justify-content: space-between;
+}
+.recover {
+    text-decoration: underline;
+    text-align: left;
+}
+
+#signin {
+    text-align: center;
+}
+
+#signin button{
+    max-width: 12rem;
+}
+/* SIGNUP END */

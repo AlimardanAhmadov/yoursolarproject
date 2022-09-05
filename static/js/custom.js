@@ -687,7 +687,7 @@ $(document).on('click', 'button[data-remove-cart-item]', function(event){
                 $(".cart-quantity").load(location.href + " .cart-quantity");
                 $("#cart-subtotal").load(location.href + " #cart-subtotal");
 
-                if (!$('.cart-notification__product').length) {
+                if ($('.cart__body .cart-notification__product').length == 0) {
                     $('.cart__body').html('<div class="cart__empty-state">NO ITEMS FOUND</div>');
                     $('.cart__footer').remove();
                 }
@@ -791,3 +791,104 @@ categories.forEach(function (category) {
     });
 });
 // LOCAL STORAGE END
+
+// SIGN UP & SIGN IN 
+$(document).on('submit', '.login', function(event){
+	event.preventDefault();
+	var input_data = {
+		'username': $('input[name="username"]').val(),
+		'password': $('input[name="password"]').val(),
+		'next': $('input[name="next"]').val(),
+	}
+
+    var $this = $(this);
+
+	$this.addClass('disabled');
+
+    $('.button-black').html('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
+  
+	$.ajax({
+		type: 'POST',
+		url: '/login/',
+		data: JSON.stringify(input_data),
+		dataType: 'json',
+		headers: { 'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"},
+		success: function (data) {
+            setTimeout(function() {
+                $this.removeClass('disabled');
+                if (data['next_url']){
+                    window.location.href = data['next_url'];
+                }
+                else {
+                    window.location.href = '/';
+                }
+            }, delay_by_in_ms);
+		},
+        error: function (xhr, ajaxOptions, thrownError) {
+            setTimeout(function() {
+                $this.removeClass('disabled');
+                $('.button-black').html('Sign in');
+                var list_of_errors = xhr.responseJSON['error'];
+                $('.form__error').fadeIn('slow');
+                $('.form__error').addClass('active');
+
+                for(let i = 0; i < list_of_errors.length; i++){
+                    var newItem = list_of_errors[i];
+                    $( ".error__content" ).html( newItem );
+                }
+            }, delay_by_in_ms);
+            setTimeout(function() {
+                $('.form__error').fadeOut('slow');
+                $('.form__error').removeClass('active');
+            }, 10000); 
+		}
+	}); 
+});
+
+$(document).on('submit', '.signup', function(event){
+	event.preventDefault();
+	var input_data = {
+		'username': $('input[name="username"]').val(),
+		'email': $('input[name="email"]').val(),
+		'password1': $('input[name="password1"]').val(),
+		'password2': $('input[name="password2"]').val(),
+	}
+
+    var $this = $(this);
+
+	$this.addClass('disabled');
+
+    $('.button-black').html('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
+  
+	$.ajax({
+		type: 'POST',
+		url: '/sign-up/',
+		data: JSON.stringify(input_data),
+		dataType: 'json',
+		headers: { 'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"},
+		success: function (data) {
+            setTimeout(function() {
+                $this.removeClass('disabled');
+                window.location.href = '/login/';
+            }, delay_by_in_ms);
+		},
+        error: function (xhr, ajaxOptions, thrownError) {
+            setTimeout(function() {
+                $this.removeClass('disabled');
+                $('.button-black').html('Sign up');
+                var list_of_errors = xhr.responseJSON['error'];
+                $('.form__error').fadeIn('slow');
+                $('.form__error').addClass('active');
+
+                for(let i = 0; i < list_of_errors.length; i++){
+                    var newItem = list_of_errors[i];
+                    $( ".error__content" ).html( newItem );
+                }
+            }, delay_by_in_ms);
+            setTimeout(function() {
+                $('.form__error').fadeOut('slow');
+                $('.form__error').removeClass('active');
+            }, 10000); 
+		}
+	}); 
+});

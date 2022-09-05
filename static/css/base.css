@@ -35,6 +35,34 @@ ul{
     padding: 0;
 }
 
+.field {
+    background: #fff;
+    padding-left: 6px;
+    padding-right: 17px;
+    border: 1px solid rgb(146, 146, 146);
+    transition: outline 0.1s ease;
+    display: flex;
+}
+
+.field:hover {
+    outline: 1px solid rgb(146, 146, 146);
+}
+
+input {
+    padding: 10px;
+    background: none;
+    border: none;
+    width: 100%;
+}
+
+input:focus{
+    outline: none;
+}
+
+input[type="text"]:focus + .field {
+    outline: 1px solid rgb(146, 146, 146);
+}
+
 #overlay {
     position: fixed;
     height: 100%;
@@ -150,4 +178,38 @@ ul{
     100% {
         transform: rotate(360deg);
     }
+}
+
+.input-group label {
+    font-size: 15px;
+    left: calc(1px + 1.3rem);
+    top: calc(0.64rem + 1px);
+    margin-bottom: 0;
+    pointer-events: none;
+    position: absolute;
+    transition: top .1s ease,font-size .1s ease;
+    color: rgba(18, 18, 18,.75);
+    letter-spacing: 1px;
+    line-height: 1.5;
+}
+
+.loader {
+    width: 20px;
+    height: 20px;
+    margin: 0 auto;
+    border-top: 2px solid #292929;
+    border-right: 2px solid #efefef;
+    border-bottom: 2px solid #efefef;
+    border-left: 2px solid #efefef;
+    border-radius: 100px;
+    animation: spin 1s infinite linear;
+}
+
+.btn .lds-ring {
+    padding-right: 18px;
+    margin: 0;
+}
+
+.disabled_button {
+    background: none;
 }

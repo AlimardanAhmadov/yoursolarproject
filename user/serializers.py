@@ -161,7 +161,6 @@ class CustomRegisterSerializer(RegisterSerializer):
 class UserSerializer(serializers.ModelSerializer):
     address = serializers.ImageField(source="customer.address")
     postcode = serializers.CharField(source="customer.postcode")
-    account_type = serializers.CharField(source="customer.account_type")
     phone = PhoneNumberField(source="customer.phone")
     property_type = serializers.CharField(source="customer.property_type")
     no_floors = serializers.CharField(source="customer.no_floors")
@@ -183,12 +182,12 @@ class UserSerializer(serializers.ModelSerializer):
             "bill_rate",
             "agreement",
             "other",
+            "phone"
         ]
 
 class BussinesUserSerializer(serializers.ModelSerializer):
     address = serializers.ImageField(source="business.address")
     postcode = serializers.CharField(source="business.postcode")
-    account_type = serializers.CharField(source="business.account_type")
     phone = PhoneNumberField(source="business.phone")
     property_type = serializers.CharField(source="business.property_type")
     no_floors = serializers.CharField(source="business.no_floors")
@@ -208,7 +207,8 @@ class BussinesUserSerializer(serializers.ModelSerializer):
             "no_floors",
             "bill_rate",
             "other",
-            "company_name"
+            "company_name",
+            "phone"
         ]
 
 

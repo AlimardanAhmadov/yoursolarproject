@@ -21,7 +21,7 @@ from rest_framework.generics import (
 from main.html_renderer import MyHTMLRenderer
 from .models import Customer
 from .send_mail import send_reset_password_email
-from .serializers import (ChangePasswordSerializer, CustomRegisterSerializer, SendResetPasswordSerializer, GoogleSocialAuthSerializer)
+from .serializers import (ChangePasswordSerializer, CustomRegisterSerializer, LoginSerializer, SendResetPasswordSerializer, GoogleSocialAuthSerializer)
 
 User = get_user_model()
 
@@ -39,11 +39,16 @@ def get_prev_url(request):
     return stripped
 
 
-
 class LoginAPIView(LoginView):
     queryset = ""
-    #template_name = ""
+    renderer_classes = [MyHTMLRenderer,]
+    template_name = "user/login.html"
     allowed_methods = ("POST", "OPTIONS", "HEAD", "GET")
+
+    def get(self, request):
+        users = User.objects.all()
+        serializer = LoginSerializer(users, many=True)
+        return Response(serializer.data)
 
     def get_response(self, request):
         serializer_class = self.get_response_serializer()
@@ -80,7 +85,6 @@ class LoginAPIView(LoginView):
             print(emessage)
             for key in emessage:
                 err_message = str(emessage[key])
-                print(err_message)
                 err_string = re.search("string=(.*), ", err_message) 
                 message_value = err_string.group(1)
                 final_message = f"{message_value}"
@@ -202,7 +206,6 @@ class PasswordResetView(ListCreateAPIView):
                         content_type='application/json')
             response.status_code = 400
             return response
-
 
 
 class PasswordResetConfirmView(ListCreateAPIView):
