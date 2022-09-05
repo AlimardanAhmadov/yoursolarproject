@@ -2,6 +2,7 @@ import random
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.http import JsonResponse
+from django.db.models import Q
 from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -33,7 +34,7 @@ class ProductDetailView(APIView):
         variant_serializer = ProductVariantSerializer(product_variants, many=True)
 
         #related products
-        products = list(Product.objects.filter(category=selected_product.category).exclude(slug=slug))
+        products = list(Product.objects.filter(Q(category=selected_product.category)).exclude(slug=slug))
 
         list_length = len(products)
 
@@ -41,6 +42,7 @@ class ProductDetailView(APIView):
             related_products = random.sample(products, list_length)
         else:
             related_products = random.sample(products, 4)
+        
 
         context = {
             'product_variants': variant_serializer.data,

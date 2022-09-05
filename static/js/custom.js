@@ -385,7 +385,7 @@ $(window).on('load', function(){
     // Initialize current url
     const url = new URL(window.location);
 
-    if (url.href.includes('?')){
+    if (url.href.includes('e-shop/?')){
         // Disable eShop
         $('.infinite-container').css("display", 'block');
         $('.infinite-container').html('<div class="lds-ellipsis" style="display: flex;-webkit-box-pack: center;justify-content: center;margin: auto;"><div></div><div></div><div></div><div></div></div>');
