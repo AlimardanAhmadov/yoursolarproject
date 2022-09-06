@@ -105,9 +105,10 @@ class CustomRegisterSerializer(RegisterSerializer):
     username = serializers.CharField(required=False, write_only=True)
     first_name = serializers.CharField(required=False, write_only=True)
     last_name = serializers.CharField(required=False, write_only=True)
-    email = serializers.EmailField(required=True, write_only=True, validators=[UniqueValidator(queryset=UserModel.objects.all())])
+    email = serializers.EmailField(required=True, write_only=True)
     agreement = serializers.BooleanField(default=False)
     account_type = serializers.CharField(required=True, write_only=True)
+    company_name = serializers.CharField(required=False, write_only=True)
     
 
     def get_cleaned_data_customer(self):
@@ -120,12 +121,30 @@ class CustomRegisterSerializer(RegisterSerializer):
     def get_cleaned_data_business(self):
         return {
             "agreement": self.validated_data.get("agreement", ""),
+            "company_name": self.validated_data.get("company_name", ""),
         }
+    
     
     def validate(self, attrs):
         agreement = attrs['agreement']
+        account_type = attrs['account_type']
+
         if agreement is not True:
             raise serializers.ValidationError({'Agreement': ['You must agree to our terms & conditions']})
+        
+        if account_type == 'business':
+            if Business.objects.filter(company_name=attrs['company_name']).exists():
+                raise serializers.ValidationError({'Company': ['A user with this company name already exists']})
+                
+            if attrs['company_name'] is None:
+                raise serializers.ValidationError({'Company Name': ['This field cannot be blank']})
+                
+        elif account_type == 'individual':
+            if attrs['first_name'] is None:
+                raise serializers.ValidationError({'First Name': ['This field cannot be blank']})
+            elif attrs['last_name'] is None:
+                raise serializers.ValidationError({'Last Name': ['This field cannot be blank']})
+
         return attrs
 
     def create_customer(self, user, validated_data):
@@ -143,17 +162,18 @@ class CustomRegisterSerializer(RegisterSerializer):
     
     def create_business(self, user, validated_data):
         user.email = self.validated_data.get('email')
-        user.username = id_generator()
+        user.username = self.validated_data.get('company_name')
         user.save()
 
         Business.objects.create(
             user=user, 
+            company_name = self.validated_data.get('company_name'),
             provider='Email'
         )
 
     def custom_signup(self, request, user):
-        if self.validated_data.get('account_type') == 'Bussines':
-            self.create_bussines(user, self.get_cleaned_data_customer())
+        if self.validated_data.get('account_type') == 'business':
+            self.create_business(user, self.get_cleaned_data_customer())
         else:
             self.create_customer(user, self.get_cleaned_data_business())
 

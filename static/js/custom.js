@@ -845,13 +845,173 @@ $(document).on('submit', '.login', function(event){
 	}); 
 });
 
+const account_types = []
+
+$(document).on('click', '.user__type', function(event){
+    event.preventDefault();
+    var $this = $(this);
+    
+    account_types.push($this.data('account-type'));
+
+    $('#flexibleSignup').html('<div class="lds-ellipsis" style="display: flex;-webkit-box-pack: center;justify-content: center;margin: auto;"><div></div><div></div><div></div><div></div></div>');
+    setTimeout(function() {
+        if ($this.data('account-type') == 'individual') {
+            const inv_signup = '<form class="user signup">' +
+                    '<h1>Create Account</h1>'+
+
+                    '<div class="form__error small" role="alert">' +
+                        '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="red" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">' +
+                            '<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>' +
+                        '</svg>' +
+                        '<span class="error__content">' +
+                        '</span>' +
+                    '</div>' +
+                    '<div class="input-group">'+ 
+                        '<div class="field">'+
+                            '<input id="firstnameField" type="text" name="first_name" placeholder=" " autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true">'+
+                            '<label for="firstnameField">First Name</label>'+
+                        '</div>'+
+                    '</div>'+
+                
+                    '<div class="input-group">'+
+                        '<div class="field">'+
+                            '<input id="lastnameField" type="text" name="last_name" placeholder=" " autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true">'+
+                            '<label for="lastnameField">Last Name</label>'+
+                        '</div>'+
+                    '</div>'+
+                
+                    '<div class="input-group">'+
+                        '<div class="field">'+
+                            '<input id="emailuserField" type="email" name="email" placeholder=" " autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true">'+
+                            '<label for="emailuserField">Email</label>'+
+                        '</div>'+
+                    '</div>'+
+                
+                    '<div class="input-group">'+
+                        '<div class="field">'+
+                            '<input id="usernameField" type="text" name="username" placeholder=" " autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true">'+
+                            '<label for="usernameField">Username</label>'+
+                        '</div>'+
+                    '</div>'+
+                    
+                    '<div class="input-group">'+
+                        '<div class="field">'+
+                            '<input id="passwordField" type="password" name="password1" placeholder=" " autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true">'+
+                            '<label for="passwordField">Password</label>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="input-group">'+
+                        '<div class="field">'+
+                            '<input id="passwordField" type="password" name="password2" placeholder=" " autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true">'+
+                            '<label for="passwordField">Confirm Password</label>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="signup__agreement">'+
+                        '<div class="choice-input-wrapper ">'+
+                            '<input type="checkbox" name="agreement" class="form-check-input mt-0" autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true"> '+
+                            '<label class="form-check-label small" for="">Yes, I understand and agree to the Upwork Terms of Service, including the User Agreement and Privacy Policy.</label>'+
+                        '</div>'+
+                    '</div>'+
+
+                    '<div class="or or--x" aria-role="presentation"> OR </div>' +
+
+                    '<div class="google__sign-in">' +
+                        '<button class="google-btn border plain-btn" type="button">' +
+                            '<img src="/static/images/google.svg" alt="google">' +
+                            'Continue with Google'+
+                        '</button>'+
+                    '</div>'+
+                    '<div class="signup__recover">'+
+                        '<a href="{% url "account_login" %}" class="recover small">Already have an account?</a>'+
+                    '</div>'+
+                    '<div id="signin">'+
+                        '<button class="btn button-black">Sign Up</button>'+
+                    '</div>'+
+                '</form>'
+            $('#flexibleSignup').html(inv_signup);
+        }
+        else if ($this.data('account-type') == 'business'){
+            const  business_signup = '<form class="user signup">' +
+                    '<h1>Create Account</h1>'+
+                    '<div class="form__error small" role="alert">' +
+                        '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="red" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">' +
+                            '<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>' +
+                        '</svg>' +
+                        '<span class="error__content">' +
+                        '</span>' +
+                    '</div>' +
+                    '<div class="input-group">'+
+                        '<div class="field">'+
+                            '<input id="companynameField" type="text" name="company_name" placeholder=" " autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true">'+
+                            '<label for="companynameField">Company Name</label>'+
+                        '</div>'+
+                    '</div>'+
+
+                    '<div class="input-group">'+
+                        '<div class="field">'+
+                            '<input id="emailuserField" type="email" name="email" placeholder=" " autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true">'+
+                            '<label for="emailuserField">Email</label>'+
+                        '</div>' +
+                    '</div>' +
+
+                    '<div class="input-group">'+
+                        '<div class="field">'+
+                            '<input id="passwordField" type="password" name="password1" placeholder=" " autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true">'+
+                            '<label for="passwordField">Password</label>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="input-group">'+
+                        '<div class="field">'+
+                            '<input id="passwordField" type="password" name="password2" placeholder=" " autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true">'+
+                            '<label for="passwordField">Confirm Password</label>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="signup__agreement">'+
+                        '<div class="choice-input-wrapper ">'+
+                            '<input type="checkbox" name="agreement" class="form-check-input mt-0">'+
+                            '<label class="form-check-label small" for="">Yes, I understand and agree to the Upwork Terms of Service, including the User Agreement and Privacy Policy.</label>' +
+                        '</div>' +
+                    '</div>' +
+
+                    '<div class="or or--x" aria-role="presentation"> OR </div>' +
+                    
+                    '<div class="google__sign-in">' +
+                        '<button class="google-btn border plain-btn" type="button">' +
+                            '<img src="/static/images/google.svg" alt="google">' +
+                            'Continue with Google'+
+                        '</button>'+
+                    '</div>'+
+                    '<div class="signup__recover">' +
+                        '<a href="{% url "account_login" %}" class="recover small">Already have an account?</a>' +
+                    '</div>' +
+                    '<div id="signin">' +
+                        '<button class="btn button-black">Sign Up</button>' +
+                    '</div>' +
+                '</form>' 
+            $('#flexibleSignup').html(business_signup);
+        }
+    }, delay_by_in_ms);
+})
+
 $(document).on('submit', '.signup', function(event){
 	event.preventDefault();
+
+    if ($('input[name="agreement"]').is(":checked")) {
+        var agreement = true
+    }
+    else {
+        var agreement = false
+    }
 	var input_data = {
+        'account_type': account_types[0],
+		'first_name': $('input[name="first_name"]').val(),
+		'last_name': $('input[name="last_name"]').val(),
 		'username': $('input[name="username"]').val(),
 		'email': $('input[name="email"]').val(),
 		'password1': $('input[name="password1"]').val(),
 		'password2': $('input[name="password2"]').val(),
+		'company_name': $('input[name="company_name"]').val(),
+		'agreement': agreement,
 	}
 
     var $this = $(this);
@@ -892,3 +1052,4 @@ $(document).on('submit', '.signup', function(event){
 		}
 	}); 
 });
+// SIGN UP & SIGN IN END

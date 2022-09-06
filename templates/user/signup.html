@@ -10,42 +10,21 @@
     </div>
 </section>
 
-<div class="container">
-    <form class="user signup">
-        <h1>Create Account</h1>
-        <div class="input-group">
-            <div class="field">
-                <input id="emailuserField" type="email" name="email" placeholder=" ">
-                <label for="emailuserField">Email</label>
-            </div>
-        </div>
-
-        <div class="input-group">
-            <div class="field">
-                <input id="emailuserField" type="text" name="email" placeholder=" ">
-                <label for="emailuserField">Username</label>
-            </div>
-        </div>
-        
-        <div class="input-group">
-            <div class="field">
-                <input id="passwordField" type="password" name="password1" placeholder=" ">
-                <label for="passwordField">Password</label>
-            </div>
-        </div>
-        <div class="input-group">
-            <div class="field">
-                <input id="passwordField" type="password" name="password2" placeholder=" ">
-                <label for="passwordField">Confirm Password</label>
-            </div>
-        </div>
-        <div class="signup__recover">
-            <a href="{% url 'account_login' %}" class="recover small">Already have an account?</a>
-        </div>
-        <div id="signin">
-            <button class="btn button-black">Sign Up</button>
-        </div>
-    </form>
+<div class="container" id="flexibleSignup">
+    <div class="user choose-account-type">
+        <button class="plain-btn border user__type" data-account-type="individual">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+            </svg>
+            <h6>Individual User</h6>
+        </button>
+        <button class="plain-btn border user__type" data-account-type="business">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-briefcase" viewBox="0 0 16 16">
+                <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0zM1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5z"/>
+            </svg>
+            <h6>Business User</h6>
+        </button>
+    </div>
 </div>
 
 {% endblock %}

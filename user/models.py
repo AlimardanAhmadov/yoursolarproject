@@ -25,16 +25,6 @@ class Customer(TimeStampedModel):
     user=models.OneToOneField(User, related_name='customer', on_delete=models.CASCADE)
     slug=models.SlugField(blank=True, null=True)
     full_name=models.CharField(max_length=250)
-    address=models.TextField(blank=True, null=True)
-    postcode=models.PositiveIntegerField(blank=True, null=True)
-    property_type=models.CharField(max_length=50, blank=True, null=True)
-    no_floors=models.PositiveSmallIntegerField(blank=True, null=True)
-    no_bedrooms=models.PositiveSmallIntegerField(blank=True, null=True)
-    bill_rate=models.PositiveIntegerField(blank=True, null=True)
-    agreement=models.BooleanField(default=False)
-    company_name=models.CharField(max_length=250, unique=True, blank=True, null=True)
-    other=RichTextField(blank=True)
-    phone=PhoneNumberField(blank=True, null=True)
     provider=models.CharField(max_length=10, choices=PROVIDER_TYPES)
     
     class Meta:
@@ -60,15 +50,7 @@ post_save.connect(Customer.post_save, sender=Customer)
 class Business(TimeStampedModel):
     user=models.OneToOneField(User, related_name='business', on_delete=models.CASCADE)
     slug=models.SlugField(blank=True, null=True)
-    address=models.TextField(blank=True, null=True)
-    postcode=models.PositiveIntegerField(blank=True, null=True)
-    property_type=models.CharField(max_length=50, blank=True, null=True)
-    no_floors=models.PositiveSmallIntegerField(blank=True, null=True)
-    bill_rate=models.PositiveIntegerField(blank=True, null=True)
-    agreement=models.BooleanField(default=False)
     company_name=models.CharField(max_length=250, unique=True, blank=True, null=True)
-    other=RichTextField(blank=True)
-    phone=PhoneNumberField(blank=True, null=True)
     provider=models.CharField(max_length=10, choices=PROVIDER_TYPES)
     
     class Meta:

@@ -213,3 +213,29 @@ input[type="text"]:focus + .field {
 .disabled_button {
     background: none;
 }
+
+.or::before,
+.or::after {
+    content: "";
+}
+
+.or--x::before,
+.or--x::after {
+    position: relative;
+    border-top: 1px solid #ccc;
+    display: inline-block;
+    vertical-align: middle;
+    width: 44.8%;
+    margin-bottom: 0.15em;
+    overflow: hidden;
+}
+
+.or--x::before {
+    right: 0.5em;
+    margin-left: -50%;
+}
+
+.or--x::after {
+    left: 0.5em;
+    margin-right: -50%;
+}

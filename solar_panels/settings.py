@@ -110,7 +110,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'main.context_processors.geoip', 
-                'main.context_processors.cart_items'
+                #'main.context_processors.cart_items'
             ],
         },
     },
@@ -284,3 +284,4 @@ REST_USE_JWT = True
 # GEOLOCAITON CONFIGS
 GEOIP_PATH =os.path.join('geoip')
 
+SESSION_COOKIE_SECURE = False

@@ -1357,6 +1357,12 @@ footer a {
 /* CART END */
 
 /* SIGN UP & SIGN IN */
+#flexibleSignup {
+    margin: 6rem auto 9rem;
+    max-width: 28rem;
+    text-align: center;
+}
+
 .user {
     margin: 6rem auto 9rem;
     max-width: 28rem;
@@ -1399,5 +1405,47 @@ input[name="username"]:focus + label{
 
 #signin button{
     max-width: 12rem;
+}
+
+.choose-account-type {
+    max-width: 24rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.user__type {
+    padding: 25px 37px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-radius: 10px;
+    transition: .3s;
+}
+.user__type:hover {
+    background: #f4f4f4;
+}
+.user__type svg {
+    margin: 0 auto;
+}
+.signup__agreement {
+    text-align: left;
+}
+.signup__agreement input{
+    margin-top: 5px !important;
+}
+
+.google-btn {
+    padding: 12px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: center;
+    transition: .3s;
+    border-radius: 3px;
+}
+
+.google-btn:hover {
+    background-color: #fafafa;
 }
 /* SIGNUP END */
