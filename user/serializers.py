@@ -5,9 +5,9 @@ from django.conf import settings
 from django.contrib.auth.forms import SetPasswordForm
 from cart.models import Cart
 from rest_framework import serializers, exceptions
-from phonenumber_field.serializerfields import PhoneNumberField
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_auth.registration.serializers import RegisterSerializer
-from rest_framework.validators import UniqueValidator
+from phonenumber_field.serializerfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
 from .models import Business, Customer
 from . import google_validate
@@ -162,6 +162,12 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.username = self.validated_data.get("username")
         user.save()
 
+        token = RefreshToken.for_user(user)
+        token = {
+            "refresh_token": str(token),
+            "access_token": str(token.access_token)
+        }
+
         Customer.objects.create(
             user=user,
             full_name = self.validated_data.get("first_name") + " " + self.validated_data.get("last_name"),
@@ -178,6 +184,12 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.email = self.validated_data.get('email')
         user.username = self.validated_data.get('company_name')
         user.save()
+        
+        token = RefreshToken.for_user(user)
+        token = {
+            "refresh_token": str(token),
+            "access_token": str(token.access_token)
+        }
 
         Business.objects.create(
             user=user, 

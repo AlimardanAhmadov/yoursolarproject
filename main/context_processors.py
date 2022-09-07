@@ -31,14 +31,11 @@ def geoip(request):
 def cart_items(request):
     if request.user.is_authenticated:
         current_user = request.user
-        print("user:", current_user)
 
         current_cart = Cart.cache_by_slug(slugify(current_user.username))
 
         if current_cart is None:
             current_cart = Cart.objects.filter(slug=slugify(current_user.username)).first()
-        
-        print("cart:", current_cart)
 
         cart_serializer = CartSerializer(current_cart, many=False)
 
