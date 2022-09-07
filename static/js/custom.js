@@ -28,6 +28,16 @@ var swiper = new Swiper(".slide-content", {
     },
 });
 
+function makePassword(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }    
+    return result;
+}
+
 var checkboxes = document.querySelectorAll('.form-check-input');
 var categories = document.querySelectorAll('.category-item');
 var thumbnails = document.querySelectorAll('.thumbnail');
@@ -847,7 +857,7 @@ $(document).on('submit', '.login', function(event){
 
 const account_types = []
 
-$(document).on('click', '.user__type', function(event){
+$(document).on('click', '.local-account__type', function(event){
     event.preventDefault();
     var $this = $(this);
     
@@ -915,12 +925,7 @@ $(document).on('click', '.user__type', function(event){
 
                     '<div class="or or--x" aria-role="presentation"> OR </div>' +
 
-                    '<div class="google__sign-in">' +
-                        '<button class="google-btn border plain-btn" type="button">' +
-                            '<img src="/static/images/google.svg" alt="google">' +
-                            'Continue with Google'+
-                        '</button>'+
-                    '</div>'+
+                    '<div id="buttonDiv"></div>' +
                     '<div class="signup__recover">'+
                         '<a href="{% url "account_login" %}" class="recover small">Already have an account?</a>'+
                     '</div>'+
@@ -975,12 +980,7 @@ $(document).on('click', '.user__type', function(event){
 
                     '<div class="or or--x" aria-role="presentation"> OR </div>' +
                     
-                    '<div class="google__sign-in">' +
-                        '<button class="google-btn border plain-btn" type="button">' +
-                            '<img src="/static/images/google.svg" alt="google">' +
-                            'Continue with Google'+
-                        '</button>'+
-                    '</div>'+
+                    '<div id="buttonDiv"></div>' +
                     '<div class="signup__recover">' +
                         '<a href="{% url "account_login" %}" class="recover small">Already have an account?</a>' +
                     '</div>' +
@@ -989,6 +989,37 @@ $(document).on('click', '.user__type', function(event){
                     '</div>' +
                 '</form>' 
             $('#flexibleSignup').html(business_signup);
+        }
+        // generate google button
+        google.accounts.id.initialize({
+            client_id: "86282417486-l5morm5n1a4pa39ftt9bllrdm9acfinv.apps.googleusercontent.com",
+            callback: handleCredentialResponse
+        });
+        google.accounts.id.renderButton(
+            document.getElementById("buttonDiv"),
+            { theme: "outline", size: "large" }
+        );
+        google.accounts.id.prompt();
+    }, delay_by_in_ms);
+})
+
+$(document).on('click', '.google-account__type', function(event){
+    event.preventDefault();
+    var $this = $(this);
+
+    $('.user__type.selected').removeClass('selected');
+    $this.addClass('selected');
+
+    account_types.push($this.data('account-type'));
+    $('.extra-fields').html('<div class="lds-ellipsis" style="display: flex;-webkit-box-pack: center;justify-content: center;margin: auto;"><div></div><div></div><div></div><div></div></div>');
+    
+    setTimeout(function() {
+        if ($this.data('account-type') == 'individual') {
+            console.log("individual");
+            $('.extra-fields').html('<div class="input-group"><div class="field"><input id="usernameField" type="text" name="username" placeholder=" " autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true"><label for="usernameField">Username</label></div></div>')
+        }
+        else if ($this.data('account-type') == 'business'){
+            $('.extra-fields').html('<div class="input-group"><div class="field"><input id="companynameField" type="text" name="company_name" placeholder=" " autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true"><label for="companynameField">Company Name</label></div></div>')
         }
     }, delay_by_in_ms);
 })
@@ -1011,6 +1042,7 @@ $(document).on('submit', '.signup', function(event){
 		'password1': $('input[name="password1"]').val(),
 		'password2': $('input[name="password2"]').val(),
 		'company_name': $('input[name="company_name"]').val(),
+        'provider': 'Email',
 		'agreement': agreement,
 	}
 
@@ -1053,3 +1085,168 @@ $(document).on('submit', '.signup', function(event){
 	}); 
 });
 // SIGN UP & SIGN IN END
+
+
+// GOOGLE AUTHENTICATION
+function handleCredentialResponse(response) {
+    var input_data = {
+        'account_type': account_types[0],
+        'auth_token': String(response.credential),
+	}
+    $.ajax({
+		type: 'POST',
+		url: '/google-login/',
+		data: JSON.stringify(input_data),
+		dataType: 'json',
+		headers: { 'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"},
+		success: function (data) {
+            setTimeout(function() {
+                var url = String(new URL(window.location.href));
+                if (url.includes('sign-up')) {
+                    $('.user').removeClass('choose-account-type');
+                    $('.user').html('<div class="user google-acc__card border card" style="display:none">' +
+                        '<h4>Continue with Google</h4>' +
+                        '<div class="form__error small" role="alert">' +
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="red" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">' +
+                                '<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>' +
+                            '</svg>' +
+                            '<span class="error__content">' +
+                            '</span>' +
+                        '</div>' +
+                        '<div class="google-acc-details">' +
+                            '<img width="30" height="30" src="'+ data['data'].picture +'" alt="' + data['data'].email + '" style="border-radius: 50%;">' +
+                            '<span class="google__username">' + data['data'].email + '</span>' +
+                        '</div>' +
+                        '<input type="hidden" name="first_name" value="'+ data['data'].given_name +'">' +
+                        '<input type="hidden" name="last_name" value="'+ data['data'].family_name +'">' +
+                        '<div class="choose-account-type">' +
+                            '<button class="plain-btn border user__type google-account__type" data-account-type="individual" type="button">' +
+                                '<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">' +
+                                    '<path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path>' +
+                                '</svg>' +
+                                '<h6>Individual User</h6>' +
+                            '</button>' +
+                            '<button class="plain-btn border user__type google-account__type" data-account-type="business" type="button">' +
+                                '<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-briefcase" viewBox="0 0 16 16">' +
+                                    '<path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0zM1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5z"></path>' +
+                                '</svg>' +
+                                '<h6>Business User</h6>' +
+                            '</button>' +
+                        '</div>' +
+                        '<div class="extra-fields"></div>' +
+                        '<div class="signup__agreement">' +
+                            '<div class="choice-input-wrapper ">' +
+                                '<input type="checkbox" name="agreement" class="form-check-input mt-0">' +
+                                '<label class="form-check-label small" for="">Yes, I understand and agree to the Upwork Terms of Service, including the User Agreement and Privacy Policy.</label>' +
+                            '</div>' +
+                        '</div>' +
+                    
+                        '<div id="signin">' +
+                            '<button class="btn button-black" id="googleAuthenticationBtn">Create account</button>' +
+                        '</div>' +
+                    '</div>');
+                    $('.google-acc__card').fadeIn('slow');
+                }
+                //var url = String(new URL(window.location.href));
+                //if (url.includes('login')) {
+                //    window.location.href = '/';
+                //}
+                //else {
+                //    window.location.href = '/login/';
+                //}
+            }, delay_by_in_ms);
+		},
+        error: function (xhr, ajaxOptions, thrownError) {
+            setTimeout(function() {
+                var list_of_errors = xhr.responseJSON['error'];
+                $('.form__error').fadeIn('slow');
+                $('.form__error').addClass('active');
+
+                for(let i = 0; i < list_of_errors.length; i++){
+                    var newItem = list_of_errors[i];
+                    $( ".error__content" ).html( newItem );
+                }
+            }, delay_by_in_ms);
+            setTimeout(function() {
+                $('.form__error').fadeOut('slow');
+                $('.form__error').removeClass('active');
+            }, 10000); 
+		}
+	}); 
+}
+
+$(document).on('click', '#googleAuthenticationBtn', function(event){
+    event.preventDefault();
+
+    if ($('input[name="agreement"]').is(":checked")) {
+        var agreement = true
+    }
+    else {
+        var agreement = false
+    }
+
+    var password = makePassword(25);
+
+    var input_data = {
+        'account_type': $('.google-account__type.selected').data('account-type'),
+        'first_name': $('input[name="first_name"]').val(),
+        'last_name': $('input[name="last_name"]').val(),
+        'company_name': $('input[name="company_name"]').val(),
+        'username': $('input[name="username"]').val(),
+        'email': $('.google__username').text(),
+        'password1': password,
+        'password2': password,
+        'agreement': agreement,
+        'provider': 'Google'
+	}
+
+    console.log(input_data);
+
+    $('.button-black').html('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
+
+    $.ajax({
+		type: 'POST',
+		url: '/sign-up/',
+		data: JSON.stringify(input_data),
+		dataType: 'json',
+		headers: { 'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"},
+		success: function (data) {
+            setTimeout(function() {
+                window.location.href = '/';
+            }, delay_by_in_ms);
+		},
+        error: function (xhr, ajaxOptions, thrownError) {
+            setTimeout(function() {
+                $('.button-black').html('Create account')
+                var list_of_errors = xhr.responseJSON['error'];
+                $('.form__error').fadeIn('slow');
+                $('.form__error').addClass('active');
+
+                for(let i = 0; i < list_of_errors.length; i++){
+                    var newItem = list_of_errors[i];
+                    $( ".error__content" ).html( newItem );
+                }
+            }, delay_by_in_ms);
+            setTimeout(function() {
+                $('.form__error').fadeOut('slow');
+                $('.form__error').removeClass('active');
+            }, 10000); 
+		}
+	}); 
+})
+
+window.onload = function () {
+    var url = String(new URL(window.location.href));
+    if (url.includes('sign-up') || url.includes('login')) {
+        google.accounts.id.initialize({
+            client_id: "86282417486-l5morm5n1a4pa39ftt9bllrdm9acfinv.apps.googleusercontent.com",
+            callback: handleCredentialResponse
+        });
+        google.accounts.id.renderButton(
+            document.getElementById("buttonDiv"),
+            { theme: "outline", size: "large" }
+        );
+        google.accounts.id.prompt();
+    }
+}
+// GOOGLE AUTHENTICATION END

@@ -122,7 +122,7 @@ class RegisterAPIView(ListCreateAPIView):
         return JWTSerializer(data).data
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             user = self.perform_create(serializer)
             if getattr(settings, "REST_USE_JWT", False):
@@ -131,6 +131,7 @@ class RegisterAPIView(ListCreateAPIView):
         else:
             data = []
             emessage=serializer.errors 
+            print(emessage)
             for key in emessage:
                 err_message = str(emessage[key])
                 print(err_message)
@@ -319,4 +320,5 @@ class GoogleSocialAuthView(ListCreateAPIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = ((serializer.validated_data)['auth_token'])
-        return Response(data, status=status.HTTP_200_OK)
+        print("auth token:", data)
+        return JsonResponse({'data': data, 'status':status.HTTP_200_OK})

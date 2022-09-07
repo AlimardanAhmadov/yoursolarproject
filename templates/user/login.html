@@ -1,6 +1,10 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
+<div id="g_id_onload"
+    data-client_id="86282417486-r6v2tqpe4pauq01fc11apn11ai3dem16.apps.googleusercontent.com"
+    data-callback="handleCredentialResponse">
+</div>
 
 <section class="page-header padding">
     <div class="container">
@@ -40,7 +44,10 @@
         <div id="signin">
             <button class="btn button-black">Sign in</button>
         </div>
+        <div class="or or--x" aria-role="presentation"> OR </div>
+        <div id="buttonDiv"></div> 
     </form>
 </div>
+
 
 {% endblock %}

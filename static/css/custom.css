@@ -1359,7 +1359,6 @@ footer a {
 /* SIGN UP & SIGN IN */
 #flexibleSignup {
     margin: 6rem auto 9rem;
-    max-width: 28rem;
     text-align: center;
 }
 
@@ -1421,6 +1420,9 @@ input[name="username"]:focus + label{
     border-radius: 10px;
     transition: .3s;
 }
+.user__type.selected {
+    background: #f4f4f4;
+}
 .user__type:hover {
     background: #f4f4f4;
 }
@@ -1447,5 +1449,36 @@ input[name="username"]:focus + label{
 
 .google-btn:hover {
     background-color: #fafafa;
+}
+
+.g-signin2 {
+    width: 100%;
+}
+
+.abcRioButton {
+    width: 100% !important;
+}
+
+.google-acc__card {
+    padding: 30px;
+    margin: 0;
+}
+
+.google-acc__card .choose-account-type {
+    max-width: 100%;
+    width: 100%;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.google-acc-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.google-acc-details img {
+    border-radius: 50%;
 }
 /* SIGNUP END */

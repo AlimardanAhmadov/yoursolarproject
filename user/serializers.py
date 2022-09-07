@@ -1,7 +1,9 @@
 import os
-from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth import get_user_model, authenticate, login
+from django.utils.text import slugify
 from django.conf import settings
 from django.contrib.auth.forms import SetPasswordForm
+from cart.models import Cart
 from rest_framework import serializers, exceptions
 from phonenumber_field.serializerfields import PhoneNumberField
 from rest_auth.registration.serializers import RegisterSerializer
@@ -109,7 +111,13 @@ class CustomRegisterSerializer(RegisterSerializer):
     agreement = serializers.BooleanField(default=False)
     account_type = serializers.CharField(required=True, write_only=True)
     company_name = serializers.CharField(required=False, write_only=True)
-    
+    provider = serializers.CharField(required=True, write_only=True)
+
+
+    def __init__(self, *args, **kwargs):
+        super(CustomRegisterSerializer, self).__init__(*args, **kwargs)
+
+        self.request = self.context.get("request")
 
     def get_cleaned_data_customer(self):
         return {
@@ -157,9 +165,15 @@ class CustomRegisterSerializer(RegisterSerializer):
         Customer.objects.create(
             user=user,
             full_name = self.validated_data.get("first_name") + " " + self.validated_data.get("last_name"),
-            provider='Email'
+            provider=self.validated_data.get('provider')
         )
-    
+
+        if self.validated_data.get('provider') == 'Google':
+            # create cart
+            Cart.objects.create(user=user, slug=slugify(self.validated_data.get('username')))
+
+            login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+
     def create_business(self, user, validated_data):
         user.email = self.validated_data.get('email')
         user.username = self.validated_data.get('company_name')
@@ -168,8 +182,14 @@ class CustomRegisterSerializer(RegisterSerializer):
         Business.objects.create(
             user=user, 
             company_name = self.validated_data.get('company_name'),
-            provider='Email'
+            provider=self.validated_data.get('provider')
         )
+
+        if self.validated_data.get('provider') == 'Google':
+            # create cart
+            Cart.objects.create(user=user, slug=slugify(self.validated_data.get('company_name')))
+
+            login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
 
     def custom_signup(self, request, user):
         if self.validated_data.get('account_type') == 'business':
@@ -296,7 +316,6 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 class GoogleSocialAuthSerializer(serializers.Serializer):
     auth_token = serializers.CharField()
-    account_type = serializers.CharField(required=True, write_only=True)
 
     def validate_auth_token(self, auth_token):
         user_data = google_validate.Google.validate(auth_token)
@@ -310,9 +329,10 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
 
         if user_data['aud'] != os.environ['GOOGLE_CLIENT_ID']:
             raise serializers.ValidationError("User not found")
+        
+        return user_data
+        #email = user_data['email']
+        #name = user_data['name']
+        #provider = 'Google'
 
-        email = user_data['email']
-        name = user_data['name']
-        provider = 'google'
-
-        return validate_social_user(email, name, provider, self.account_type)
+        #return validate_social_user(email, name, provider)

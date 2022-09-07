@@ -42,7 +42,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', 'https://5254-212-47-143-40.eu.ngrok.io']
+ALLOWED_HOSTS = ['*', 'https://2cf0-212-47-140-169.eu.ngrok.io']
 
 # Application definition
 
@@ -110,7 +110,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'main.context_processors.geoip', 
-                #'main.context_processors.cart_items'
+                'main.context_processors.cart_items'
             ],
         },
     },
@@ -220,6 +220,8 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/

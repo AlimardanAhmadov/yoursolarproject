@@ -19,7 +19,7 @@ def random_username(name):
         return random_username(random_username)
 
 
-def validate_social_user(provider, email, name, account_type):
+def validate_social_user(provider, email, name):
     with transaction.atomic():
         try:
             selected_user = User.objects.filter(email=email)
@@ -32,7 +32,7 @@ def validate_social_user(provider, email, name, account_type):
                         email=email, password=os.environ['SECRET_PASSWORD'])
 
                     token = RefreshToken.for_user(registered_user)
-                    token = { 
+                    token = {
                         "refresh_token": str(token),
                         "access_token": str(token.access_token)
                     }

@@ -57,15 +57,6 @@ class Cart(models.Model):
         """
         cache.delete(CACHED_CART_BY_SLUG_KEY.format(instance.slug))
 
-    @staticmethod
-    def post_save(sender, **kwargs):
-        instance = kwargs.get('instance')
-        created = kwargs.get('created')
-        if created:
-            instance.slug = slugify(instance.user.username)
-            instance.save()
-
-post_save.connect(Cart.post_save, sender=Cart)
 post_save.connect(Cart.invalidate_coach_cache, sender=Cart)
 post_delete.connect(Cart.invalidate_coach_cache, sender=Cart)
 
