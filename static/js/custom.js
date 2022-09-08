@@ -1084,6 +1084,44 @@ $(document).on('submit', '.signup', function(event){
 		}
 	}); 
 });
+
+function handleGoogleLogin(data) {
+    var input_data = {
+        'email': data
+    }
+
+    $('.login').append('<div class="lds-ellipsis-div" style="position: absolute;right: 0;left: 0;z-index: 10000;height: 450px;width: 100%;pointer-events: none;background-image: linear-gradient(rgb(231 228 228 / 39%), rgb(231 228 228 / 39%));"><div class="lds-ellipsis" style="margin: 10rem;"><div></div><div></div><div></div><div></div></div></div>');
+                
+    $.ajax({
+		type: 'POST',
+		url: '/google-signin/',
+		data: JSON.stringify(input_data),
+		dataType: 'json',
+		headers: { 'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"},
+		success: function (data) {
+            setTimeout(function() {
+                window.location.href = '/';
+            }, delay_by_in_ms);
+		},
+        error: function (xhr, ajaxOptions, thrownError) {
+            setTimeout(function() {
+                $('.lds-ellipsis-div').remove();
+                var list_of_errors = xhr.responseJSON['error'];
+                $('.form__error').fadeIn('slow');
+                $('.form__error').addClass('active');
+
+                for(let i = 0; i < list_of_errors.length; i++){
+                    var newItem = list_of_errors[i];
+                    $( ".error__content" ).html( newItem );
+                }
+            }, delay_by_in_ms);
+            setTimeout(function() {
+                $('.form__error').fadeOut('slow');
+                $('.form__error').removeClass('active');
+            }, 10000); 
+		}
+	}); 
+}
 // SIGN UP & SIGN IN END
 
 
@@ -1147,13 +1185,9 @@ function handleCredentialResponse(response) {
                     '</div>');
                     $('.google-acc__card').fadeIn('slow');
                 }
-                //var url = String(new URL(window.location.href));
-                //if (url.includes('login')) {
-                //    window.location.href = '/';
-                //}
-                //else {
-                //    window.location.href = '/login/';
-                //}
+                else {
+                    handleGoogleLogin(data['data'].email)
+                }
             }, delay_by_in_ms);
 		},
         error: function (xhr, ajaxOptions, thrownError) {

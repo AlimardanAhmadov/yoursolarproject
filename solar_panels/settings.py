@@ -162,7 +162,10 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_REQUIRED = True
 
 AUTHENTICATION_BACKENDS = (
+    # username login
     'django.contrib.auth.backends.ModelBackend',
+    # email login
+    "user.auth_backends.EmailBackend",
 )
 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'

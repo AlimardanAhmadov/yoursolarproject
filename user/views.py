@@ -322,15 +322,13 @@ class GoogleSocialAuthView(ListCreateAPIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = ((serializer.validated_data)['auth_token'])
-        print("auth token:", data)
         return JsonResponse({'data': data, 'status':status.HTTP_200_OK})
 
 
-class GoogleLoginAPIView(LoginView):
+class GoogleLoginAPIView(ListCreateAPIView):
     queryset = ""
     permission_classes = (permissions.AllowAny,)
     serializer_class = CustomRegisterSerializer
-    
     
     @sensitive_post_parameters_m
     def dispatch(self, *args, **kwargs):
@@ -351,7 +349,7 @@ class GoogleLoginAPIView(LoginView):
             return JsonResponse(serializer.data, status=status.HTTP_200_OK)
         else:
             data = []
-            emessage=serializer.errors 
+            emessage=serializer.errors
             for key in emessage:
                 err_message = str(emessage[key])
                 err_string = re.search("string=(.*), code", err_message)

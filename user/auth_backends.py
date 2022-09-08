@@ -18,19 +18,3 @@ class EmailBackend(AllowAllUsersModelBackend):
             if user.check_password(password) and self.user_can_authenticate(user):
                 return user
 
-
-class PasswordlessAuthBackend(ModelBackend):
-    def authenticate(self, request, email):
-        try:
-            user = User.objects.get(email=email)
-            return user
-        except User.DoesNotExist:
-            return None
-
-    def get_user(self, user_id):
-        User = get_user_model()
-        try:
-            return User.objects.get(pk=user_id)
-        except User.DoesNotExist:
-            return None
-            

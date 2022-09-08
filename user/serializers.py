@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model, authenticate, login
 from django.utils.text import slugify
 from django.conf import settings
 from django.contrib.auth.forms import SetPasswordForm
+from allauth.account.models import EmailAddress
 from cart.models import Cart
 from rest_framework import serializers, exceptions
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -88,9 +89,9 @@ class LoginSerializer(serializers.Serializer):
                 app_settings.EMAIL_VERIFICATION
                 == app_settings.EmailVerificationMethod.MANDATORY
             ):
-                if user.email is not None:
+                try:
                     email_address = user.emailaddress_set.get(email=user.email)
-                else:
+                except EmailAddress.DoesNotExist:
                     raise serializers.ValidationError(
                         _(
                             "This account doesn't have an E-mail address!, so that you can't login."
@@ -100,6 +101,11 @@ class LoginSerializer(serializers.Serializer):
                     raise serializers.ValidationError(_("E-mail is not verified."))
 
         attrs["user"] = user
+        token = RefreshToken.for_user(attrs["user"])
+        token = {
+            "refresh_token": str(token),
+            "access_token": str(token.access_token)
+        }
         return attrs
 
 
@@ -319,8 +325,6 @@ class GoogleLoginSerializer(serializers.Serializer):
 
         self.request = self.context.get("request")
     
-    def authenticate(self, **kwargs):
-        return authenticate(self.request, **kwargs)
 
     def _validate_email(self, email):
         user = None
@@ -329,7 +333,7 @@ class GoogleLoginSerializer(serializers.Serializer):
             user = UserModel.objects.filter(email=email).first()
         else:
             msg = _('Must include "email".')
-            raise exceptions.ValidationError(msg)
+            raise serializers.ValidationError(msg)
 
         return user
     
@@ -343,11 +347,11 @@ class GoogleLoginSerializer(serializers.Serializer):
 
         if user:
             if not user.is_active:
-                msg = _("User account is inactive.")
-                raise exceptions.ValidationError(msg)
+                msg = {'Error': ['This field cannot be blank']}
+                raise serializers.ValidationError(msg)
         else:
-            msg = _("A user with this email address doesn't exist.")
-            raise exceptions.ValidationError(msg)
+            msg = {'Error': ["A user with this email address doesn't exist."]}
+            raise serializers.ValidationError(msg)
 
         if "rest_auth.registration" in settings.INSTALLED_APPS:
             from allauth.account import app_settings
@@ -357,13 +361,16 @@ class GoogleLoginSerializer(serializers.Serializer):
                 == app_settings.EmailVerificationMethod.MANDATORY
             ):
                 if user.email is None:
-                    raise serializers.ValidationError(
-                        _(
-                            "This account doesn't have an E-mail address!, so that you can't login."
-                        )
-                    )
+                    msg = {'Error': ["This account doesn't have an E-mail address!, so that you can't login."]}
+                    raise serializers.ValidationError(msg)
 
         attrs["user"] = user
+
+        token = RefreshToken.for_user(user)
+        token = {
+            "refresh_token": str(token),
+            "access_token": str(token.access_token)
+        }
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         user = login(self.request, user)
         return attrs

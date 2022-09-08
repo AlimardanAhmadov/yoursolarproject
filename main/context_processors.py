@@ -31,6 +31,7 @@ def geoip(request):
 def cart_items(request):
     if request.user.is_authenticated:
         current_user = request.user
+        print("current user:", current_user)
 
         current_cart = Cart.cache_by_slug(slugify(current_user.username))
 
