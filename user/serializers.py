@@ -347,11 +347,10 @@ class GoogleLoginSerializer(serializers.Serializer):
 
         if user:
             if not user.is_active:
-                msg = {'Error': ['This field cannot be blank']}
+                msg = {'Error:': ['This field cannot be blank']}
                 raise serializers.ValidationError(msg)
         else:
-            msg = {'Error': ["A user with this email address doesn't exist."]}
-            raise serializers.ValidationError(msg)
+            raise serializers.ValidationError({'Error:': ["A user with this email address doesn't exist."]})
 
         if "rest_auth.registration" in settings.INSTALLED_APPS:
             from allauth.account import app_settings
@@ -361,11 +360,14 @@ class GoogleLoginSerializer(serializers.Serializer):
                 == app_settings.EmailVerificationMethod.MANDATORY
             ):
                 if user.email is None:
-                    msg = {'Error': ["This account doesn't have an E-mail address!, so that you can't login."]}
+                    msg = {'Error:': ["This account doesn't have an E-mail address!, so that you can't login."]}
                     raise serializers.ValidationError(msg)
 
         attrs["user"] = user
-
+        return attrs
+    
+    def create(self, validated_data):
+        user = self.validated_data['user']
         token = RefreshToken.for_user(user)
         token = {
             "refresh_token": str(token),
@@ -373,5 +375,5 @@ class GoogleLoginSerializer(serializers.Serializer):
         }
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         user = login(self.request, user)
-        return attrs
 
+        return token

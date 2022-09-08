@@ -13,7 +13,7 @@ from rest_auth.serializers import PasswordResetConfirmSerializer
 from rest_auth.app_settings import JWTSerializer
 from rest_framework import permissions, status
 from rest_auth.views import (
-    LoginView,
+    LoginView, APIView
 )
 from rest_framework.generics import (
     ListCreateAPIView,
@@ -326,7 +326,7 @@ class GoogleSocialAuthView(ListCreateAPIView):
 class GoogleLoginAPIView(ListCreateAPIView):
     queryset = ""
     permission_classes = (permissions.AllowAny,)
-    serializer_class = CustomRegisterSerializer
+    serializer_class = GoogleLoginSerializer
     
     @sensitive_post_parameters_m
     def dispatch(self, *args, **kwargs):
@@ -341,11 +341,11 @@ class GoogleLoginAPIView(ListCreateAPIView):
         return GoogleLoginSerializer(*args, **kwargs)
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data, context={"request": request})
-        if serializer.is_valid():
-            serializer.save()
+        self.serializer = self.get_serializer(data=request.data, context={"request": request})
+        if self.serializer.is_valid():
+            self.serializer.save()
             context = {
-                'data': serializer.data,
+                'data': self.serializer.data,
                 'status': status.HTTP_200_OK,
             }
             if get_prev_url(request) is not None:
@@ -356,7 +356,8 @@ class GoogleLoginAPIView(ListCreateAPIView):
             return response
         else:
             data = []
-            emessage=serializer.errors
+            emessage=self.serializer.errors
+            print(self.serializer)
             for key in emessage:
                 err_message = str(emessage[key])
                 err_string = re.search("string=(.*), code", err_message)
@@ -368,3 +369,4 @@ class GoogleLoginAPIView(ListCreateAPIView):
                 content_type='application/json')
             response.status_code = 400
             return response
+
