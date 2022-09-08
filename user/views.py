@@ -214,8 +214,6 @@ class PasswordResetView(ListCreateAPIView):
 
 
 class PasswordResetConfirmView(ListCreateAPIView):
-    #renderer_classes = [MyHTMLRenderer,]
-    #template_name = ""
     permission_classes = (permissions.AllowAny,)
     serializer_class = PasswordResetConfirmSerializer
 
@@ -346,7 +344,16 @@ class GoogleLoginAPIView(ListCreateAPIView):
         serializer = self.get_serializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+            context = {
+                'data': serializer.data,
+                'status': status.HTTP_200_OK,
+            }
+            if get_prev_url(request) is not None:
+                next_url = get_prev_url(request)
+                context['next_url'] = next_url
+            response = JsonResponse(context)
+
+            return response
         else:
             data = []
             emessage=serializer.errors
@@ -361,4 +368,3 @@ class GoogleLoginAPIView(ListCreateAPIView):
                 content_type='application/json')
             response.status_code = 400
             return response
-
