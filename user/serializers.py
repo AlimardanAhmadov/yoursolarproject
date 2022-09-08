@@ -175,7 +175,6 @@ class CustomRegisterSerializer(RegisterSerializer):
         )
 
         if self.validated_data.get('provider') == 'Google':
-            # create cart
             Cart.objects.create(user=user, slug=slugify(self.validated_data.get('username')))
 
             login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
@@ -198,7 +197,6 @@ class CustomRegisterSerializer(RegisterSerializer):
         )
 
         if self.validated_data.get('provider') == 'Google':
-            # create cart
             Cart.objects.create(user=user, slug=slugify(self.validated_data.get('company_name')))
 
             login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
@@ -211,41 +209,17 @@ class CustomRegisterSerializer(RegisterSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    address = serializers.ImageField(source="customer.address")
-    postcode = serializers.CharField(source="customer.postcode")
-    phone = PhoneNumberField(source="customer.phone")
-    property_type = serializers.CharField(source="customer.property_type")
-    no_floors = serializers.CharField(source="customer.no_floors")
-    bill_rate = serializers.CharField(source="customer.bill_rate")
-    agreement = serializers.BooleanField(source="customer.agreement")
-    other = serializers.CharField(source="customer.other")
-
     class Meta:
         model = get_user_model()
         fields = [
             "id",
             "username",
             "email",
-            "password",
-            "address",
-            "postcode",
-            "property_type",
-            "no_floors",
-            "bill_rate",
-            "agreement",
-            "other",
-            "phone"
+            "password"
         ]
 
 class BussinesUserSerializer(serializers.ModelSerializer):
-    address = serializers.ImageField(source="business.address")
-    postcode = serializers.CharField(source="business.postcode")
-    phone = PhoneNumberField(source="business.phone")
-    property_type = serializers.CharField(source="business.property_type")
-    no_floors = serializers.CharField(source="business.no_floors")
-    bill_rate = serializers.CharField(source="business.bill_rate")
     company_name = serializers.BooleanField(source="business.company_name")
-    other = serializers.CharField(source="business.other")
 
     class Meta:
         model = get_user_model()
@@ -253,14 +227,7 @@ class BussinesUserSerializer(serializers.ModelSerializer):
             "id",
             "email",
             "password",
-            "address",
-            "postcode",
-            "property_type",
-            "no_floors",
-            "bill_rate",
-            "other",
             "company_name",
-            "phone"
         ]
 
 
@@ -331,7 +298,6 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
 
     def validate_auth_token(self, auth_token):
         user_data = google_validate.Google.validate(auth_token)
-        print("user data: ", user_data)
         try:
             user_data['sub']
         except:
@@ -343,8 +309,62 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
             raise serializers.ValidationError("User not found")
         
         return user_data
-        #email = user_data['email']
-        #name = user_data['name']
-        #provider = 'Google'
 
-        #return validate_social_user(email, name, provider)
+
+class GoogleLoginSerializer(serializers.Serializer):
+    email = serializers.CharField(required=False, allow_blank=True)
+
+    def __init__(self, *args, **kwargs):
+        super(GoogleLoginSerializer, self).__init__(*args, **kwargs)
+
+        self.request = self.context.get("request")
+    
+    def authenticate(self, **kwargs):
+        return authenticate(self.request, **kwargs)
+
+    def _validate_email(self, email):
+        user = None
+
+        if email:
+            user = UserModel.objects.filter(email=email).first()
+        else:
+            msg = _('Must include "email".')
+            raise exceptions.ValidationError(msg)
+
+        return user
+    
+    def validate(self, attrs):
+        email = attrs.get("email")
+
+        user = None
+
+        if email:
+            user = self._validate_email(email)
+
+        if user:
+            if not user.is_active:
+                msg = _("User account is inactive.")
+                raise exceptions.ValidationError(msg)
+        else:
+            msg = _("A user with this email address doesn't exist.")
+            raise exceptions.ValidationError(msg)
+
+        if "rest_auth.registration" in settings.INSTALLED_APPS:
+            from allauth.account import app_settings
+
+            if (
+                app_settings.EMAIL_VERIFICATION
+                == app_settings.EmailVerificationMethod.MANDATORY
+            ):
+                if user.email is None:
+                    raise serializers.ValidationError(
+                        _(
+                            "This account doesn't have an E-mail address!, so that you can't login."
+                        )
+                    )
+
+        attrs["user"] = user
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        user = login(self.request, user)
+        return attrs
+

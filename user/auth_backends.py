@@ -1,8 +1,8 @@
-from django.contrib.auth.backends import AllowAllUsersModelBackend
-from django.contrib.auth.models import User
+from django.contrib.auth.backends import AllowAllUsersModelBackend, ModelBackend
+from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 
-# User = get_user_model()
+User = get_user_model()
 
 
 class EmailBackend(AllowAllUsersModelBackend):
@@ -17,3 +17,20 @@ class EmailBackend(AllowAllUsersModelBackend):
         else:
             if user.check_password(password) and self.user_can_authenticate(user):
                 return user
+
+
+class PasswordlessAuthBackend(ModelBackend):
+    def authenticate(self, request, email):
+        try:
+            user = User.objects.get(email=email)
+            return user
+        except User.DoesNotExist:
+            return None
+
+    def get_user(self, user_id):
+        User = get_user_model()
+        try:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return None
+            

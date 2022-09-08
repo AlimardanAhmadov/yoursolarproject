@@ -925,7 +925,7 @@ $(document).on('click', '.local-account__type', function(event){
 
                     '<div class="or or--x" aria-role="presentation"> OR </div>' +
 
-                    '<div id="buttonDiv"></div>' +
+                    '<div id="googlebtnDiv"></div>' +
                     '<div class="signup__recover">'+
                         '<a href="{% url "account_login" %}" class="recover small">Already have an account?</a>'+
                     '</div>'+
@@ -980,7 +980,7 @@ $(document).on('click', '.local-account__type', function(event){
 
                     '<div class="or or--x" aria-role="presentation"> OR </div>' +
                     
-                    '<div id="buttonDiv"></div>' +
+                    '<div id="googlebtnDiv"></div>' +
                     '<div class="signup__recover">' +
                         '<a href="{% url "account_login" %}" class="recover small">Already have an account?</a>' +
                     '</div>' +
@@ -996,7 +996,7 @@ $(document).on('click', '.local-account__type', function(event){
             callback: handleCredentialResponse
         });
         google.accounts.id.renderButton(
-            document.getElementById("buttonDiv"),
+            document.getElementById("googlebtnDiv"),
             { theme: "outline", size: "large" }
         );
         google.accounts.id.prompt();
@@ -1217,8 +1217,8 @@ $(document).on('click', '#googleAuthenticationBtn', function(event){
 		},
         error: function (xhr, ajaxOptions, thrownError) {
             setTimeout(function() {
-                $('.button-black').html('Create account')
                 var list_of_errors = xhr.responseJSON['error'];
+                $('.button-black').html('Create account');
                 $('.form__error').fadeIn('slow');
                 $('.form__error').addClass('active');
 
@@ -1243,7 +1243,7 @@ window.onload = function () {
             callback: handleCredentialResponse
         });
         google.accounts.id.renderButton(
-            document.getElementById("buttonDiv"),
+            document.getElementById("googlebtnDiv"),
             { theme: "outline", size: "large" }
         );
         google.accounts.id.prompt();

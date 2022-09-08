@@ -21,7 +21,14 @@ from rest_framework.generics import (
 from main.html_renderer import MyHTMLRenderer
 from .models import Customer
 from .send_mail import send_reset_password_email
-from .serializers import (ChangePasswordSerializer, CustomRegisterSerializer, LoginSerializer, SendResetPasswordSerializer, GoogleSocialAuthSerializer)
+from .serializers import (
+    ChangePasswordSerializer, 
+    CustomRegisterSerializer, 
+    LoginSerializer, 
+    SendResetPasswordSerializer, 
+    GoogleSocialAuthSerializer, 
+    GoogleLoginSerializer
+)
 
 User = get_user_model()
 
@@ -81,8 +88,7 @@ class LoginAPIView(LoginView):
             self.login()
         else:
             data = []
-            emessage=self.serializer.errors 
-            print(emessage)
+            emessage=self.serializer.errors
             for key in emessage:
                 err_message = str(emessage[key])
                 err_string = re.search("string=(.*), ", err_message) 
@@ -131,10 +137,8 @@ class RegisterAPIView(ListCreateAPIView):
         else:
             data = []
             emessage=serializer.errors 
-            print(emessage)
             for key in emessage:
                 err_message = str(emessage[key])
-                print(err_message)
                 err_string = re.search("string=(.*), code", err_message)
                 message_value = err_string.group(1)
                 final_message = f"{key} - {message_value}"
@@ -240,7 +244,6 @@ class PasswordResetConfirmView(ListCreateAPIView):
         else:
             data = []
             emessage=serializer.errors 
-            print(emessage)
             for key in emessage:
                 err_message = str(emessage[key])
                 err_string = re.search("string='(.*)', ", err_message) 
@@ -281,7 +284,6 @@ class ChangePasswordView(ListCreateAPIView):
                 else:
                     data = []
                     emessage=serializer.errors 
-                    print(emessage)
                     for key in emessage:
                         err_message = str(emessage[key])
                         err_string = re.search("string='(.*)', ", err_message) 
@@ -322,3 +324,43 @@ class GoogleSocialAuthView(ListCreateAPIView):
         data = ((serializer.validated_data)['auth_token'])
         print("auth token:", data)
         return JsonResponse({'data': data, 'status':status.HTTP_200_OK})
+
+
+class GoogleLoginAPIView(LoginView):
+    queryset = ""
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = CustomRegisterSerializer
+    
+    
+    @sensitive_post_parameters_m
+    def dispatch(self, *args, **kwargs):
+        return super(GoogleLoginAPIView, self).dispatch(*args, **kwargs)
+
+    def get(self, request, format=None):
+        users = User.objects.all()
+        serializer = GoogleLoginSerializer(users, many=True)
+        return Response(serializer.data)
+
+    def get_serializer(self, *args, **kwargs):
+        return GoogleLoginSerializer(*args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, context={"request": request})
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+        else:
+            data = []
+            emessage=serializer.errors 
+            for key in emessage:
+                err_message = str(emessage[key])
+                err_string = re.search("string=(.*), code", err_message)
+                message_value = err_string.group(1)
+                final_message = f"{key} - {message_value}"
+                data.append(final_message)
+
+            response = HttpResponse(json.dumps({'error': data}), 
+                content_type='application/json')
+            response.status_code = 400
+            return response
+
