@@ -1,0 +1,81 @@
+<div class="section" id="content" data-section="">
+    <h3 id="sectionTitle">Personal Information</h3>
+    <div class="section__caption small"> * indicates a required field</div>
+    <form>
+        <div class="form__error small" role="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="red" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+            </svg>
+            <span class="error__content">
+            </span>
+        </div>
+        <div class="input-row">
+            <div class="input-group">
+                <div class="field">
+                    <input id="fullnameField" type="text" name="full_name" autocomplete="off" placeholder=" ">
+                    <label for="fullnameField">Full Name</label>
+                </div>
+            </div>
+            <div class="input-group">
+                <div class="field">
+                    <input id="housetypeField" type="text" name="property_type" autocomplete="off" placeholder=" ">
+                    <label for="housetypeField">* Type of House</label>
+                </div>
+            </div>
+        </div>
+        <div class="input-row">
+            <div class="input-group">
+                <div class="field">
+                    <input id="emailField" type="email" name="email" autocomplete="off" placeholder=" ">
+                    <label for="emailField">Email</label>
+                </div>
+            </div>
+            <div class="input-group">
+                <div class="field">
+                    <input id="phoneField" type="text" name="phone" autocomplete="off" placeholder=" ">
+                    <label for="phoneField">Phone</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-row">
+            <div class="input-group">
+                <div class="field">
+                    <input id="addressField" type="text" name="address" autocomplete="off" placeholder=" ">
+                    <label for="addressField">Address</label>
+                </div>
+            </div>
+            <div class="input-group">
+                <div class="field">
+                    <input id="postcodeField" type="text" name="postcode" autocomplete="off" placeholder=" ">
+                    <label for="postcodeField">Post Code</label>
+                </div>
+            </div>
+        </div>
+        <div class="input-row">
+            <div class="input-group">
+                <div class="field">
+                    <input id="nobedroomsField" type="number" name="no_bedrooms" min="0" autocomplete="off" placeholder=" ">
+                    <label for="nobedroomsField">* Number of Bedrooms</label>
+                </div>
+            </div>
+            <div class="input-group">
+                <div class="field">
+                    <input id="nofloorsField" type="number" name="no_floors" min="0" autocomplete="off" placeholder=" ">
+                    <label for="nofloorsField">* Number of Floors</label>
+                </div>
+            </div>
+        </div>
+        <div class="input-row">
+            <div class="signup__agreement">
+                <div class="choice-input-wrapper" style="align-items: center !important;">
+                    <input style="margin: 0 !important" type="checkbox" name="agreement" class="form-check-input mt-0">
+                    <label class="form-check-label small" for="">Yes, I understand and agree to the Upwork Terms of Service, including the User Agreement and Privacy Policy.</label>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="btn-group-footer">
+        <a type="button" id="validatePersonalInfo" class="btn button-black btn-next">Next</a>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<style>
+    header {
+        background-image: linear-gradient(rgb(0 0 0 / 38%), rgb(0 0 0 / 38%)),url(/static/images/banner-bg.jpeg);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+    }
+    .navbar {
+        border-bottom: none;
+    }
+</style>
+
+<div class="container quote-builder-container">
+    <div class="quote-builder">
+        <div class="progress-section">
+            <a href="" class="step active" data-step="Personal Information"><span class="step-text">Personal Information</span></a>
+            <a href="" class="step" data-step="Installation Details"><span class="step-text">Installation Details</span></a>
+            <a href="" class="step" data-step="Panel Accessories"><span class="step-text">Panel & Accessories</span></a>
+            <a href="" class="step" data-step="Inverter"><span class="step-text">Inverter</span></a>
+            <a href="" class="step" data-step="Storage System"><span class="step-text">Storage System</span></a>
+            <a href="" class="step" data-step="Summary"><span class="step-text">Summary</span></a>
+        </div>
+        <div class="quote-sections">
+            <div class="section" id="content" data-section="">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -19,7 +19,7 @@ class CreateCartItemView(ListCreateAPIView):
     serializer_class = CreateCartItemSerializer
     queryset = ""
 
-    @method_decorator(login_required(login_url='***'))
+    @method_decorator(login_required(login_url='/login/'))
     def dispatch(self, *args, **kwargs):
         return super(CreateCartItemView, self).dispatch(*args, **kwargs)
 
@@ -61,7 +61,6 @@ class CreateCartItemView(ListCreateAPIView):
                 else:
                     data = []
                     emessage=serializer.errors
-                    print(emessage)
                     for key in emessage:
                         err_message = str(emessage[key])
                         err_string = re.search("string='(.*)', ", err_message)
@@ -92,7 +91,7 @@ class UpdateCartView(ListCreateAPIView):
     serializer_class = UpdateCartSerializer
     queryset = ""
 
-    #@method_decorator(login_required(login_url='***'))
+    @method_decorator(login_required(login_url='/login/'))
     def dispatch(self, *args, **kwargs):
         return super(UpdateCartView, self).dispatch(*args, **kwargs)
 
@@ -147,7 +146,7 @@ class DestroyCartItemAPIView(ListCreateAPIView):
     queryset = ""
     allowed_methods = ("POST", "OPTIONS", "HEAD")
 
-    @method_decorator(login_required(login_url='***'))
+    @method_decorator(login_required(login_url='/login/'))
     def dispatch(self, *args, **kwargs):
         return super(DestroyCartItemAPIView, self).dispatch(*args, **kwargs)
 

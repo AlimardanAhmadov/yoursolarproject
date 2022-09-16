@@ -1,0 +1,47 @@
+<div class="page-title-wrap text-center">
+    <h4 class="sub-title">Select one of these panels</h4>
+</div>
+<div class="form__error small" role="alert">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="red" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+    </svg>
+    <span class="error__content">
+    </span>
+</div>
+<div class="card-list infinite-container">
+    {% for item in products %}
+    <div class="card product-card product-choice infinite-item" data-slug="{{ item.slug }}">
+        <div class="image-content">
+            <div class="card-image">
+                <img src="{{ item.image }}" alt="{{ item.title }}" class="card-img">
+            </div>
+        </div>
+        <div class="card-content">
+            <a class="small">{{ item.title }}</a>
+            <div class="description">
+                <span class="small price">$ {{ item.price }} USD</span>
+                <span class="discount-price">$ {{ item.discount }} USD</span>
+            </div>
+            <span class="small">Wattage: {{ item.wattage }} Watt</span>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="select-btn-group-footer">
+    <div class="button-couple" style="float: right;">
+        <a class="btn-back" data-back="roof-dimensions" data-href="Panel Accessories" style="font-size: 18px; color: #000; cursor: pointer;">Back</a>
+        <a type="button" data-modal="panel-modal" class="btn button-black modal-btn">Choose Panel</a>
+    </div>
+</div>
+
+<div id="panel-modal" class="modal-window">
+    <div class="modal-block modal-white" style="width: 900px;">
+        <a data-modal="panel-modal" title="Close" class="modal-close">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#000" class="bi bi-x-lg" viewBox="0 0 16 16">
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
+            </svg>
+        </a>
+        <div class="modal-content" style="flex-direction: row; gap: 30px;height: 500px;">
+        </div>
+    </div>
+</div>

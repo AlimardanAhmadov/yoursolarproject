@@ -1,0 +1,57 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+
+<section class="page-header padding">
+    <div class="container">
+        <div class="page-content">
+            <h2>Account</h2>
+        </div>
+    </div>
+</section>
+
+<div class="container profile">
+    <div class="form__error small" role="alert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="red" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+        </svg>
+        <span class="error__content">
+        </span>
+    </div>
+    <div class="profile__header">
+        <h2>Account</h2>
+        <button class="plain-btn logout-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path>
+            </svg>
+            Log out
+        </button>
+    </div>
+
+    <!--<div class="profile__content">
+        <h4>Order History</h4>
+        <div class="order-list">
+            <table class="table">
+                <thead>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Items</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td></td>
+                        <td>3</td>
+                        <td>January 12, 2022</td>
+                        <td>$ 450.89 USD</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>-->
+</div>
+
+{% endblock %}

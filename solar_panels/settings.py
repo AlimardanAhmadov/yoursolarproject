@@ -42,7 +42,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', 'https://2cf0-212-47-140-169.eu.ngrok.io']
+ALLOWED_HOSTS = ['*',]
 
 # Application definition
 

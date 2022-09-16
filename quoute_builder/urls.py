@@ -2,5 +2,7 @@ from . import views
 from django.urls import path
 
 urlpatterns = [
-    path('quote-builder', views.QuoteBuilderView.as_view(), name='quote_builder')
+    path('build-quote/section', views.QuoteBuilderView.as_view(), name='quote_builder'),
+    path('upload-products/', views.UploadProductsView.as_view(), name='upload_products'),
+    path('variant-details/<slug:slug>', views.DisplayVariantDetailsView.as_view(), name='variant_details'),
 ]

@@ -1,5 +1,5 @@
 import logging
-from django.contrib.contenttypes.models import ContentType
+from rest_framework.fields import CurrentUserDefault
 from cart.models import CartItem
 from phonenumber_field.serializerfields import PhoneNumberField
 from product.models import Product
@@ -11,11 +11,11 @@ from rest_framework import serializers
 class QuoteBuilderSerializer(serializers.Serializer):    
     selected_panel = serializers.CharField(required=True)
     inverter = serializers.CharField(required=True)
-    full_name = serializers.CharField(required=True)
-    address = serializers.CharField(required=True)
-    postcode = serializers.IntegerField(required=True)
+    full_name = serializers.CharField(required=False)
+    address = serializers.CharField(required=False)
+    postcode = serializers.IntegerField(required=False)
     title = serializers.CharField(required=True)
-    email = serializers.EmailField(required=True)
+    email = serializers.EmailField(required=False)
     property_type = serializers.CharField(required=True)
     no_floors = serializers.IntegerField(required=True)
     no_bedrooms = serializers.IntegerField(required=True)

@@ -6,12 +6,13 @@ from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
 from django.contrib.auth.decorators import login_required 
-from rest_framework.response import Response
 from allauth.account.models import EmailAddress, EmailConfirmationHMAC
+from rest_framework.response import Response
 from rest_auth.utils import jwt_encode 
 from rest_auth.serializers import PasswordResetConfirmSerializer
 from rest_auth.app_settings import JWTSerializer
 from rest_framework import permissions, status
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_auth.views import (
     LoginView, APIView
 )
@@ -27,7 +28,8 @@ from .serializers import (
     LoginSerializer, 
     SendResetPasswordSerializer, 
     GoogleSocialAuthSerializer, 
-    GoogleLoginSerializer
+    GoogleLoginSerializer,
+    UserSerializer
 )
 
 User = get_user_model()
@@ -260,7 +262,7 @@ class ChangePasswordView(ListCreateAPIView):
     renderer_classes = [MyHTMLRenderer,]
     serializer_class = ChangePasswordSerializer
 
-    @method_decorator(login_required(login_url='***'))
+    @method_decorator(login_required(login_url='/login/'))
     @sensitive_post_parameters_m
     def dispatch(self, *args, **kwargs):
         return super(ChangePasswordView, self).dispatch(*args, **kwargs)
@@ -332,11 +334,6 @@ class GoogleLoginAPIView(ListCreateAPIView):
     def dispatch(self, *args, **kwargs):
         return super(GoogleLoginAPIView, self).dispatch(*args, **kwargs)
 
-    def get(self, request, format=None):
-        users = User.objects.all()
-        serializer = GoogleLoginSerializer(users, many=True)
-        return Response(serializer.data)
-
     def get_serializer(self, *args, **kwargs):
         return GoogleLoginSerializer(*args, **kwargs)
 
@@ -357,7 +354,6 @@ class GoogleLoginAPIView(ListCreateAPIView):
         else:
             data = []
             emessage=self.serializer.errors
-            print(self.serializer)
             for key in emessage:
                 err_message = str(emessage[key])
                 err_string = re.search("string=(.*), code", err_message)
@@ -370,3 +366,42 @@ class GoogleLoginAPIView(ListCreateAPIView):
             response.status_code = 400
             return response
 
+
+class ProfileAPIView(APIView):
+    serializer_class = UserSerializer
+    permission_class = (permissions.IsAuthenticated, )
+    template_name = 'user/profile.html'
+    renderer_classes = [MyHTMLRenderer, ]
+
+    @method_decorator(login_required(login_url='/login/'))
+    def dispatch(self, *args, **kwargs):
+        return super(ProfileAPIView, self).dispatch(*args, **kwargs)
+
+    def get_serializer(self, *args, **kwargs):
+        return UserSerializer(*args, **kwargs)
+    
+    def get(self, request):
+        current_user = request.user
+        self.serializer = self.get_serializer(current_user)
+        context = {
+            'data': self.serializer.data,
+            'status': status.HTTP_200_OK,
+        }
+        return Response(context)
+
+
+
+class LogoutView(ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    allowed_methods = ('GET', 'POST')
+    
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

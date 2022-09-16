@@ -17,6 +17,7 @@
     --shadow-large: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
         0 4px 6px -2px rgba(0, 0, 0, 0.05);
     --card-gradient: 66%;
+    --light-card-gradient: 40%;
     --duration-default:.2s;
     --duration-short: .1s;
     --duration-long: .5s;
@@ -33,6 +34,11 @@ li {
 
 ul{
     padding: 0;
+}
+
+.table>:not(caption)>*>* {
+    padding: 0.5rem 0;
+    font-size: .875em;
 }
 
 .field {
@@ -238,4 +244,56 @@ input[type="text"]:focus + .field {
 .or--x::after {
     left: 0.5em;
     margin-right: -50%;
+}
+
+.button-couple {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+button.transparent-btn {
+    background-color: rgba(0,0,0, .10);
+    border: none;
+    padding: 10px;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 6px;
+    color: #121212BF;
+    transition: .3s;
+}
+
+button.transparent-btn:hover {
+    background-color: rgba(0,0,0, .15);
+}
+
+button.transparent-btn:focus {
+    background-color: rgba(0,0,0, .20);
+}
+
+button.stripe-btn {
+    background: #5252f2;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 6px;
+    margin-top: 15px;   
+    display: flex; 
+    gap: 7px;
+    justify-content: center;
+    transition: .3s;
+}
+
+button.stripe-btn:hover {
+    background: #3434f0;
+}
+
+button.stripe-btn:focus {
+    background: #1d1dee;
 }

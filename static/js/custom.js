@@ -1,3 +1,29 @@
+const navbarMenu = document.getElementById("menu");
+const burgerMenu = document.getElementById("burger");
+const bgOverlay = document.querySelector(".overlay");
+
+// Show Menu when Click the Burger
+// Hide Menu when Click the Overlay
+if (burgerMenu && navbarMenu && bgOverlay) {
+	burgerMenu.addEventListener("click", () => {
+		navbarMenu.classList.toggle("is-active");
+		bgOverlay.classList.toggle("is-active");
+	});
+
+	bgOverlay.addEventListener("click", () => {
+		navbarMenu.classList.toggle("is-active");
+		bgOverlay.classList.toggle("is-active");
+	});
+}
+
+// Hide Menu when Click the Links
+document.querySelectorAll(".menu-link").forEach((link) => {
+	link.addEventListener("click", () => {
+		navbarMenu.classList.remove("is-active");
+		bgOverlay.classList.remove("is-active");
+	});
+});
+
 var swiper = new Swiper(".slide-content", {
     slidesPerView: 3,
     spaceBetween: 25,
@@ -74,8 +100,6 @@ function updateVariantDetails(event) {
 
     window.history.pushState({}, '', url);
 
-    $('#overlay').css('display', 'block');
-
     $.post({
 		type: 'GET',
 		url: '/products/' + id,
@@ -83,7 +107,6 @@ function updateVariantDetails(event) {
 		headers: {'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"},
 		success: function (response) {
             setTimeout(function() {
-                $('#overlay').css('display', 'none');
                 $('.product').removeClass('disabled');
                 $('.product-info__wrapper').html(response['html_from_view']);
             }, delay_by_in_ms);
@@ -1284,3 +1307,34 @@ window.onload = function () {
     }
 }
 // GOOGLE AUTHENTICATION END
+
+// LOGOUT 
+$(document).on('click', '.logout-btn', function(event){
+    event.preventDefault();
+    $(this).html('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
+	$.ajax({
+		type: 'POST',
+		url: '/logout/',
+		dataType: 'json',
+		headers: { 'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"  },
+		success: function (data) {
+            setTimeout(function() {
+			    window.location.href = "";
+            }, delay_by_in_ms);
+		},
+        error: function () {
+            setTimeout(function() {
+                var list_of_errors = xhr.responseJSON['error'];
+                $('.logout-btn').html('<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path></svg> Log out');
+                $('.form__error').fadeIn('slow');
+                $('.form__error').addClass('active');
+                $( ".error__content" ).html("Something went wrong");
+            }, delay_by_in_ms);
+            setTimeout(function() {
+                $('.form__error').fadeOut('slow');
+                $('.form__error').removeClass('active');
+            }, 10000); 
+		}
+	}); 
+})
+// LOGOUT END

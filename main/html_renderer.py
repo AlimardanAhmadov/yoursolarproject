@@ -5,5 +5,5 @@ class MyHTMLRenderer(TemplateHTMLRenderer):
     def get_template_context(self, *args, **kwargs):
         context = super().get_template_context(*args, **kwargs)
         if isinstance(context, list):
-            context = {"itemss": context}
+            context = {"data": context}
         return context

@@ -534,6 +534,8 @@ header {
 .image-content{
     position: relative;
     row-gap: 5px;
+    height: 250px;
+    width: 100%;
 }
 .card-image{
     position: relative;
@@ -546,7 +548,9 @@ header {
 .card-image .card-img{
     height: 100%;
     width: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    vertical-align: middle;
+    animation: fadein 2s;
 }
 .description{
     font-size: 14px;
@@ -635,16 +639,24 @@ header {
     text-align: left;
 }
 
+.modal-window .modal-block.modal-white {
+    background: #fff;
+    border-radius: 10px;
+    color: #000;
+}
+
 .modal-content {
     display: flex;
     flex-direction: column;
     gap: 15px;
     margin-top: 35px;
+    overflow-y: auto;
 }
 
 .modal-close {
     float: right;
     color: #fff;
+    cursor: pointer;
 }
 
 .modal-close:hover {
@@ -656,6 +668,20 @@ header {
     width: 100%;
 }
 
+.modal-actions {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    padding: 13px 27px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.modal-actions a {
+    border-radius: 7px;
+}
 /* WHAT WE DO END */
 
 /* FOOTER */
@@ -799,8 +825,26 @@ footer a {
     font-weight: 700;
 }
 
+.profile,
 .eshop{
     max-width: 78rem;
+    margin-top: 50px;
+}
+
+.profile {
+    font-family: 'Nunito', sans-serif;
+}
+
+.profile__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .category-cards{
@@ -840,6 +884,7 @@ footer a {
     background-image: linear-gradient(rgb(0 0 0 / var(--card-gradient)), rgb(0 0 0 / var(--card-gradient))),url(/static/images/other.jpg);
 }
 
+.choice-text,
 .category-title {
     text-align: center;
     color: #fff;
@@ -1074,6 +1119,10 @@ footer a {
     padding: 12px 27px;
     border-radius: 0;
     border: 1px solid #000;
+    display: flex;
+    align-items: center;
+    gap:7px;
+    justify-content: center;
 }
 
 .primary-btn:hover {
@@ -1093,6 +1142,16 @@ footer a {
     background: #000;
     color: #fff;
     border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.skip-btn {
+    cursor: pointer;
+    font-size: 22px; 
+    color: #000;
 }
 
 .product__tax a{
@@ -1381,8 +1440,10 @@ footer a {
 }
 
 .field input:not(:placeholder-shown) + label, 
-input[name="password"]:focus + label,
-input[name="username"]:focus + label{
+input[type="password"]:focus + label,
+input[type="number"]:focus + label,
+input[type="text"]:focus + label,
+input[type="email"]:focus + label{
     font-size: .8rem;
     left: calc(1px + .7rem);
     top: calc(0.17rem - 12px);
@@ -1482,3 +1543,408 @@ input[name="username"]:focus + label{
     border-radius: 50%;
 }
 /* SIGNUP END */
+
+/* QUOTE */
+.quote-builder {
+    max-width: 74rem;
+    padding: 7rem 0;
+    font-family: 'Nunito', sans-serif;
+    padding-right: 25px;
+    padding-left: 25px;
+    margin: 0 auto;
+}
+
+[data-section] {
+    margin: 8rem auto auto;
+}
+
+[data-section] .input-group {
+    display: block;
+}
+
+[data-section] form{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 23px;
+}
+/* QUOTE END */
+
+/* PROGRESS BAR */
+
+.progress-section {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    margin-right: -58px;
+    font-weight: 600;
+    font-size: .875rem;
+    float: left;
+    margin: 0;
+    width: 100%;    
+    background-color: #edf1f3;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.step {
+    padding: 0;
+    border-radius: 4px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    width: 20%;
+    pointer-events: none;
+    counter-increment: item;
+}
+
+.step::before {
+    content: counter(item) ". ";
+    border: 0;
+    background: none;
+    border-radius: 50%;
+    width: auto;
+    height: auto;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 5px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.step.step-completed::before {
+    content: "\2713";
+    font-family: "Font Awesome 5 Pro";
+    color: #fff;
+    background: #000;
+    border: 1px solid #121212BF;
+    font-size: 9px;
+}
+
+.step::before {
+    line-height: 1.2rem;
+    border: 1px solid #ccc6bf;
+    width: 19px;
+    height: 19px;
+    background: #f6f5f0;
+    margin: 0 0 2px 0;
+    content: counter(item);
+    font-size: 10px;
+    position: relative;
+    /*z-index: 9;*/
+}
+.step .step-text {
+    position: relative;
+    display: block;
+    line-height: 1.8rem;
+    font-weight: 400;
+    font-size: .8rem;
+    text-transform: none;
+    vertical-align: middle;
+}
+.step.step-completed .step-text {
+    color: #082e67;
+}
+.step:not(:last-child) .step-text:before {
+    border-top: 1.5px solid #ccc6bf;
+    content: "";
+    width: 90%;
+    height: 100%;
+    position: absolute;
+    top: -13px;
+    left: 55%;
+    pointer-events: none;
+}
+
+.step.step-completed .step-text:before {
+    border-top: 2px solid #121212BF;
+    top: -14px;
+}
+
+.step::after{
+    height: 0;
+}
+.step.step-completed::after {
+    background: #121212BF;
+}
+.step:not(:last-child)::after {
+    background: #d5dae1;
+    width: 0;
+    height: 2px;
+    display: inline-block;
+    content: "";
+    margin: 0 0;
+    vertical-align: middle;
+}
+
+.step.active::before {
+    border: 2px solid #121212BF;
+    line-height: 1.0rem;
+    font-weight: 800;
+}
+
+.step.step-completed,
+.step.active {
+    pointer-events: auto;
+}
+
+.step.active .step-text {
+    color: #000 !important;
+    font-weight: 600;
+    font-size: .9rem;
+}
+
+.section__caption {
+    padding-bottom: 20px;
+}
+
+.btn-group-footer {
+    margin-top: 5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.select-btn-group-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 0 0 20px 0 rgb(0 0 0 / 18%);
+    background-color: #fff;
+    padding: 25px 100px;
+    margin: 0 !important;
+    width: 100%;
+    z-index: 9;
+}
+
+.choices-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    grid-gap: 2rem;
+}
+
+.choice-card {
+    border-radius: 15px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 90px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.choice-card:hover {
+    --light-card-gradient: 50%;
+}
+
+#installation__type .choice-card:nth-child(1) {
+    background-image: linear-gradient(
+        rgb(0 0 0 / var(--light-card-gradient)), 
+        rgb(0 0 0 / var(--light-card-gradient))),
+        url(https://images.unsplash.com/photo-1624397640148-949b1732bb0a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80);
+}
+
+#standalone__installation .choice-card:nth-child(1),
+#installation__type .choice-card:nth-child(2) {
+    background-image: linear-gradient(
+        rgb(0 0 0 / var(--light-card-gradient)), 
+        rgb(0 0 0 / var(--light-card-gradient))),
+        url(https://images.unsplash.com/photo-1509391366360-2e959784a276?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1472&q=80);
+}
+
+#standalone__installation .choice-card:nth-child(2) {
+    background-image: linear-gradient(
+        rgb(0 0 0 / var(--light-card-gradient)), 
+        rgb(0 0 0 / var(--light-card-gradient))),
+        url(https://www.sungiftsolar.co.uk/wp-content/uploads/2020/07/ground-mounted-solar-e1596213482960.jpg);
+}
+
+#standalone__installation .choice-card:nth-child(3) {
+    background-image: linear-gradient(
+        rgb(0 0 0 / var(--light-card-gradient)), 
+        rgb(0 0 0 / var(--light-card-gradient))),
+        url(https://www.explorist.life/wp-content/uploads/Camper-Van-Solar.jpg);
+}
+
+.summary .choice-card:nth-child(1),
+#roof__type .choice-card:nth-child(1) {
+    background-image: linear-gradient(
+        rgb(0 0 0 / var(--light-card-gradient)), 
+        rgb(0 0 0 / var(--light-card-gradient))),
+        url(https://www.celuplast.com/wp-content/uploads/2019/10/CLASSICBOND-Pic-4.jpg);
+}
+
+.summary .choice-card:nth-child(2),
+#roof__type .choice-card:nth-child(2) {
+    background-image: linear-gradient(
+        rgb(0 0 0 / var(--light-card-gradient)), 
+        rgb(0 0 0 / var(--light-card-gradient))),
+        url(https://rooftileassociation.co.uk/wp-content/uploads/2016/10/Pantiles.jpg);
+}
+
+.summary .choice-card:nth-child(3),
+#roof__type .choice-card:nth-child(3) {
+    background-image: linear-gradient(
+        rgb(0 0 0 / var(--light-card-gradient)), 
+        rgb(0 0 0 / var(--light-card-gradient))),
+        url(https://lyndonroofing.co.uk/wp-content/uploads/2020/09/Lyndon-Roofing19.jpg);
+}
+
+.summary .choice-card:nth-child(4),
+#roof__type .choice-card:nth-child(4) {
+    background-image: linear-gradient(
+        rgb(0 0 0 / var(--light-card-gradient)), 
+        rgb(0 0 0 / var(--light-card-gradient))),
+        url(https://www.ii-img.com/cmrs-img/products/clicklock-standing-seam.jpg);
+}
+
+.summary .choice-card:nth-child(5),
+#roof__type .choice-card:nth-child(5) {
+    background-image: linear-gradient(
+        rgb(0 0 0 / var(--light-card-gradient)), 
+        rgb(0 0 0 / var(--light-card-gradient))),
+        url(https://www.giantroofing.co.uk/wp-content/uploads/2014/09/image30.jpg);
+}
+
+.price-row{
+    display: flex;
+    float: left;
+    gap: 40px;
+    align-items: center;
+    width: 100%;
+}
+
+.price-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.product-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.variant-details {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.variant-details span {
+    font-size: 15px;
+}
+
+.choice-card.selected{
+    --light-card-gradient: 0%
+}
+
+.product-choice {
+    transition: .2s;
+}
+
+.product-choice.selected {
+    box-shadow: 0 0 0 2px #79bf11;
+}
+
+.summary {
+    padding: 7rem 0;
+}
+
+.steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+button.step-btn {
+    width: 250px;
+    border-radius: 3px;
+    background-color: #f7fafb;
+    padding: 11px 20px;
+    border: none;
+    font-size: 14px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: .3s;
+}
+
+button.step-btn.active,
+button.step-btn:hover {
+    background: #0e0d0dbf;
+    color: #fff;
+}
+
+.summary {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;;
+}
+
+h6.section__title {
+    padding-bottom: 12px;
+}
+
+.quote-pricing-card,
+.summary-section {
+    margin: 0;
+    margin-top: 10px;
+    border: 1px solid #eeeeee;
+    background-color: #fff;
+    border-radius: 0;
+}
+
+.summary-section {
+    min-width: 750px;
+    padding: 30px;
+}
+
+#storage-system-summary,
+#installation-summary {
+    display: flex; 
+    flex-direction: column; 
+    gap: 30px;
+}
+
+#parts-pricing-summary .table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+#parts-pricing-summary table th:not(:nth-child(1)) {
+    text-align: center;
+}
+
+.item-description {
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+    text-align: left;
+}
+
+.quote-pricing {
+    flex: 1 1 auto;
+}
+
+.pricing-item { 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.13);
+    padding: 1rem 1.25rem;
+}
+
+/* PROGRESS BAR END */

@@ -21,8 +21,6 @@ class ProductsAPIView(APIView):
     permission_classes = [permissions.AllowAny]
     template_name = 'main/products.html'
     renderer_classes = [MyHTMLRenderer, ]
-    paginate_by = 2
-
 
     def dispatch(self, *args, **kwargs):
         return super(ProductsAPIView, self).dispatch(*args, **kwargs)

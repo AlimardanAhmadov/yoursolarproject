@@ -1,0 +1,72 @@
+<div class="modal-img" style="flex: 0 0 40%;">
+    <img src="{{ product.image }}" alt="{{ product.title }}">
+</div>
+<div class="product-details">
+    <h3>{{ product.title }}</h3>
+    <div class="price-row border-top" style="padding-top: 10px;">
+        {% if product.discount %}
+        <div class="price-item">
+            <label for="" style="font-weight: 800;">Price</label>
+            <div class="price-item--regular" style="font-weight: 900;">$ {{ product.price }} USD</div>
+        </div>
+        {% endif %}
+        <div class="price-item">
+            {% if product.discount %}
+            <label for="" style="font-weight: 800;">Discount</label>
+            <div class="price-item--discount" style="font-weight: 900;">$ {{ product.discount }} USD</div>
+            {% else %}
+            <label for="" style="font-weight: 800;">Price</label>
+            <div class="price-item--discount" style="font-weight: 900;">$ {{ product.price }} USD</div>
+            {% endif %}
+        </div>
+        <div class="price-item">
+            <label for="" style="font-weight: 800;">Total Price</label>
+            {% if product.discount %}
+            <div class="price-item--discount total__cost" style="font-weight: 900;">$ {{ product.discount }} USD</div>
+            {% else %}
+            <div class="price-item--discount total__cost" style="font-weight: 900;">$ {{ product.price }} USD</div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="variant-details">
+        <span class="detail">
+            Variant Dimensions : 
+        </span>
+        <span class="detail">
+            Variant Inventory Qty : {{ product.quantity }} pieces left
+        </span>
+        <span class="detail">
+            Variant Wattage : {{ product.wattage }} Watt
+        </span>
+    </div>
+    <div class="form__error small" role="alert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="red" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+        </svg>
+        <span class="error__content">
+        </span>
+    </div>
+    {% ifequal product.category 'Panels' %}
+    <div class="quantity-control" data-quantity="">
+        <input type="number" class="quantity-input" data-quantity-target="" value="1" step="1" min="1" max="{{ product.quantity }}" name="panels_count">
+    </div>
+    {% endifequal %}
+    <div class="product__description">
+        {{ product.description|safe }}
+    </div>
+    <div class="modal-actions">
+        <div class="button-couple" style="float: right;">
+            {% ifequal product.category 'Panels' %}
+            <a type="button" data-href="Fitting" class="btn button-black btn-next" id="confirmSelectedPanel">Choose Panel</a>
+            {% endifequal %}
+            
+            {% ifequal product.category 'Fitting' %}
+            <a type="button" data-href="Inverter" class="btn button-black btn-next" id="confirmSelectedFitting">Choose Fitting</a>
+            {% endifequal %}
+
+            {% ifequal product.category 'Inverter' %}
+            <a type="button" data-href="Storage System" class="btn button-black btn-next" id="confirmSelectedInverter">Choose Inverter</a>
+            {% endifequal %}
+        </div>
+    </div>
+</div>

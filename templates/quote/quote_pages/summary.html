@@ -1,0 +1,291 @@
+<style>
+    .main {
+        background-color: #edf1f3;
+    }
+</style>
+<div class="summary">
+    <div class="steps-list">
+        <span class="small" style="font-weight: 600;">Steps</span>
+        <button class="step-btn" data-tab="personal-info-summary">
+            Personal Information
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+        </button>
+        <button class="step-btn" data-tab="installation-summary">
+            Installation Details
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+        </button>
+        <button class="step-btn" data-tab="parts-pricing-summary">
+            Parts & Pricing
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+        </button>
+        <button class="step-btn" data-tab="storage-system-summary">
+            Storage System
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+        </button>
+        <button class="step-btn">
+            Extra Requirements & Financing
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+        </button>
+    </div>
+    <div class="">
+        <span class="small" style="font-weight: 600;">Section</span>
+        <div class="summary-section" id="content" data-section="">
+            <div class="section-content" id="personal-info-summary">
+                <h6 id="sectionTitle">Personal Information</h6>
+                <div class="section__caption small"> * indicates a required field</div>
+                <form>
+                    <div class="form__error small" role="alert">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="red" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                        </svg>
+                        <span class="error__content">
+                        </span>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <div class="field">
+                                <input id="fullnameField" type="text" name="full_name" autocomplete="off" placeholder=" ">
+                                <label for="fullnameField">Full Name</label>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="field">
+                                <input id="housetypeField" type="text" name="property_type" autocomplete="off" placeholder=" ">
+                                <label for="housetypeField">* Type of House</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <div class="field">
+                                <input id="emailField" type="email" name="email" autocomplete="off" placeholder=" ">
+                                <label for="emailField">Email</label>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="field">
+                                <input id="phoneField" type="text" name="phone" autocomplete="off" placeholder=" ">
+                                <label for="phoneField">Phone</label>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="input-row">
+                        <div class="input-group">
+                            <div class="field">
+                                <input id="addressField" type="text" name="address" autocomplete="off" placeholder=" ">
+                                <label for="addressField">Address</label>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="field">
+                                <input id="postcodeField" type="text" name="postcode" autocomplete="off" placeholder=" ">
+                                <label for="postcodeField">Post Code</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <div class="field">
+                                <input id="nobedroomsField" type="number" name="no_bedrooms" min="0" autocomplete="off" placeholder=" ">
+                                <label for="nobedroomsField">* Number of Bedrooms</label>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="field">
+                                <input id="nofloorsField" type="number" name="no_floors" min="0" autocomplete="off" placeholder=" ">
+                                <label for="nofloorsField">* Number of Floors</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="section-content" id="installation-summary" style="display: none;">
+                <div class="summary__section">
+                    <h6 class="section__title">Monthly Electricity Bill</h6>
+                    <div class="section__content">
+                        <div class="input-row">
+                            <div class="input-group">
+                                <div class="field">
+                                    <input id="billrateField" type="number" name="bill_rate" placeholder=" " autocomplete="off">
+                                    <label for="billrateField">Amount in USD</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="summary__section">
+                    <h6 class="section__title">Roof Style</h6>
+                    <div class="section__content">
+                        <div class="choices-wrapper" style="grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));">
+                            <div class="choice-card" style="padding: 57px;">
+                                <h3 class="choice-text">Flat Roof</h3>
+                            </div>
+                            <div class="choice-card" style="padding: 57px;">
+                                <h3 class="choice-text">Pantile Roof</h3>
+                            </div>
+                            <div class="choice-card" style="padding: 57px;">
+                                <h3 class="choice-text">Flat tile or slate</h3>
+                            </div>
+                            <div class="choice-card" style="padding: 57px;">
+                                <h3 class="choice-text">Metal roof</h3>
+                            </div>
+                            <div class="choice-card" style="padding: 57px;">
+                                <h3 class="choice-text">New build</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="summary__section">
+                    <h6 class="section__title">Roof Dimensions</h6>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td class="small disabled">Width</td>
+                                <td class="small">7m(metres)</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="small disabled">Height</td>
+                                <td class="small">3m(metres)</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="section-content" id="parts-pricing-summary" style="display: none;">
+                <h6 class="section__title">Parts & pricing</h6>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td style="display: flex; align-items: center; gap: 10px;">
+                                <div class="item-cover">
+                                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/0.91036200_1595837967_48ab01e9-158f-4df4-b63f-ed8e030486b3.png?v=1656077975" alt="" width="60" height="auto">
+                                </div>
+                                <div class="item-description">
+                                    <span class="item-title">455w JA Solar - Solar Panel - Silver Frame</span>
+                                    <span class="item-wattage disabled small">500 Watt</span>
+                                </div>
+                            </td>
+                            <td>2</td>
+                            <td>$ 165 USD</td>
+                        </tr>
+                        <tr>
+                            <td style="display: flex; align-items: center; gap: 10px;">
+                                <div class="item-cover">
+                                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/0.91036200_1595837967_48ab01e9-158f-4df4-b63f-ed8e030486b3.png?v=1656077975" alt="" width="60" height="auto">
+                                </div>
+                                <div class="item-description">
+                                    <span class="item-title">455w JA Solar - Solar Panel - Silver Frame</span>
+                                    <span class="item-wattage disabled small">500 Watt</span>
+                                </div>
+                            </td>
+                            <td>2</td>
+                            <td>$ 165 USD</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="section-content" id="storage-system-summary" style="display: none;">
+                <div class="summary__section">
+                    <h6 class="section__title">Storage System Size</h6>
+                    <div class="button-group" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: 30px;">
+                        <button class="btn primary-btn" type="button" style="border-radius: 30px;">Less than 5 KwH</button>
+                        <button class="btn primary-btn" type="button" style="border-radius: 30px;">5-10 KwH</button>
+                        <button class="btn primary-btn" type="button" style="border-radius: 30px;">Greater than 10 KwH</button>
+                    </div>
+                </div>
+                <div class="summary__section">
+                    <h6 class="section__title">Cable Length</h6>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td class="small disabled">Cable Length from battery location to the Inverter</td>
+                                <td class="small" id="cablelengthbtoinv" style="text-align: right;">7m(metres) <span style="color: rgb(57, 153, 121);">+20%</span></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="quote-pricing">
+        <span class="small" style="font-weight: 600;">Total Cost</span>
+        <div class="quote-pricing-card">
+            <div class="pricing-item">
+                <div class="pricing-label disabled small">
+                    Subtotal
+                </div>
+                <div class="pricing-value small">
+                    $ 220.56 USD
+                </div>
+            </div>
+            <div class="pricing-item">
+                <div class="pricing-label disabled small">
+                    Shipping
+                </div>
+                <div class="pricing-value small">
+                    $ 17.50 USD
+                </div>
+            </div>
+            <div class="pricing-item">
+                <div class="pricing-label disabled small">
+                    Tax
+                </div>
+                <div class="pricing-value small">
+                    $ 15 USD
+                </div>
+            </div>
+            <div class="pricing-item">
+                <div class="pricing-label disabled small">
+                    Total
+                </div>
+                <h5 class="pricing-value">
+                    $ 253.06 USD
+                </h5>
+            </div>
+        </div>
+        <button class="stripe-btn">
+            Pay with 
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="#fff" width="30">
+                <path d="M492.4 220.8c-8.9 0-18.7 6.7-18.7 22.7h36.7c0-16-9.3-22.7-18-22.7zM375 223.4c-8.2 0-13.3 2.9-17 7l.2 52.8c3.5 3.7 8.5 6.7 16.8 6.7 13.1 0 21.9-14.3 21.9-33.4 0-18.6-9-33.2-21.9-33.1zM528 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h480c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM122.2 281.1c0 25.6-20.3 40.1-49.9 40.3-12.2 0-25.6-2.4-38.8-8.1v-33.9c12 6.4 27.1 11.3 38.9 11.3 7.9 0 13.6-2.1 13.6-8.7 0-17-54-10.6-54-49.9 0-25.2 19.2-40.2 48-40.2 11.8 0 23.5 1.8 35.3 6.5v33.4c-10.8-5.8-24.5-9.1-35.3-9.1-7.5 0-12.1 2.2-12.1 7.7 0 16 54.3 8.4 54.3 50.7zm68.8-56.6h-27V275c0 20.9 22.5 14.4 27 12.6v28.9c-4.7 2.6-13.3 4.7-24.9 4.7-21.1 0-36.9-15.5-36.9-36.5l.2-113.9 34.7-7.4v30.8H191zm74 2.4c-4.5-1.5-18.7-3.6-27.1 7.4v84.4h-35.5V194.2h30.7l2.2 10.5c8.3-15.3 24.9-12.2 29.6-10.5h.1zm44.1 91.8h-35.7V194.2h35.7zm0-142.9l-35.7 7.6v-28.9l35.7-7.6zm74.1 145.5c-12.4 0-20-5.3-25.1-9l-.1 40.2-35.5 7.5V194.2h31.3l1.8 8.8c4.9-4.5 13.9-11.1 27.8-11.1 24.9 0 48.4 22.5 48.4 63.8 0 45.1-23.2 65.5-48.6 65.6zm160.4-51.5h-69.5c1.6 16.6 13.8 21.5 27.6 21.5 14.1 0 25.2-3 34.9-7.9V312c-9.7 5.3-22.4 9.2-39.4 9.2-34.6 0-58.8-21.7-58.8-64.5 0-36.2 20.5-64.9 54.3-64.9 33.7 0 51.3 28.7 51.3 65.1 0 3.5-.3 10.9-.4 12.9z"/>
+            </svg>
+        </button>
+        <button class="transparent-btn">Contact Support</button>
+    </div>
+</div>

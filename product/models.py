@@ -91,7 +91,8 @@ class ProductVariant(TimeStampedModel):
     slug=models.SlugField(blank=True, null=True)
     primary_variant=models.BooleanField(default=False)
     description=RichTextField()
-    dimensions=models.CharField(max_length=50)
+    width = models.CharField(max_length=50, blank=True, null=True, help_text="For panels")
+    height = models.CharField(max_length=50, blank=True, null=True, help_text="For panels")
     materials=models.TextField(blank=True, null=True)
     price=models.FloatField(default=0.0)
     discount=models.FloatField(default=0.0)
@@ -102,22 +103,13 @@ class ProductVariant(TimeStampedModel):
     shipping_price=models.FloatField(default=0.0)
     tax=models.FloatField(default=0.0)
     size = models.CharField(max_length=10, blank=True, null=True, help_text='For cables')
-    
+    wattage = models.CharField(max_length=10, blank=True, null=True)
     tracker = FieldTracker()
 
     class Meta:
         verbose_name = 'Variant'
         verbose_name_plural = 'Variants'
         indexes = [models.Index(fields=['selected_product', 'slug', 'id', 'active',])]
-    
-
-    @staticmethod
-    def invalidate_coach_cache(sender, instance, **kwargs):
-        """
-        Invalidate the variant cached data when it is updated or deleted
-        """
-        print("deleting cache")
-        cache.delete(CACHED_VARIANT_BY_SLUG_KEY.format(instance.slug))
     
     def save(self, *args, **kwargs):
         image_changed = self.tracker.has_changed('image')
@@ -134,7 +126,6 @@ class ProductVariant(TimeStampedModel):
             if image and image.size > (0.3 * 1024 * 1024):
                 self.image = compress_image(image)
         super(ProductVariant, self).save(*args, **kwargs)
- 
 
     @staticmethod
     def cache_by_slug(slug):
@@ -155,6 +146,13 @@ class ProductVariant(TimeStampedModel):
         cache.set(key, variant, CACHE_LENGTH)
         return variant
 
+    @staticmethod
+    def invalidate_coach_cache(sender, instance, **kwargs):
+        """
+        Invalidate the variant cached data when it is updated or deleted
+        """
+        print("deleting cache")
+        cache.delete(CACHED_VARIANT_BY_SLUG_KEY.format(instance.slug))
 
     @staticmethod
     def post_save(sender, **kwargs):

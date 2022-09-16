@@ -31,7 +31,6 @@ def geoip(request):
 def cart_items(request):
     if request.user.is_authenticated:
         current_user = request.user
-        print("current user:", current_user)
 
         current_cart = Cart.cache_by_slug(slugify(current_user.username))
 
@@ -52,7 +51,7 @@ def cart_items(request):
             cart_items = CartItem.objects.filter(cart=current_cart)
 
             cart_item_serializer = CartItemSerializer(cart_items, many=True)
-            context['total_cost'] = current_cart.total_cost
+            context['cart_total'] = current_cart.total_cost
             context['items'] = cart_item_serializer.data
 
         return context

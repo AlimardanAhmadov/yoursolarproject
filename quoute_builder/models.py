@@ -30,8 +30,8 @@ INSTALLATION = (
 class Quote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     slug = models.SlugField()
-    selected_panel = models.ForeignKey(Product, on_delete=models.CASCADE)
-    inverter = models.CharField(max_length=250)
+    selected_panel = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='panel')
+    inverter = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='selected_inverter')
     title = models.CharField(max_length=250)
     full_name = models.CharField(max_length=150)
     address = models.TextField()

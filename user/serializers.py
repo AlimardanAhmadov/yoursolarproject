@@ -148,7 +148,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         
         if account_type == 'business':
             if Business.objects.filter(company_name=attrs['company_name']).exists():
-                raise serializers.ValidationError({'Company': ['A user with this company name already exists']})
+                raise serializers.ValidationError({'Company': ['A user already exists with this company name ']})
                 
             if attrs['company_name'] is None:
                 raise serializers.ValidationError({'Company Name': ['This field cannot be blank']})
@@ -350,7 +350,7 @@ class GoogleLoginSerializer(serializers.Serializer):
                 msg = {'Error:': ['This field cannot be blank']}
                 raise serializers.ValidationError(msg)
         else:
-            raise serializers.ValidationError({'Error:': ["A user with this email address doesn't exist."]})
+            raise serializers.ValidationError({'Error:': ["A user doesn't exist with this email address."]})
 
         if "rest_auth.registration" in settings.INSTALLED_APPS:
             from allauth.account import app_settings
