@@ -615,7 +615,7 @@ header {
 
 .modal-window {
     position: fixed;
-    background-color: rgb(64 65 65 / 80%);
+    /* background-color: rgb(64 65 65 / 80%); */
     top: 0;
     right: 0;
     bottom: 0;
@@ -625,6 +625,8 @@ header {
     opacity: 0;
     pointer-events: none;
     transition: all 0.3s;
+    background-color: rgba(0, 0, 0, 0.314);
+    backdrop-filter: blur(10px);
 }
 
 .modal-window .modal-block {
@@ -1555,7 +1557,7 @@ input[type="email"]:focus + label{
 }
 
 [data-section] {
-    margin: 8rem auto auto;
+    margin: 4rem auto auto;
 }
 
 [data-section] .input-group {
@@ -1630,6 +1632,13 @@ input[type="email"]:focus + label{
     font-size: 9px;
 }
 
+.progress-section a.step.active.step-completed::before {
+    color: #121213BF;
+    background-color: #f6f5f0 !important;
+    content: counter(item);
+    font-family: 'Nunito', sans-serif;
+}
+
 .step::before {
     line-height: 1.2rem;
     border: 1px solid #ccc6bf;
@@ -1640,7 +1649,7 @@ input[type="email"]:focus + label{
     content: counter(item);
     font-size: 10px;
     position: relative;
-    /*z-index: 9;*/
+    z-index: 1;
 }
 .step .step-text {
     position: relative;
@@ -1650,6 +1659,7 @@ input[type="email"]:focus + label{
     font-size: .8rem;
     text-transform: none;
     vertical-align: middle;
+    transition: .1s;
 }
 .step.step-completed .step-text {
     color: #082e67;
@@ -1690,6 +1700,7 @@ input[type="email"]:focus + label{
     border: 2px solid #121212BF;
     line-height: 1.0rem;
     font-weight: 800;
+    z-index: 1;
 }
 
 .step.step-completed,
@@ -1724,7 +1735,6 @@ input[type="email"]:focus + label{
     padding: 25px 100px;
     margin: 0 !important;
     width: 100%;
-    z-index: 9;
 }
 
 .choices-wrapper {
@@ -1740,6 +1750,9 @@ input[type="email"]:focus + label{
     padding: 90px;
     cursor: pointer;
     transition: 0.3s;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .choice-card:hover {
@@ -1843,6 +1856,7 @@ input[type="email"]:focus + label{
 }
 
 .variant-details span {
+    display: flex;
     font-size: 15px;
 }
 
@@ -1948,3 +1962,55 @@ h6.section__title {
 }
 
 /* PROGRESS BAR END */
+
+.toolbar__section {
+    height: 64px;
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.13);
+    position: fixed;
+    top: 74px;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    background-color: #fff;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 8%), 0 3px 8px 0 rgb(0 0 0 / 4%);
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0 2.2rem;
+}
+
+/*.toolbar__section-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-weight: 900;
+}*/
+
+.toolbar__section-middle {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.toolbar__section-middle .btn-back,
+.toolbar__section-middle .btn-next {
+    --background-color: transparent;
+    --border-color: rgba(0,0,0,0.13);
+    border: 1px solid var(--border-color);
+    padding: 3px;
+    border-radius: 4px;
+    transition: .3s;
+}
+
+.toolbar__section-middle a:hover {
+    background-color: #f3f2f2;
+    color: #000;
+}
+
+.toolbar__section-middle a:focus {
+    background-color: #d4d4d4;
+    color: #000;
+    border: 2px solid #121212BF;
+}

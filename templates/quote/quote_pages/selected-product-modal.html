@@ -29,9 +29,14 @@
         </div>
     </div>
     <div class="variant-details">
+        {% ifequal product.category 'Panels' %}
         <span class="detail">
-            Variant Dimensions : 
+            Height : <p id="panel-height" style="padding-left: 4px;margin: 0;">{{ product.height }}</p>m
         </span>
+        <span class="detail">
+            Width : <p id="panel-width"  style="padding-left: 4px;margin: 0;">{{ product.width }}</p>m
+        </span>
+        {% endifequal %}
         <span class="detail">
             Variant Inventory Qty : {{ product.quantity }} pieces left
         </span>

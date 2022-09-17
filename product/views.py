@@ -43,7 +43,6 @@ class ProductDetailView(APIView):
         else:
             related_products = random.sample(products, 4)
         
-
         context = {
             'product_variants': variant_serializer.data,
             'related_products': related_products,

@@ -65,6 +65,11 @@ class Product(TimeStampedModel):
         cache.set(key, product, CACHE_LENGTH)
         return product
 
+    def invalidate_coach_cache(sender, instance, **kwargs):
+        """
+        Invalidate the product cached data when it is updated or deleted
+        """
+        cache.delete(CACHED_PRODUCT_BY_SLUG_KEY.format(instance.slug))
 
     @staticmethod
     def post_save(sender, **kwargs):
@@ -75,14 +80,8 @@ class Product(TimeStampedModel):
             instance.save()
 
 post_save.connect(Product.post_save, sender=Product)
-
-
-@receiver((post_delete, post_save), sender=Product)
-def invalidate_coach_cache(sender, instance, **kwargs):
-    """
-    Invalidate the product cached data when it is updated or deleted
-    """
-    cache.delete(CACHED_PRODUCT_BY_SLUG_KEY.format(instance.slug))
+post_save.connect(Product.invalidate_coach_cache, sender=Product)
+post_delete.connect(Product.invalidate_coach_cache, sender=Product)
 
 
 class ProductVariant(TimeStampedModel):
@@ -91,8 +90,8 @@ class ProductVariant(TimeStampedModel):
     slug=models.SlugField(blank=True, null=True)
     primary_variant=models.BooleanField(default=False)
     description=RichTextField()
-    width = models.CharField(max_length=50, blank=True, null=True, help_text="For panels")
-    height = models.CharField(max_length=50, blank=True, null=True, help_text="For panels")
+    width = models.CharField(max_length=50, blank=True, null=True, help_text="For panels. (metres)")
+    height = models.CharField(max_length=50, blank=True, null=True, help_text="For panels. (metres)")
     materials=models.TextField(blank=True, null=True)
     price=models.FloatField(default=0.0)
     discount=models.FloatField(default=0.0)

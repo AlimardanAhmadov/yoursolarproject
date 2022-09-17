@@ -159,3 +159,26 @@
         height: 42px;
     }
 }
+
+@media screen and (max-width: 904px) {
+    .modal-white {
+        width: 100% !important;
+    }
+}
+
+@media screen and (max-width: 510px) {
+    .modal-white {
+        height: 100%;
+        border-radius: 0px !important;
+    }
+
+    .modal-white .modal-content {
+        flex-direction: column !important;
+    }
+}
+
+@media screen and (max-width:1000px) {
+    .select-btn-group-footer {
+        padding: 25px 44px;
+    }
+}
