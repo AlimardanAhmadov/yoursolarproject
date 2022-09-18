@@ -8,12 +8,9 @@ from cart.models import Cart
 from rest_framework import serializers, exceptions
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_auth.registration.serializers import RegisterSerializer
-from phonenumber_field.serializerfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
 from .models import Business, Customer
 from . import google_validate
-from .social_register import validate_social_user
-from main.utils import id_generator
 
 # Get the UserModel
 UserModel = get_user_model()

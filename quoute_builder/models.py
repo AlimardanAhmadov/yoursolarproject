@@ -8,7 +8,7 @@ from django.db.models.signals import post_save
 from main.utils import send_email, id_generator
 
 from phonenumber_field.serializerfields import PhoneNumberField
-from product.models import Product
+from product.models import Product, ProductVariant
 
 User = get_user_model()
 
@@ -26,9 +26,9 @@ RAIL_LENGTH =  (
 class Quote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     slug = models.SlugField()
-    selected_panel = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='panel')
-    inverter = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='selected_inverter')
-    selected_rail = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='selected_rail')
+    selected_panel = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='panel')
+    inverter = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='selected_inverter')
+    selected_rail = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='selected_rail')
     title = models.CharField(max_length=250)
     full_name = models.CharField(max_length=150)
     address = models.TextField()
@@ -44,8 +44,7 @@ class Quote(models.Model):
     roof_height = models.FloatField(default=0.0)
     panels_count = models.IntegerField(blank=True, null=True)
     fitting = models.CharField(max_length=50, blank=True, null=True)
-    rails_count = models.IntegerField(blank=True, null=True)
-    cable_length = models.FloatField(blank=True, null=True)
+    cable_length_bat_inv = models.FloatField(blank=True, null=True)
     storage_system_size = models.CharField(max_length=5, blank=True, null=True)
     extra_requirement = models.CharField(max_length=50, blank=True, null=True)
     total_cost = models.FloatField(default=0.0)
@@ -60,6 +59,11 @@ class Quote(models.Model):
     def __str__(self):
         return "%s" % self.selected_panel.title
 
+    def grand_total(self):
+        panel_price = (self.selected_panel.price * self.panels_count) + self.selected_panel.shipping_price
+        inverter_price = self.inverter.price + self.inverter.shipping_price
+        selected_rail = self.selected_rail.price + self.selected_rail.shipping_price
+        
     
     def confirmation(self):
         

@@ -13,25 +13,24 @@ class QuoteBuilderSerializer(serializers.Serializer):
     full_name = serializers.CharField(required=False)
     address = serializers.CharField(required=False)
     postcode = serializers.IntegerField(required=False)
-    title = serializers.CharField(required=True)
     email = serializers.EmailField(required=False)
     property_type = serializers.CharField(required=True)
     no_floors = serializers.IntegerField(required=True)
     no_bedrooms = serializers.IntegerField(required=True)
     phone = PhoneNumberField()
-    other = serializers.CharField(required=False)
     bill_rate = serializers.CharField(required=False)
     roof_style = serializers.CharField(required=False)
-    width = serializers.FloatField(required=False, default=0.0)
-    height = serializers.FloatField(required=False, default=0.0)
+    roof_width = serializers.FloatField(required=False, default=0.0)
+    roof_height = serializers.FloatField(required=False, default=0.0)
     panels_count = serializers.IntegerField(required=False, default=0)
     fitting = serializers.CharField(required=False)
     rail = serializers.CharField(required=False)
-    rails_count = serializers.IntegerField(required=False, default=0)
-    cable_length = serializers.FloatField(required=False, default=0.0)
+    cable_length_bat_inv = serializers.FloatField(required=False, default=0.0)
+    cable_length_panel_cons = serializers.FloatField(required=False, default=0.0)
+    storage_cable = serializers.FloatField(required=False, default=0.0)
     storage_system_size = serializers.CharField(required=False)
     extra_requirements = serializers.CharField(required=False)
-    total_cost = serializers.FloatField(default=0.0)
+    #total_cost = serializers.FloatField(default=0.0)
     
 
     def __init__(self, *args, **kwargs):
@@ -46,23 +45,22 @@ class QuoteBuilderSerializer(serializers.Serializer):
             "full_name": self.validated_data.get("full_name", ""),
             "address": self.validated_data.get("address", ""),
             "postcode": self.validated_data.get("postcode", ""),
-            "title": self.validated_data.get("title", ""),
             "email": self.validated_data.get("email", ""),
             "property_type": self.validated_data.get("property_type", ""),
             "no_floors": self.validated_data.get("no_floors", ""),
             "no_bedrooms": self.validated_data.get("no_bedrooms", ""),
             "phone": self.validated_data.get("phone", ""),
-            "other": self.validated_data.get("other", ""),
             "roof_style": self.validated_data.get("roof_style", ""),
-            "width": self.validated_data.get("width", ""),
-            "height": self.validated_data.get("height", ""),
+            "roof_width": self.validated_data.get("roof_width", ""),
+            "roof_height": self.validated_data.get("roof_height", ""),
             "panels_count": self.validated_data.get("panels_count", ""),
             "fitting": self.validated_data.get("fitting", ""),
-            "rails_count": self.validated_data.get("rails_count", ""),
-            "cable_length": self.validated_data.get("cable_length", ""),
+            "cable_length_bat_inv": self.validated_data.get("cable_length_bat_inv", ""),
+            "cable_length_panel_cons": self.validated_data.get("cable_length_panel_cons", ""),
+            "storage_cable": self.validated_data.get("storage_cable", ""),
             "storage_system_size": self.validated_data.get("storage_system_size", ""),
             "extra_requirement": self.validated_data.get("extra_requirement", ""),
-            "total_cost": self.validated_data.get("total_cost", ""),
+            #"total_cost": self.validated_data.get("total_cost", ""),
             "inverter": self.validated_data.get("inverter", "")
         }
 
@@ -81,7 +79,7 @@ class QuoteBuilderSerializer(serializers.Serializer):
         quote = Quote(**data, selected_panel=selected_product, user=self.user)
         quote.save()
 
-        cart = self.cart.cache_by_slug(self.user.username)
+        """cart = self.cart.cache_by_slug(self.user.username)
         if cart:
             print("using cached data")
         else:
@@ -94,7 +92,7 @@ class QuoteBuilderSerializer(serializers.Serializer):
             #quantity=self.validated_data.get("quantity"),
             content_object=quote
         )
-        cart_item.save()
+        cart_item.save()"""
 
         return quote
 

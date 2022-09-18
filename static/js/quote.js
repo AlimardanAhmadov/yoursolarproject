@@ -294,20 +294,28 @@ $(document).on('click', '#storageSystem button', function() {
     }
 })
 
-$(document).on('click', '#extraRequiremet button, #skipSummary', function() {
-    var $this = $(this);
-    var url = new URL(window.location);
-    if ($this.hasClass('primary-btn')) {
-        var extra_requirement = $this.text();
-        localStorage.setItem("extra_requirement", extra_requirement);
+$(document).on('click', '#extraRequiremet button, #concludeQuote', function(e) {
+    e.preventDefault();
+    var input_date = {
+        'full_name': localStorage.getItem("fullnameField"),
+        'address': localStorage.getItem("addressField"),
+        'postcode': localStorage.getItem("postcodeField"),
+        'email': localStorage.getItem("emailField"),
+        'property_type': localStorage.getItem("housetypeField"),
+        'no_floors': localStorage.getItem("nofloorsField"),
+        'no_bedrooms': localStorage.getItem("nobedroomsField"),
+        'phone': localStorage.getItem("phoneField"),
+        'bill_rate': localStorage.getItem("billrateField"),
+        'roof_style': localStorage.getItem("roof_style"),
+        'roof_width': localStorage.getItem("widthField"),
+        'roof_height': localStorage.getItem("heightField"),
+        'panels_count': localStorage.getItem("quantity"),
+        'selected_panel': localStorage.getItem("panel_slug"),
+        'fitting': localStorage.getItem("fitting_slug"),
+        'rail': localStorage.getItem("inverter_slug"),
+        'cable_length_panel_cons': localStorage.getItem("fattened_consumer_cable_length"),
+        'cable_length_bat_inv': localStorage.getItem("fattened_cable_length"),
     }
-    $.get("/templates/quote/quote_pages/summary.html", function(html_string)
-    {
-        $(".quote-builder-container").html(html_string);
-    },'html');
-    url.searchParams.set('name', "Summary");
-    url.searchParams.set('page', "summary");
-    window.history.pushState({}, '', url);
 })
 
 // upload products on window load
