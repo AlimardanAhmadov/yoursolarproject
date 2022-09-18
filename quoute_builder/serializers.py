@@ -1,5 +1,4 @@
 import logging
-from rest_framework.fields import CurrentUserDefault
 from cart.models import CartItem
 from phonenumber_field.serializerfields import PhoneNumberField
 from product.models import Product
@@ -22,26 +21,17 @@ class QuoteBuilderSerializer(serializers.Serializer):
     phone = PhoneNumberField()
     other = serializers.CharField(required=False)
     bill_rate = serializers.CharField(required=False)
-    agreement = serializers.BooleanField(default=False)
-    installation_type = serializers.CharField(required=True) # on a roof or standalone
-    standalone_installation = serializers.CharField(required=False)
-    spare_way = serializers.BooleanField(default=False)
     roof_style = serializers.CharField(required=False)
-    b_no_panels = serializers.CharField(required=False) # yes or no
     width = serializers.FloatField(required=False, default=0.0)
     height = serializers.FloatField(required=False, default=0.0)
     panels_count = serializers.IntegerField(required=False, default=0)
     fitting = serializers.CharField(required=False)
-    mount_style_no = serializers.CharField(required=False)
+    rail = serializers.CharField(required=False)
     rails_count = serializers.IntegerField(required=False, default=0)
-    rails_length = serializers.FloatField(required=False, default=0.0) #2.2M or 3.3M
     cable_length = serializers.FloatField(required=False, default=0.0)
     storage_system_size = serializers.CharField(required=False)
-    storage_cost_option = serializers.CharField(required=False)
-    help_with = serializers.CharField(required=False)
-    completed = serializers.BooleanField(default=True)
+    extra_requirements = serializers.CharField(required=False)
     total_cost = serializers.FloatField(default=0.0)
-    quantity = serializers.IntegerField(default=0)
     
 
     def __init__(self, *args, **kwargs):
@@ -63,24 +53,15 @@ class QuoteBuilderSerializer(serializers.Serializer):
             "no_bedrooms": self.validated_data.get("no_bedrooms", ""),
             "phone": self.validated_data.get("phone", ""),
             "other": self.validated_data.get("other", ""),
-            "agreement": self.validated_data.get("agreement", ""),
-            "installation_type": self.validated_data.get("installation_type", ""),
-            "standalone_installation": self.validated_data.get("standalone_installation", ""),
-            "spare_way": self.validated_data.get("spare_way", ""),
             "roof_style": self.validated_data.get("roof_style", ""),
-            "b_no_panels": self.validated_data.get("b_no_panels", ""),
             "width": self.validated_data.get("width", ""),
             "height": self.validated_data.get("height", ""),
             "panels_count": self.validated_data.get("panels_count", ""),
             "fitting": self.validated_data.get("fitting", ""),
-            "mount_style_no": self.validated_data.get("mount_style_no", ""),
             "rails_count": self.validated_data.get("rails_count", ""),
-            "rails_length": self.validated_data.get("rails_length", ""),
             "cable_length": self.validated_data.get("cable_length", ""),
             "storage_system_size": self.validated_data.get("storage_system_size", ""),
-            "storage_cost_option": self.validated_data.get("storage_cost_option", ""),
-            "help_with": self.validated_data.get("help_with", ""),
-            "completed": self.validated_data.get("completed", ""),
+            "extra_requirement": self.validated_data.get("extra_requirement", ""),
             "total_cost": self.validated_data.get("total_cost", ""),
             "inverter": self.validated_data.get("inverter", "")
         }
@@ -110,7 +91,7 @@ class QuoteBuilderSerializer(serializers.Serializer):
             cart=cart,
             product_id=quote.slug,
             price=self.validated_data.get("total_cost"),
-            quantity=self.validated_data.get("quantity"),
+            #quantity=self.validated_data.get("quantity"),
             content_object=quote
         )
         cart_item.save()

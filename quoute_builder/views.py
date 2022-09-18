@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from main.views import is_ajax
-from product.models import ProductVariant
+from product.models import Product, ProductVariant
 from product.serializers import ProductVariantSerializer
 
 from rest_framework.generics import (
@@ -134,3 +134,4 @@ class DisplayVariantDetailsView(APIView):
             data_dict = {"html_from_view": html}
 
             return JsonResponse(data=data_dict, safe=False)
+

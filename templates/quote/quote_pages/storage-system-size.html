@@ -16,11 +16,20 @@
 <div class="page-title-wrap text-center">
     <h4 class="sub-title">What size Storage System?</h4>
 </div>
-<form style="max-width: 50rem;margin: 3rem auto auto;" id="storageSystemSize">
+<form style="max-width: 52rem;margin: 3rem auto auto;" id="storageSystemSize">
     <div class="button-group" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: 30px;">
-        <button class="btn primary-btn" type="button" style="border-radius: 30px;padding: 15px 50px;">Less than 5 KwH</button>
-        <button class="btn primary-btn" type="button" style="border-radius: 30px;padding: 15px 50px;">5-10 KwH</button>
-        <button class="btn primary-btn" type="button" style="border-radius: 30px;padding: 15px 50px;">Greater than 10 KwH</button>
+        <button class="btn primary-btn" data-price="13" type="button" style="border-radius: 3px;padding: 15px 50px;border: 1px solid #a3a3a3;flex-direction: column;gap: 1px;">
+            Less than 5 KwH
+            <span class="small-price disabled" style="font-size: 13px;">Price: $13 USD</span>
+        </button>
+        <button class="btn primary-btn" data-price="15" type="button" style="border-radius: 3px;padding: 15px 50px;border: 1px solid #a3a3a3;flex-direction: column;gap: 1px;">
+            5-10 KwH
+            <span class="small-price disabled" style="font-size: 13px;">Price: $15 USD</span>
+        </button>
+        <button class="btn primary-btn" data-price="18" type="button" style="border-radius: 3px;padding: 15px 50px;border: 1px solid #a3a3a3;flex-direction: column;gap: 1px;">
+            Greater than 10 KwH
+            <span class="small-price disabled" style="font-size: 13px;">Price: $18 USD</span>
+        </button>
     </div>
 </form>
 <!--<div class="btn-group-footer">

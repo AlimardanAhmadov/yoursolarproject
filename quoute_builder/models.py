@@ -22,16 +22,13 @@ RAIL_LENGTH =  (
     ("3.3", "3.3"),
 )
 
-INSTALLATION = (
-    ("Roof", "Roof"),
-    ("Standalone", "Standalone"),
-)
 
 class Quote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     slug = models.SlugField()
     selected_panel = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='panel')
     inverter = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='selected_inverter')
+    selected_rail = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='selected_rail')
     title = models.CharField(max_length=250)
     full_name = models.CharField(max_length=150)
     address = models.TextField()
@@ -41,30 +38,19 @@ class Quote(models.Model):
     property_type = models.CharField(max_length=50)
     no_floors = models.IntegerField()
     no_bedrooms = models.IntegerField()
-    other = models.TextField(blank=True, null=True)
     bill_rate = models.CharField(max_length=10, blank=True, null=True)
-    agreement = models.BooleanField(default=False)
-    installation_type = models.CharField(max_length=150, choices=INSTALLATION)
-    standalone_installation = models.CharField(max_length=70, blank=True, null=True)
-    spare_way = models.BooleanField(default=False)
     roof_style = models.CharField(max_length=20, blank=True, null=True)
-    b_no_panels = models.CharField(max_length=4, blank=True, null=True, choices=YES_NO_CHOICE) # yes or no
-    width = models.FloatField(default=0.0)
-    height = models.FloatField(default=0.0)
+    roof_width = models.FloatField(default=0.0)
+    roof_height = models.FloatField(default=0.0)
     panels_count = models.IntegerField(blank=True, null=True)
     fitting = models.CharField(max_length=50, blank=True, null=True)
-    mount_style_no = models.CharField(max_length=200, blank=True, null=True)
     rails_count = models.IntegerField(blank=True, null=True)
-    rails_length = models.FloatField(blank=True, null=True, choices=RAIL_LENGTH) #2.2M or 3.3M
     cable_length = models.FloatField(blank=True, null=True)
     storage_system_size = models.CharField(max_length=5, blank=True, null=True)
-    storage_cost_option = models.CharField(max_length=5, blank=True, null=True)
-    help_with = models.CharField(max_length=50, blank=True, null=True)
-    completed = models.BooleanField(default=True)
+    extra_requirement = models.CharField(max_length=50, blank=True, null=True)
     total_cost = models.FloatField(default=0.0)
     shipping_price = models.FloatField(default=0.0)
     tax = models.FloatField(default=0.0)
-    quantity = models.PositiveIntegerField(default=0)
 
     class Meta:
         verbose_name = 'Quote'
