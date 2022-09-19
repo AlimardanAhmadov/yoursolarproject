@@ -20,9 +20,30 @@ from django.utils.decorators import method_decorator
 from django.db import transaction
 
 from main.html_renderer import MyHTMLRenderer
-from .serializers import QuoteBuilderSerializer, ServiceSerializer, StorageSystemSerializer
-from .models import Service, StorageSystem
+from .serializers import QuoteBuilderSerializer, QuoteSerializer, ServiceSerializer, StorageSystemSerializer
+from .models import Quote, Service, StorageSystem
 
+
+class QuoteView(APIView):
+    permission_classes = (permissions.IsAuthenticated, )
+    template_name = 'quote/quote_pages/summary.html'
+    renderer_classes = [MyHTMLRenderer, ]
+    serializer_class = QuoteSerializer
+
+
+    def get(self, request, slug):
+        selected_quote = Quote.cache_by_slug(slug)
+        if selected_quote is None:
+            selected_quote = get_object_or_404(Quote, slug=slug)
+
+        serializer = QuoteSerializer(selected_quote, many=False)
+
+        context = {
+            'data': serializer.data,
+            'status': status.HTTP_200_OK
+        }
+
+        return Response(context)
 
 
 class QuoteBuilderView(ListCreateAPIView):
@@ -49,6 +70,7 @@ class QuoteBuilderView(ListCreateAPIView):
             serializer = self.get_serializer(data=request.data, context={'request': request})
             if serializer.is_valid():
                 self.perform_create_quote(serializer)
+                print(serializer.data)
                 return JsonResponse(serializer.data, status=status.HTTP_200_OK)
             else:
                 data = []
@@ -153,10 +175,12 @@ class LoadObjectsView(APIView):
     def get(self, request):
         if is_ajax(request=request):
             object_type = request.GET.get('object_type')
+
             if object_type == 'storage-system-size':
                 storages = StorageSystem.objects.all()
                 serializer = StorageSystemSerializer(storages, many=True)
                 template_name="quote/quote_pages/storage-system-size.html"
+                
             elif object_type == 'extra-help':
                 services = Service.objects.all()
                 serializer = ServiceSerializer(services, many=True)

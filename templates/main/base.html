@@ -100,7 +100,11 @@
                 {% for item in items %}
                 <div class="cart-notification__product">
                     <div class="cart-product__img">
+                        {% if item.content_object.price %}
                         <img src="{{ item.content_object.image.url }}" alt="{{ item.content_object.title }}" width="80" height="auto" loading="lazy">
+                        {% else %}
+                        <img src="{{ item.content_object.selected_panel.image.url }}" alt="{{ item.content_object.title }}" width="80" height="auto" loading="lazy">
+                        {% endif %}
                     </div>
                     <div class="cart-notification__product-info">
                         <h6>{{ item.content_object.title }}</h6>
@@ -108,7 +112,11 @@
                             <div class="quantity-control" data-quantity="">
                                 <input type="number" class="quantity-input" data-update-quantity="{{ item.slug }}" value="{{ item.quantity }}" step="1" min="1" name="quantity">
                             </div>
+                            {% if item.content_object.price %}
                             <span class="notification-product__feature">Price: ${{ item.content_object.price }}</span>
+                            {% else %}
+                            <span class="notification-product__feature">Price: ${{ item.content_object.total_cost }}</span>
+                            {% endif %}
                             <button class="plain-btn notification__product-remove" data-remove-cart-item="{{ item.slug }}">Remove</button>
                         </div>
                     </div>

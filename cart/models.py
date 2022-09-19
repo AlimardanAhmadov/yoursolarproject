@@ -9,6 +9,8 @@ from django.dispatch import receiver
 from django.db.models import Sum
 from main.utils import id_generator
 from model_utils import FieldTracker
+from product.models import ProductVariant
+from quoute_builder.models import Quote
 
 
 User = get_user_model()
@@ -84,8 +86,13 @@ class CartItem(models.Model):
     def save(self, *args, **kwargs):
         quantity = self.tracker.has_changed('quantity')
         if quantity:
-            total_cost = float(self.price) * int(self.quantity)
-            grand_total = total_cost + float(self.content_object.shipping_price) + float(self.content_object.tax)
+            if self.model_type == ContentType.objects.get_for_model(ProductVariant):
+                total_cost = float(self.price) * int(self.quantity)
+                grand_total = total_cost + float(self.content_object.shipping_price) + float(self.content_object.tax)
+            else:
+                total_cost = float(self.total_cost) * int(self.quantity)
+                grand_total = total_cost + float(self.content_object.shipping_price) + float(self.content_object.tax)
+
             self.total_cost = total_cost
             self.grand_total = grand_total
         super(CartItem, self).save(*args, **kwargs)
@@ -94,8 +101,14 @@ class CartItem(models.Model):
     def post_save(sender, *args, **kwargs):
         instance = kwargs.get('instance')
         created = kwargs.get('created')
-        total_cost = float(instance.price) * int(instance.quantity)
-        grand_total = total_cost + float(instance.content_object.shipping_price) + float(instance.content_object.tax)
+
+        if instance.model_type == ContentType.objects.get_for_model(ProductVariant):
+            total_cost = float(instance.price) * int(instance.quantity)
+            grand_total = total_cost + float(instance.content_object.shipping_price) + float(instance.content_object.tax)
+        else:
+            total_cost = float(instance.total_cost) * int(instance.quantity)
+            grand_total = total_cost + float(instance.content_object.shipping_price) + float(instance.content_object.tax)
+            
         if created:
             instance.slug = slugify(str(id_generator()) + "-" + str(instance.pk))
             instance.total_cost = total_cost

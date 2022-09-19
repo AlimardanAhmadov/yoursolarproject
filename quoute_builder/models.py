@@ -15,6 +15,7 @@ User = get_user_model()
 
 
 CACHED_SERVICE_BY_SLUG_KEY = 'service__by_slug__{}'
+CACHED_QUOTE_BY_SLUG_KEY = 'quote__by_slug__{}'
 CACHE_LENGTH = 24 * 3600  # --> 24hrs
 
 class NotFound:
@@ -43,6 +44,7 @@ class Quote(models.Model):
     panels_count = models.IntegerField(blank=True, null=True)
     fitting = models.CharField(max_length=50, blank=True, null=True)
     cable_length_bat_inv = models.FloatField(blank=True, null=True)
+    cable_length_panel_cons = models.FloatField(blank=True, null=True)
     storage_cable = models.FloatField(blank=True, null=True)
     storage_system = models.ForeignKey("StorageSystem", on_delete=models.CASCADE, blank=True, null=True)
     extra_service = models.ForeignKey("Service", on_delete=models.CASCADE, blank=True, null=True)
@@ -54,9 +56,32 @@ class Quote(models.Model):
         verbose_name = 'Quote'
         verbose_name_plural = 'Quotes'
         indexes = [models.Index(fields=['user', 'selected_panel', 'id'])]
+    
+    @staticmethod
+    def cache_by_slug(slug):
+        key = CACHED_QUOTE_BY_SLUG_KEY.format(slug)
 
-    def __str__(self):
-        return "%s" % self.selected_panel.title
+        quote = cache.get(key)
+        if quote:
+            if isinstance(quote, NotFound):
+                return None
+            return quote
+
+        quote = Quote.objects.filter(slug=slug).first()
+
+        if not quote:
+            cache.set(key, NotFound(), CACHE_LENGTH)
+            return None
+
+        cache.set(key, quote, CACHE_LENGTH)
+        return quote
+
+    @staticmethod
+    def invalidate_cache(sender, instance, **kwargs):
+        """
+        Invalidate the cached data when it is updated or deleted
+        """
+        cache.delete(CACHED_QUOTE_BY_SLUG_KEY.format(instance.slug))
 
 
     def confirmation(self):
@@ -109,9 +134,12 @@ class Quote(models.Model):
         created = kwargs.get('created')
         if created:
             instance.slug = slugify(str(id_generator()) + "-" + str(instance.id))
+            instance.title = slugify(str(id_generator()) + "-" + str(instance.id))
             instance.save()
 
 post_save.connect(Quote.post_save, sender=Quote)
+post_save.connect(Quote.invalidate_cache, sender=Quote)
+post_delete.connect(Quote.invalidate_cache, sender=Quote)
 
 
 class Service(models.Model):
@@ -140,7 +168,7 @@ class Service(models.Model):
     @staticmethod
     def invalidate_cache(sender, instance, **kwargs):
         """
-        Invalidate the variant cached data when it is updated or deleted
+        Invalidate the cached data when it is updated or deleted
         """
         cache.delete(CACHED_SERVICE_BY_SLUG_KEY.format(instance.pk))
 
@@ -173,6 +201,9 @@ class StorageSystem(models.Model):
 
     @staticmethod
     def invalidate_cache(sender, instance, **kwargs):
+        """
+        Invalidate the cached data when it is updated or deleted
+        """
         cache.delete(CACHED_SERVICE_BY_SLUG_KEY.format(instance.pk))
 
 post_save.connect(StorageSystem.invalidate_cache, sender=StorageSystem)

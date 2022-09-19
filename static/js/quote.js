@@ -137,7 +137,6 @@ $(document).on("click", ".btn-back", function(){
                         steps[index-1].classList.remove('active');
                     }
                     steps[index + 1].classList.remove('active');
-                    //steps[index].className += " step-completed";
 
                     // switch to the current step
                     item.classList.add('active')
@@ -146,7 +145,7 @@ $(document).on("click", ".btn-back", function(){
         }
     }
 
-    if(url.href.includes('section?name') && (url.searchParams.get('page')) != 'parts' && (url.searchParams.get('page')) != 'storage-system-size' && (url.searchParams.get('page')) != 'extra-help') {
+    if (url.href.includes('section?name') && (url.searchParams.get('page')) != 'parts' && (url.searchParams.get('page')) != 'storage-system-size' && (url.searchParams.get('page')) != 'extra-help') {
         var html = "/templates/quote/quote_pages/" + $previouspage + ".html"
         $.get(html, function(html_string)
         {
@@ -168,6 +167,10 @@ $(document).on('click', '.choice-card, .product-choice', function(){
     $(this).addClass('selected');
 })
 
+// disable on enter form
+$(document).on('submit', '.quote-sections form', function(e){
+    e.preventDefault();
+})
 
 $(document).on('click', '#installation__type .choice-card', function(){
     var $this = $(this).find('.choice-text');
@@ -298,10 +301,26 @@ $(document).on('click', '#storageSystem button', function() {
     }
 })
 
+
 $(document).on('click', '#extraRequiremet button, #concludeQuote', function(e) {
     e.preventDefault();
+    
+    // loading page
+    $('#content').html(
+        '<div class="text">' +
+            '<h2>' +
+                '<span class="words-wrapper">' +
+                    '<b class="is-visible">We are working on it, give us a minute...</b>' +
+                    '<b>Setting up stuff...</b>' +
+                    '<b>Getting things ready...</b>' +
+                    '<b>Almost done...</b>' +
+                '</span>' +
+            '<h2>' +
+        '</div>'
+    )
+
     if ($(this).hasClass('primary-btn')) {
-        var extra_service = localStorage.setItem('extra_service', $(this).data('id'));
+        localStorage.setItem('extra_service', $(this).data('id'));
     }
 
     var input_data = {
@@ -324,6 +343,7 @@ $(document).on('click', '#extraRequiremet button, #concludeQuote', function(e) {
         'rail': localStorage.getItem("inverter_slug"),
         'cable_length_panel_cons': localStorage.getItem("fattened_consumer_cable_length"),
         'cable_length_bat_inv': localStorage.getItem("fattened_cable_length"),
+        'storage_cable': localStorage.getItem("fattened_storage_cable_length"),
         'storage_system': localStorage.getItem("storage_system"),
         'extra_service': localStorage.getItem("extra_service"),
     }
@@ -334,8 +354,10 @@ $(document).on('click', '#extraRequiremet button, #concludeQuote', function(e) {
 		data: JSON.stringify(input_data),
 		dataType: 'json',
 		headers: {'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"},
-		success: function (data) {
-            console.log("working");
+		success: function () {
+            setTimeout(function() {
+                window.location.href = '/'
+            }, 1000);
 		},
         error: function (xhr, ajaxOptions, thrownError) {
             console.log("not working");
@@ -401,13 +423,16 @@ $(document).on('click', '.step.step-completed', function(e){
     var url = new URL(window.location);
     var $this = $(this);
     var $last_completed_step = $('.step.step-completed').last();
+
     $last_completed_step.next().removeClass('active');
     $last_completed_step.prevAll().removeClass('active');
     $this.nextAll('.step-completed').removeClass('active');
     $this.prevAll('.step').removeClass('active');
     $this.addClass('active');
+
     url.searchParams.set('name', $this.data('step'));
     url.searchParams.set('page', $this.data('page'));
+
     window.history.pushState({}, '', url);
 
     updateCurrentSection();
@@ -415,7 +440,7 @@ $(document).on('click', '.step.step-completed', function(e){
 
 function updateCurrentSection() {
     var url = new URL(window.location);
-    if (url.href.includes("build-quote") && !url.href.includes("page") || !url.href.includes("section?name")){
+    if (url.href.includes("build-quote") && (!url.href.includes("page") || !url.href.includes("section?name"))){
         url.searchParams.set('name', "Personal Information");
         url.searchParams.set('page', "personal-information");
         window.history.pushState({}, '', url);
@@ -474,12 +499,12 @@ $(window).on('load popstate hashchange', function(){
 
 // display data saved with localStorage 
 $(document).on("DOMSubtreeModified", "#content", function(){
-    var inputs = document.querySelectorAll('input');
+    var inputs = document.querySelectorAll('.section input');
     
     // fill in inputs
     inputs.forEach(function (item, index) {
         var saved_data = localStorage.getItem(item.id);
-        if (saved_data != null) {
+        if (saved_data) {
             document.getElementById(item.id).value = saved_data;
         }
     });
@@ -566,10 +591,6 @@ function validateElectricityBill(){
         },'html');
     }
 }
-$(document).on('submit', '#billRateForm', function(e){
-    e.preventDefault();
-    validateElectricityBill();
-})
 
 function validateInstallationType(){
     if (!$('.choice-card.selected').length) {
@@ -797,14 +818,14 @@ function confirmStorageCable(){
     else {
         var input = document.getElementById("storagecableField");
         localStorage.setItem(input.id, input.value);
+        // add %20 fat
+        var fattened_value = parseFloat(input.value) + parseFloat(((input.value)*0.2));
+        localStorage.setItem("fattened_storage_cable_length", fattened_value);
+
         var url = new URL(window.location);
         url.searchParams.set('page', 'extra-help');
         window.history.pushState({}, '', url);
         loadObjects()
-        //$.get("/templates/quote/quote_pages/extra-help.html", function(html_string)
-        //{
-        //    $("#content").html(html_string);
-        //},'html');
     }
 }
 

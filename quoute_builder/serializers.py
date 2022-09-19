@@ -6,29 +6,29 @@ from rest_framework import serializers
 
 
 
-class QuoteBuilderSerializer(serializers.Serializer):    
+class QuoteBuilderSerializer(serializers.Serializer):
     selected_panel = serializers.CharField(required=True)
     inverter = serializers.CharField(required=True)
-    full_name = serializers.CharField(required=False)
-    address = serializers.CharField(required=False)
-    postcode = serializers.CharField(required=False)
-    email = serializers.EmailField(required=False)
+    full_name = serializers.CharField(required=False, allow_blank=True)
+    address = serializers.CharField(required=False, allow_blank=True)
+    postcode = serializers.CharField(required=False, allow_blank=True)
+    email = serializers.EmailField(required=False, allow_blank=True)
     property_type = serializers.CharField(required=True)
     no_floors = serializers.IntegerField(required=True)
     no_bedrooms = serializers.IntegerField(required=True)
-    phone = serializers.CharField(required=False)
-    bill_rate = serializers.CharField(required=False)
-    roof_style = serializers.CharField(required=False)
+    phone = serializers.CharField(required=False, allow_blank=True)
+    bill_rate = serializers.CharField(required=False, allow_blank=True)
+    roof_style = serializers.CharField(required=False, allow_blank=True)
     roof_width = serializers.FloatField(required=False, default=0.0)
     roof_height = serializers.FloatField(required=False, default=0.0)
     panels_count = serializers.IntegerField(required=False, default=0)
-    fitting = serializers.CharField(required=False)
-    rail = serializers.CharField(required=False)
+    fitting = serializers.CharField(required=False, allow_blank=True)
+    rail = serializers.CharField(required=False, allow_blank=True)
     cable_length_bat_inv = serializers.FloatField(required=False, default=0.0)
     cable_length_panel_cons = serializers.FloatField(required=False, default=0.0)
     storage_cable = serializers.FloatField(required=False, default=0.0)
-    storage_system = serializers.CharField(required=False)
-    extra_service = serializers.CharField(required=False)
+    storage_system = serializers.CharField(required=False, allow_blank=True)
+    extra_service = serializers.CharField(required=False, allow_blank=True)
     
 
     def __init__(self, *args, **kwargs):
@@ -71,6 +71,7 @@ class QuoteBuilderSerializer(serializers.Serializer):
             "panels_count": self.validated_data.get("panels_count", ""),
             "fitting": self.validated_data.get("fitting", ""),
             "cable_length_bat_inv": self.validated_data.get("cable_length_bat_inv", ""),
+            "cable_length_panel_cons": self.validated_data.get("cable_length_panel_cons", ""),
             "panels_count": panels_count,
             "storage_cable": self.validated_data.get("storage_cable", ""),
             "inverter": inverter,
@@ -91,7 +92,7 @@ class QuoteBuilderSerializer(serializers.Serializer):
 
         if extra_service_id:
             if extra_service.service_title == 'Complete Installation':
-                storage_syste_price = math.fsum(selected_panel.price, inverter.price)
+                extra_service_fee = math.fsum(selected_panel.price, inverter.price)
             elif extra_service.service_title != 'Complete Installation':
                 extra_service_fee = extra_service.service_price = [float(s) for s in extra_service.service_price.split() if s.isdigit()][0]
         else:
@@ -126,7 +127,7 @@ class QuoteBuilderSerializer(serializers.Serializer):
         cart_item = CartItem(
             cart=cart,
             product_id=quote.slug,
-            price=data['total_cost'],
+            total_cost=data['total_cost'],
             quantity=1,
             content_object=quote
         )
@@ -144,4 +145,10 @@ class ServiceSerializer(serializers.ModelSerializer):
 class StorageSystemSerializer(serializers.ModelSerializer):
     class Meta:
         model = StorageSystem
+        fields = "__all__"
+
+
+class QuoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Quote
         fields = "__all__"
