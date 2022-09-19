@@ -2,7 +2,6 @@ from django.db import models
 from django.utils.text import slugify
 from django.db.models.signals import post_save, post_delete
 from django.core.cache import cache
-from django.dispatch import receiver
 
 from djrichtextfield.models import RichTextField
 from model_utils import FieldTracker
@@ -102,6 +101,7 @@ class ProductVariant(TimeStampedModel):
     shipping_price=models.FloatField(default=0.0)
     tax=models.FloatField(default=0.0)
     size = models.CharField(max_length=10, blank=True, null=True, help_text='For cables')
+    suitable_roof_style = models.CharField(max_length=10, blank=True, null=True, help_text='For Hooks/Fittings')
     wattage = models.CharField(max_length=10, blank=True, null=True)
     tracker = FieldTracker()
 

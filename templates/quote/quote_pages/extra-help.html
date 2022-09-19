@@ -19,18 +19,12 @@
 
 <form style="max-width: 55rem;margin: 3rem auto auto;" id="extraRequiremet">
     <div class="button-group" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: 30px;">
-        <button class="btn primary-btn" data-price="13" type="button" style="border-radius: 3px;padding: 15px 50px;border: 1px solid #a3a3a3;flex-direction: column;gap: 1px;">
-            Roof Access
-            <span class="small-price disabled" style="font-size: 13px;">Price: $1000 USD</span>
+        {% for item in objects %}
+        <button class="btn primary-btn" data-id="{{ item.id }}" type="button" style="border-radius: 3px;padding: 15px 50px;border: 1px solid #a3a3a3;flex-direction: column;gap: 1px;">
+            {{ item.service_title }}
+            <span class="small-price disabled" style="font-size: 13px;">Price: {{ item.service_price }}</span>
         </button>
-        <button class="btn primary-btn" data-price="13" type="button" style="border-radius: 3px;padding: 15px 50px;border: 1px solid #a3a3a3;flex-direction: column;gap: 1px;">
-            Electrical
-            <span class="small-price disabled" style="font-size: 13px;">Price: $750 USD</span>
-        </button>
-        <button class="btn primary-btn" data-price="13" type="button" style="border-radius: 3px;padding: 15px 50px;border: 1px solid #a3a3a3;flex-direction: column;gap: 1px;">
-            Complete Installation
-            <span class="small-price disabled" style="font-size: 13px;">Price: x2 of the full equipment cost</span>
-        </button>
+        {% endfor %}
     </div>
 </form>
 <!--<div class="btn-group-footer">

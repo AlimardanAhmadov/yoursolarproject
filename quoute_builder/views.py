@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from main.views import is_ajax
-from product.models import Product, ProductVariant
+from product.models import ProductVariant
 from product.serializers import ProductVariantSerializer
 
 from rest_framework.generics import (
@@ -20,7 +20,8 @@ from django.utils.decorators import method_decorator
 from django.db import transaction
 
 from main.html_renderer import MyHTMLRenderer
-from .serializers import QuoteBuilderSerializer
+from .serializers import QuoteBuilderSerializer, ServiceSerializer, StorageSystemSerializer
+from .models import Service, StorageSystem
 
 
 
@@ -44,32 +45,33 @@ class QuoteBuilderView(ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         with transaction.atomic():
-            try:
-                serializer = self.get_serializer(data=request.data, context={'request': request})
-                if serializer.is_valid():
-                    self.perform_create_quote(serializer)
-                    return JsonResponse(serializer.data, status=status.HTTP_200_OK)
-                else:
-                    data = []
-                    emessage=serializer.errors
-                    for key in emessage:
-                        err_message = str(emessage[key])
-                        err_string = re.search("string='(.*)', ", err_message)
-                        message_value = err_string.group(1)
-                        final_message = f"{key} - {message_value}"
-                        data.append(final_message)
+            #try:
+            serializer = self.get_serializer(data=request.data, context={'request': request})
+            if serializer.is_valid():
+                self.perform_create_quote(serializer)
+                return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+            else:
+                data = []
+                emessage=serializer.errors
+                print(emessage)
+                for key in emessage:
+                    err_message = str(emessage[key])
+                    err_string = re.search("string='(.*)', ", err_message)
+                    message_value = err_string.group(1)
+                    final_message = f"{key} - {message_value}"
+                    data.append(final_message)
 
-                    response = HttpResponse(json.dumps({'err': data}), 
-                        content_type='application/json')
-                    response.status_code = 400
-                    return response
+                response = HttpResponse(json.dumps({'err': data}), 
+                    content_type='application/json')
+                response.status_code = 400
+                return response
 
-            except Exception:
+            """except Exception:
                 transaction.set_rollback(True)
                 response = HttpResponse(json.dumps({'err': ["Something went wrong!"]}), 
                     content_type='application/json')
                 response.status_code = 400
-                return response
+                return response"""
 
     def perform_create_quote(self, serializer):
         quote = serializer.save()
@@ -84,7 +86,15 @@ class UploadProductsView(APIView):
         if is_ajax(request=request):
             page = request.GET.get('page', 1)
             product_type = request.GET.get('product_type')
+            slug = request.GET.get('slug')
+
             variants = ProductVariant.objects.filter(Q(selected_product__category=product_type))
+            if product_type == 'Inverter':
+                selected_panel = ProductVariant.cache_by_slug(slug)
+                if selected_panel is None:
+                    selected_panel = get_object_or_404(ProductVariant, slug=slug)
+                variants = ProductVariant.objects.filter(Q(selected_product__category=product_type) & Q(wattage__gte=selected_panel.wattage))
+            
             paginator = Paginator(variants, 10)
 
             try:
@@ -135,3 +145,28 @@ class DisplayVariantDetailsView(APIView):
 
             return JsonResponse(data=data_dict, safe=False)
 
+
+class LoadObjectsView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = ServiceSerializer
+
+    def get(self, request):
+        if is_ajax(request=request):
+            object_type = request.GET.get('object_type')
+            if object_type == 'storage-system-size':
+                storages = StorageSystem.objects.all()
+                serializer = StorageSystemSerializer(storages, many=True)
+                template_name="quote/quote_pages/storage-system-size.html"
+            elif object_type == 'extra-help':
+                services = Service.objects.all()
+                serializer = ServiceSerializer(services, many=True)
+                template_name="quote/quote_pages/extra-help.html"
+
+            html = render_to_string(
+                template_name=template_name,
+                context={"objects": serializer.data}
+            )
+            
+            data_dict = {"html_from_view": html}
+
+            return JsonResponse(data=data_dict, safe=False)

@@ -2,7 +2,7 @@
     <img src="{{ product.image }}" alt="{{ product.title }}">
 </div>
 <div class="product-details">
-    <h3>{{ product.title }}</h3>
+    <h3 style="max-width: 500px;">{{ product.title }}</h3>
     <div class="price-row border-top" style="padding-top: 10px;">
         {% if product.discount %}
         <div class="price-item">

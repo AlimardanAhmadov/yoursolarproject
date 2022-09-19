@@ -146,12 +146,15 @@ $(document).on("click", ".btn-back", function(){
         }
     }
 
-    if(url.href.includes('section?name') && (url.searchParams.get('page')) != 'parts') {
+    if(url.href.includes('section?name') && (url.searchParams.get('page')) != 'parts' && (url.searchParams.get('page')) != 'storage-system-size' && (url.searchParams.get('page')) != 'extra-help') {
         var html = "/templates/quote/quote_pages/" + $previouspage + ".html"
         $.get(html, function(html_string)
         {
             $("#content").html(html_string);
         },'html');
+    }
+    else if (((url.searchParams.get('page')) == 'storage-system-size') || ((url.searchParams.get('page')) == 'extra-help')){
+        loadObjects();
     }
     else if ((url.searchParams.get('page')) == 'parts') {
         loadProducts();
@@ -281,10 +284,11 @@ $(document).on('click', '#spareWay button', function(){
 $(document).on('click', '#storageSystem button', function() {
     var $this = $(this);
     if ($this.text() == 'Yes') {
-        $.get("/templates/quote/quote_pages/storage-system-size.html", function(html_string)
-        {
-            $("#content").html(html_string);
-        },'html');
+        var url = new URL(window.location);
+
+        url.searchParams.set('page', "storage-system-size");
+        window.history.pushState({}, '', url);
+        loadObjects();
     }
     else {
         $.get("/templates/quote/quote_pages/summary.html", function(html_string)
@@ -296,7 +300,11 @@ $(document).on('click', '#storageSystem button', function() {
 
 $(document).on('click', '#extraRequiremet button, #concludeQuote', function(e) {
     e.preventDefault();
-    var input_date = {
+    if ($(this).hasClass('primary-btn')) {
+        var extra_service = localStorage.setItem('extra_service', $(this).data('id'));
+    }
+
+    var input_data = {
         'full_name': localStorage.getItem("fullnameField"),
         'address': localStorage.getItem("addressField"),
         'postcode': localStorage.getItem("postcodeField"),
@@ -312,15 +320,33 @@ $(document).on('click', '#extraRequiremet button, #concludeQuote', function(e) {
         'panels_count': localStorage.getItem("quantity"),
         'selected_panel': localStorage.getItem("panel_slug"),
         'fitting': localStorage.getItem("fitting_slug"),
+        'inverter': localStorage.getItem("inverter_slug"),
         'rail': localStorage.getItem("inverter_slug"),
         'cable_length_panel_cons': localStorage.getItem("fattened_consumer_cable_length"),
         'cable_length_bat_inv': localStorage.getItem("fattened_cable_length"),
+        'storage_system': localStorage.getItem("storage_system"),
+        'extra_service': localStorage.getItem("extra_service"),
     }
+
+    $.post({
+		type: 'POST',
+		url: '/build-quote/section',
+		data: JSON.stringify(input_data),
+		dataType: 'json',
+		headers: {'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"},
+		success: function (data) {
+            console.log("working");
+		},
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.log("not working");
+		}
+	});
 })
 
 // upload products on window load
 
 const quote_url = '/upload-products/';
+const object_url = '/upload-objects/';
 const content = $('#content');
 const delay_100_ms = 100
 
@@ -333,10 +359,20 @@ const ajax_func = function (quote_url, request_parameters) {
     })
 }
 
+const load_func = function (object_url, request_parameters) {
+    $.getJSON(object_url, request_parameters)
+    .done(response => {  
+        setTimeout(function() {
+            content.html(response['html_from_view']);
+        }, delay_100_ms);
+    })
+}
+
 function loadProducts() {
     var url = new URL(window.location);
 	const request_parameters = {
 		"product_type": url.searchParams.get('name'),
+		"slug": localStorage.getItem('panel_slug'),
 	}
     $('#content').html('<div class="lds-ellipsis" style="display: flex;-webkit-box-pack: center;justify-content: center;margin: auto;"><div></div><div></div><div></div><div></div></div>');
 
@@ -344,6 +380,20 @@ function loadProducts() {
         clearTimeout(scheduled_function)
     } 
     scheduled_function = setTimeout(ajax_func, delay_100_ms, quote_url, request_parameters);
+}
+
+
+function loadObjects() {
+    var url = new URL(window.location);
+	const request_parameters = {
+		"object_type": url.searchParams.get('page'),
+	}
+    $('#content').html('<div class="lds-ellipsis" style="display: flex;-webkit-box-pack: center;justify-content: center;margin: auto;"><div></div><div></div><div></div><div></div></div>');
+
+    if (scheduled_function) {
+        clearTimeout(scheduled_function)
+    } 
+    scheduled_function = setTimeout(load_func, delay_100_ms, object_url, request_parameters);
 }
 
 $(document).on('click', '.step.step-completed', function(e){
@@ -389,6 +439,9 @@ function updateCurrentSection() {
     else if ((url.searchParams.get('page')) == 'parts') {
         loadProducts();
     }
+    else if ((url.searchParams.get('page')) == 'storage-system-size' || (url.searchParams.get('page')) == 'extra-help') {
+        loadObjects();
+    }
     else if(url.href.includes('section?name') && (url.searchParams.get('page')) != 'parts') {
         $('#content').html('<div class="lds-ellipsis" style="display: flex;-webkit-box-pack: center;justify-content: center;margin: auto;"><div></div><div></div><div></div><div></div></div>');
         var html = "/templates/quote/quote_pages/" + url.searchParams.get('page') + ".html"
@@ -426,7 +479,7 @@ $(document).on("DOMSubtreeModified", "#content", function(){
     // fill in inputs
     inputs.forEach(function (item, index) {
         var saved_data = localStorage.getItem(item.id);
-        if (saved_data !== null) {
+        if (saved_data != null) {
             document.getElementById(item.id).value = saved_data;
         }
     });
@@ -646,7 +699,7 @@ function confirmSelectedPanel() {
     }
     else {
         var slug = $('.product-choice.selected').data('slug');
-        var quantity = $('input[name="quantity-input"]').val();
+        var quantity = $('.quantity-input').val();
 
         localStorage.setItem("panel_slug", slug);
         localStorage.setItem("quantity", quantity);
@@ -676,6 +729,8 @@ $(document).on('click', '#storageSystemSize button', function() {
     url.searchParams.set('name', "Cable Length from Battery to Inverter");
     url.searchParams.set('page', "cable-length-battery-inverter");
     window.history.pushState({}, '', url);
+    localStorage.setItem('storage_system', $this.data('slug'));
+
     $.get("/templates/quote/quote_pages/cable-length-battery-inverter.html", function(html_string)
     {
         $("#content").html(html_string);
@@ -701,10 +756,8 @@ function confirmSelectedInverter(){
 }
 
 $(document).on('change', '#cablelengthbtoinvField', function(){
-    console.log("Asd");
     var $this = $(this);
     var input_val = $this.val();
-    console.log(input_val);
     localStorage.setItem($this.attr('id'), input_val);
 
     // add %20 fat
@@ -747,10 +800,11 @@ function confirmStorageCable(){
         var url = new URL(window.location);
         url.searchParams.set('page', 'extra-help');
         window.history.pushState({}, '', url);
-        $.get("/templates/quote/quote_pages/extra-help.html", function(html_string)
-        {
-            $("#content").html(html_string);
-        },'html');
+        loadObjects()
+        //$.get("/templates/quote/quote_pages/extra-help.html", function(html_string)
+        //{
+        //    $("#content").html(html_string);
+        //},'html');
     }
 }
 

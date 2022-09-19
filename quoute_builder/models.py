@@ -4,49 +4,48 @@ from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
+from django.core.cache import cache
+from django.db.models.signals import post_save, post_delete
 
 from main.utils import send_email, id_generator
 
-from phonenumber_field.serializerfields import PhoneNumberField
-from product.models import Product, ProductVariant
+from product.models import ProductVariant
 
 User = get_user_model()
 
-YES_NO_CHOICE = (
-    ("Yes", "Yes"),
-    ("No", "No"),
-)
 
-RAIL_LENGTH =  (
-    ("2.2", "2.2"),
-    ("3.3", "3.3"),
-)
+CACHED_SERVICE_BY_SLUG_KEY = 'service__by_slug__{}'
+CACHE_LENGTH = 24 * 3600  # --> 24hrs
+
+class NotFound:
+    """ caching """
 
 
 class Quote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=250, blank=True, null=True)
     slug = models.SlugField()
     selected_panel = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='panel')
     inverter = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='selected_inverter')
-    selected_rail = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='selected_rail')
-    title = models.CharField(max_length=250)
-    full_name = models.CharField(max_length=150)
-    address = models.TextField()
-    postcode = models.IntegerField()
-    email = models.EmailField(max_length=250)
-    phone = models.CharField(max_length=50)
+    rail_length = models.CharField(max_length=100, blank=True, null=True)
+    full_name = models.CharField(max_length=150, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    postcode = models.CharField(max_length=50, blank=True, null=True)
+    email = models.EmailField(max_length=250, blank=True, null=True)
+    phone = models.CharField(max_length=50, blank=True, null=True)
     property_type = models.CharField(max_length=50)
     no_floors = models.IntegerField()
     no_bedrooms = models.IntegerField()
-    bill_rate = models.CharField(max_length=10, blank=True, null=True)
+    bill_rate = models.CharField(max_length=100, blank=True, null=True)
     roof_style = models.CharField(max_length=20, blank=True, null=True)
     roof_width = models.FloatField(default=0.0)
     roof_height = models.FloatField(default=0.0)
     panels_count = models.IntegerField(blank=True, null=True)
     fitting = models.CharField(max_length=50, blank=True, null=True)
     cable_length_bat_inv = models.FloatField(blank=True, null=True)
-    storage_system_size = models.CharField(max_length=5, blank=True, null=True)
-    extra_requirement = models.CharField(max_length=50, blank=True, null=True)
+    storage_cable = models.FloatField(blank=True, null=True)
+    storage_system = models.ForeignKey("StorageSystem", on_delete=models.CASCADE, blank=True, null=True)
+    extra_service = models.ForeignKey("Service", on_delete=models.CASCADE, blank=True, null=True)
     total_cost = models.FloatField(default=0.0)
     shipping_price = models.FloatField(default=0.0)
     tax = models.FloatField(default=0.0)
@@ -59,12 +58,7 @@ class Quote(models.Model):
     def __str__(self):
         return "%s" % self.selected_panel.title
 
-    def grand_total(self):
-        panel_price = (self.selected_panel.price * self.panels_count) + self.selected_panel.shipping_price
-        inverter_price = self.inverter.price + self.inverter.shipping_price
-        selected_rail = self.selected_rail.price + self.selected_rail.shipping_price
-        
-    
+
     def confirmation(self):
         
         logging.debug("Sending order summary to %s" % (self.email))
@@ -118,3 +112,68 @@ class Quote(models.Model):
             instance.save()
 
 post_save.connect(Quote.post_save, sender=Quote)
+
+
+class Service(models.Model):
+    service_title = models.CharField(max_length=250)
+    service_price = models.CharField(max_length=50, help_text="Please make sure to add $ USD")
+
+    @staticmethod
+    def cache_by_slug(pk):
+        key = CACHED_SERVICE_BY_SLUG_KEY.format(pk)
+
+        service = cache.get(key)
+        if service:
+            if isinstance(service, NotFound):
+                return None
+            return service
+
+        service = Service.objects.filter(pk=pk).first()
+
+        if not service:
+            cache.set(key, NotFound(), CACHE_LENGTH)
+            return None
+
+        cache.set(key, service, CACHE_LENGTH)
+        return service
+
+    @staticmethod
+    def invalidate_cache(sender, instance, **kwargs):
+        """
+        Invalidate the variant cached data when it is updated or deleted
+        """
+        cache.delete(CACHED_SERVICE_BY_SLUG_KEY.format(instance.pk))
+
+post_save.connect(Service.invalidate_cache, sender=Service)
+post_delete.connect(Service.invalidate_cache, sender=Service)
+
+
+class StorageSystem(models.Model):
+    storage_size = models.CharField(max_length=250)
+    storage_price = models.FloatField(default=0.0)
+
+    @staticmethod
+    def cache_by_slug(pk):
+        key = CACHED_SERVICE_BY_SLUG_KEY.format(pk)
+
+        storage = cache.get(key)
+        if storage:
+            if isinstance(storage, NotFound):
+                return None
+            return storage
+
+        storage = StorageSystem.objects.filter(pk=pk).first()
+
+        if not storage:
+            cache.set(key, NotFound(), CACHE_LENGTH)
+            return None
+
+        cache.set(key, storage, CACHE_LENGTH)
+        return storage
+
+    @staticmethod
+    def invalidate_cache(sender, instance, **kwargs):
+        cache.delete(CACHED_SERVICE_BY_SLUG_KEY.format(instance.pk))
+
+post_save.connect(StorageSystem.invalidate_cache, sender=StorageSystem)
+post_delete.connect(StorageSystem.invalidate_cache, sender=StorageSystem)
