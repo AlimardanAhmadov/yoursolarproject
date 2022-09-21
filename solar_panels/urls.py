@@ -34,6 +34,7 @@ urlpatterns = [
     path('', include('user.urls')),
     path('', include('quoute_builder.urls')),
     path('', include('cart.urls')),
+    path('', include('order.urls')),
 ]
 
 if settings.DEBUG:

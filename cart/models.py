@@ -91,7 +91,7 @@ class CartItem(models.Model):
                 grand_total = total_cost + float(self.content_object.shipping_price) + float(self.content_object.tax)
             else:
                 total_cost = float(self.total_cost) * int(self.quantity)
-                grand_total = total_cost + float(self.content_object.shipping_price) + float(self.content_object.tax)
+                grand_total = total_cost
 
             self.total_cost = total_cost
             self.grand_total = grand_total
@@ -107,8 +107,8 @@ class CartItem(models.Model):
             grand_total = total_cost + float(instance.content_object.shipping_price) + float(instance.content_object.tax)
         else:
             total_cost = float(instance.total_cost) * int(instance.quantity)
-            grand_total = total_cost + float(instance.content_object.shipping_price) + float(instance.content_object.tax)
-            
+            grand_total = total_cost
+
         if created:
             instance.slug = slugify(str(id_generator()) + "-" + str(instance.pk))
             instance.total_cost = total_cost

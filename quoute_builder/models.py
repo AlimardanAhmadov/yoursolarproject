@@ -15,6 +15,7 @@ User = get_user_model()
 
 
 CACHED_SERVICE_BY_SLUG_KEY = 'service__by_slug__{}'
+CACHED_STORAGE_BY_SLUG_KEY = 'storage__by_slug__{}'
 CACHED_QUOTE_BY_SLUG_KEY = 'quote__by_slug__{}'
 CACHE_LENGTH = 24 * 3600  # --> 24hrs
 
@@ -26,31 +27,33 @@ class Quote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=250, blank=True, null=True)
     slug = models.SlugField()
-    selected_panel = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='panel')
-    inverter = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='selected_inverter')
-    rail_length = models.CharField(max_length=100, blank=True, null=True)
     full_name = models.CharField(max_length=150, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     postcode = models.CharField(max_length=50, blank=True, null=True)
     email = models.EmailField(max_length=250, blank=True, null=True)
     phone = models.CharField(max_length=50, blank=True, null=True)
     property_type = models.CharField(max_length=50)
-    no_floors = models.IntegerField()
-    no_bedrooms = models.IntegerField()
+    no_floors = models.IntegerField("Number of floors")
+    no_bedrooms = models.IntegerField("Number of bedrooms")
+    selected_panel = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='panel')
+    inverter = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='selected_inverter')
+    rail_length = models.CharField(max_length=100, blank=True, null=True)
     bill_rate = models.CharField(max_length=100, blank=True, null=True)
     roof_style = models.CharField(max_length=20, blank=True, null=True)
     roof_width = models.FloatField(default=0.0)
     roof_height = models.FloatField(default=0.0)
     panels_count = models.IntegerField(blank=True, null=True)
-    fitting = models.CharField(max_length=50, blank=True, null=True)
-    cable_length_bat_inv = models.FloatField(blank=True, null=True)
-    cable_length_panel_cons = models.FloatField(blank=True, null=True)
+    fitting = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='selected_fitting')
+    cable_length_bat_inv = models.FloatField("Cable Length from battery location to the inverter", blank=True, null=True)
+    cable_length_panel_cons = models.FloatField("Cable length from panels to the consumer unit via the Inverter", blank=True, null=True)
     storage_cable = models.FloatField(blank=True, null=True)
     storage_system = models.ForeignKey("StorageSystem", on_delete=models.CASCADE, blank=True, null=True)
     extra_service = models.ForeignKey("Service", on_delete=models.CASCADE, blank=True, null=True)
+    shipping_price = models.FloatField(default=200.0)
+    equipment_cost = models.FloatField(default=0.0)
     total_cost = models.FloatField(default=0.0)
-    shipping_price = models.FloatField(default=0.0)
-    tax = models.FloatField(default=0.0)
+    tax = models.FloatField(default=20)
+    paid = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Quote'
@@ -98,13 +101,13 @@ class Quote(models.Model):
                 getattr(settings, 'EMAIL_USE_TLS'),
             ]
         ):
-            if self.completed:
+            if self.paid:
                 body = """<p>
                 Hello from Solar Panels!<br><br>
                 Confirmation Mail: %s
                 Thank you from Solar Panels! <br><br>
                 <p>""" % (
-                    self.product.title,
+                    self.title,
                 )
 
                 subject = "Order Summary"
@@ -115,13 +118,13 @@ class Quote(models.Model):
                 Complete your order: %s
                 Thank you from Solar Panels! <br><br>
                 <p>""" % (
-                    self.product.title,
+                    self.title,
                 )
 
                 subject = "Complete your order"
-                template_name = 'email/order_warning.html'
+                template_name = 'email/summary.html'
 
-            recipients = [self.email]
+            recipients = [self.user.email]
 
             send_email(body, subject, recipients, template_name, "html")
         else:
@@ -182,7 +185,7 @@ class StorageSystem(models.Model):
 
     @staticmethod
     def cache_by_slug(pk):
-        key = CACHED_SERVICE_BY_SLUG_KEY.format(pk)
+        key = CACHED_STORAGE_BY_SLUG_KEY.format(pk)
 
         storage = cache.get(key)
         if storage:
@@ -204,7 +207,7 @@ class StorageSystem(models.Model):
         """
         Invalidate the cached data when it is updated or deleted
         """
-        cache.delete(CACHED_SERVICE_BY_SLUG_KEY.format(instance.pk))
+        cache.delete(CACHED_STORAGE_BY_SLUG_KEY.format(instance.pk))
 
 post_save.connect(StorageSystem.invalidate_cache, sender=StorageSystem)
 post_delete.connect(StorageSystem.invalidate_cache, sender=StorageSystem)

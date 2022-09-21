@@ -66,10 +66,6 @@ class OrderItem(TimeStampedModel):
     order = models.ForeignKey(
         Order, related_name="order_items", on_delete=models.CASCADE
     )
-    product = models.ForeignKey(
-        CartItem, related_name="product_order", on_delete=models.CASCADE
-    )
-    quantity = models.IntegerField()
-    total = models.DecimalField(max_digits=10, decimal_places=2)
+    total = models.FloatField(default=0.0)
 
 

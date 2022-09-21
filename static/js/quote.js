@@ -354,9 +354,12 @@ $(document).on('click', '#extraRequiremet button, #concludeQuote', function(e) {
 		data: JSON.stringify(input_data),
 		dataType: 'json',
 		headers: {'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"},
-		success: function () {
+		success: function (data) {
+            var redirect_url = '/quote/' + data.redirect_url
+            console.log(redirect_url);
             setTimeout(function() {
-                window.location.href = '/'
+                window.location.href = redirect_url;
+                localStorage.removeItem('extra_service');
             }, 1000);
 		},
         error: function (xhr, ajaxOptions, thrownError) {

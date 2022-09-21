@@ -42,7 +42,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', 'https://3433-212-47-143-198.eu.ngrok.io']
+ALLOWED_HOSTS = ['*', 'https://21db-212-47-137-85.eu.ngrok.io']
 
 # Application definition
 
@@ -250,6 +250,8 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Baku' 
 
+STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET']
+STRIPE_WEBHOOK_SECRET = os.environ['STRIPE_WEBHOOK_SECRET']
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

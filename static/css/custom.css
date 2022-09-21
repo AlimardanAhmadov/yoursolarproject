@@ -1127,6 +1127,7 @@ footer a {
     justify-content: center;
 }
 
+.primary-btn.active,
 .primary-btn:hover {
     background-color: #000;
     border: 1px solid #000;
@@ -1945,6 +1946,10 @@ h6.section__title {
     text-align: center;
 }
 
+#parts-pricing-summary table th:nth-child(3) {
+    text-align: right;
+}
+
 .item-description {
     display: flex; 
     flex-direction: column; 
@@ -2196,4 +2201,46 @@ h6.section__title {
       -o-transform: translateY(100%);
       transform: translateY(100%);
     }
+}
+
+.item-title {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 400px;
+    white-space: nowrap;
+}
+
+.prp-btn {
+    display: inline-block;
+    padding: 0.6rem 1rem;
+    font-family: work sans,sans-serif;
+    border: 0;
+    border-radius: 6px;
+    box-sizing: border-box;
+    outline: none;
+    transition: background-color .15s ease-out;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: .01rem;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #fff;
+    background-color: #5252f2;
+    position: absolute;
+    right: 50px;
+}
+
+.prp-btn:hover {
+    background-color: #4845d9;
+    color: #fff;
+}
+
+.prp-btn:focus {
+    background-color: #2d208c;
+    color: #fff;
 }
