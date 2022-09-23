@@ -10,7 +10,6 @@ from django.db.models import Sum
 from main.utils import id_generator
 from model_utils import FieldTracker
 from product.models import ProductVariant
-from quoute_builder.models import Quote
 
 
 User = get_user_model()
@@ -26,7 +25,6 @@ class Cart(models.Model):
     user = models.OneToOneField(User, related_name='cart', on_delete=models.CASCADE)
     total_cost = models.FloatField(default=0.0)
     grand_total = models.FloatField(default=0.0)
-    tax = models.FloatField(default=0.0)
     shipping_cost = models.FloatField(default=0.0)
     slug = models.SlugField(blank=True, null=True)
 
@@ -88,7 +86,7 @@ class CartItem(models.Model):
         if quantity:
             if self.model_type == ContentType.objects.get_for_model(ProductVariant):
                 total_cost = float(self.price) * int(self.quantity)
-                grand_total = total_cost + float(self.content_object.shipping_price) + float(self.content_object.tax)
+                grand_total = total_cost + float(self.content_object.shipping_price)
             else:
                 total_cost = float(self.total_cost) * int(self.quantity)
                 grand_total = total_cost
@@ -104,7 +102,7 @@ class CartItem(models.Model):
 
         if instance.model_type == ContentType.objects.get_for_model(ProductVariant):
             total_cost = float(instance.price) * int(instance.quantity)
-            grand_total = total_cost + float(instance.content_object.shipping_price) + float(instance.content_object.tax)
+            grand_total = total_cost + float(instance.content_object.shipping_price)
         else:
             total_cost = float(instance.total_cost) * int(instance.quantity)
             grand_total = total_cost

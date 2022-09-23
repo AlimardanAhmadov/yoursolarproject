@@ -152,10 +152,11 @@ input[type="text"]:focus + .field {
 }
 
 .lds-ring {
-    display: inline-block;
+    display: flex;
     position: relative;
     margin: 9px 22px;
     height: 20px;
+    justify-content: center;
 }
 .lds-ring div {
     box-sizing: border-box;
@@ -212,7 +213,7 @@ input[type="text"]:focus + .field {
 }
 
 .btn .lds-ring {
-    padding-right: 18px;
+    /*padding-right: 18px;*/
     margin: 0;
 }
 

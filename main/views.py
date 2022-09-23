@@ -32,7 +32,7 @@ class ProductsAPIView(APIView):
         categories = request.GET.getlist('category[]')
         availability = request.GET.getlist('availability[]')
         brand = request.GET.getlist('brand[]')
-        wattage = request.GET.getlist('wattage[]')
+        #wattage = request.GET.getlist('wattage[]')
         is_ajax = request.GET.get('is_ajax')
 
         nested_list = [[q,], categories, availability, brand, wattage]
@@ -56,7 +56,7 @@ class ProductsAPIView(APIView):
             return JsonResponse(data=data_dict, safe=False)
      
         else:
-            paginator = Paginator(matching_items, 10)
+            paginator = Paginator(matching_items, 20)
 
             try:
                 products = paginator.page(page)

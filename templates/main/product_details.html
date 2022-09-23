@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="form__buttons">
-                    <button class="btn primary-btn">Go to Cart</button>
+                    <button class="btn primary-btn cart-btn">Go to Cart</button>
                     <button class="btn button-black">Checkout</button>
                 </div>
             </div>
@@ -110,8 +110,8 @@
             </button>
         </div>
         <div class="form__buttons">
-            <button class="btn primary-btn" id="addCart">Add to Cart</button>
-            <button class="btn button-black">Buy Now</button>
+            <button class="btn primary-btn disabled" id="addCart">Add to Cart</button>
+            <button class="btn button-black disabled">Buy Now</button>
         </div>
         <div class="description">
             {{ selected_variant.description|safe }}

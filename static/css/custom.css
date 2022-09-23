@@ -965,10 +965,6 @@ footer a {
     width: 20rem;
 }
 
-.clear-button button{
-    padding: 0;
-}
-
 .choice-input-wrapper {
     display: flex;
     align-items: flex-start;
@@ -2243,4 +2239,20 @@ h6.section__title {
 .prp-btn:focus {
     background-color: #2d208c;
     color: #fff;
+}
+
+.clearpay-card {
+    max-width: 200px;
+    padding: 10px 15px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    box-shadow: 0 0 0 1px rgb(26 26 26 / 90%), 0 2px 4px 0 rgb(0 0 0 / 7%), 0 1px 1.5px 0 rgb(0 0 0 / 5%);
+    background-color: #fff;
+    border-radius: 6px;
+}
+
+.video-wrapper {
+    max-width: 680px;
 }

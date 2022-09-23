@@ -7,9 +7,12 @@ from django.db.models.signals import post_save
 from django.core.cache import cache
 from django.db.models.signals import post_save, post_delete
 
-from main.utils import send_email, id_generator
+from main.utils import id_generator
+from datetime import date
 
 from product.models import ProductVariant
+from order.tasks import confirm_payment_email
+
 
 User = get_user_model()
 
@@ -89,7 +92,7 @@ class Quote(models.Model):
 
     def confirmation(self):
         
-        logging.debug("Sending order summary to %s" % (self.email))
+        logging.debug("Sending quote details to %s" % (self.email))
 
         if all(
             [   
@@ -101,35 +104,16 @@ class Quote(models.Model):
                 getattr(settings, 'EMAIL_USE_TLS'),
             ]
         ):
-            if self.paid:
-                body = """<p>
-                Hello from Solar Panels!<br><br>
-                Confirmation Mail: %s
-                Thank you from Solar Panels! <br><br>
-                <p>""" % (
-                    self.title,
-                )
-
-                subject = "Order Summary"
-                template_name = 'email/summary.html'
-            else:
-                body = """<p>
-                Hello from Solar Panels!<br><br>
-                Complete your order: %s
-                Thank you from Solar Panels! <br><br>
-                <p>""" % (
-                    self.title,
-                )
-
-                subject = "Complete your order"
-                template_name = 'email/summary.html'
-
+            context_dict = {
+                'url': 'http://localhost:8000/quote/' + self.slug
+            }
+            
+            subject = "New Quote"
+            template_name = 'email/order.html'
+            
             recipients = [self.user.email]
 
-            send_email(body, subject, recipients, template_name, "html")
-        else:
-            logging.warning("Sendgrid credentials are not set")
-
+            confirm_payment_email(context_dict, subject, recipients, template_name)
 
     @staticmethod
     def post_save(sender, **kwargs):
@@ -139,6 +123,8 @@ class Quote(models.Model):
             instance.slug = slugify(str(id_generator()) + "-" + str(instance.id))
             instance.title = slugify(str(id_generator()) + "-" + str(instance.id))
             instance.save()
+
+            instance.confirmation()
 
 post_save.connect(Quote.post_save, sender=Quote)
 post_save.connect(Quote.invalidate_cache, sender=Quote)

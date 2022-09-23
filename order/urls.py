@@ -6,5 +6,6 @@ urlpatterns = [
     path('success', views.SuccessView.as_view()),
     path('cancel', views.SuccessView.as_view()),
     path('checkout', views.CreateCheckoutSessionView.as_view(), name="checkout_session"),
+    path('single-checkout/<slug:slug>', views.SingleProductCreateCheckoutSessionView.as_view(), name="single_checkout_session"),
     path('stripe-webhook', stripe_webhook.stripe_webhook, name="stripe_webhook"),
 ]

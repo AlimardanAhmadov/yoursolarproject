@@ -140,7 +140,7 @@
                     <span>Subtotal</span>
                     <span id="cart-subtotal">$ {{ cart_total }} USD</span>
                 </div>
-                <form action="{% url 'checkout_session' %}" method="POST" style="margin: 0;">
+                <form action="{% url 'checkout_session' %}" method="POST" class="stripe-form" style="margin: 0;">
                     <button class="btn primary-btn" type="submit" id="checkout-button">CHECKOUT</button>
                 </form>
             </div>

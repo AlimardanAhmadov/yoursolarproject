@@ -709,10 +709,12 @@ function possibleMaxPanels() {
     var row = roof_height/panel_height;
     var column = roof_width/panel_width;
 
-    return (row * column).toFixed(2)
+    return Math.round(row * column)
 }
 
 function confirmSelectedPanel() {
+    console.log(possibleMaxPanels());
+    console.log($('.quantity-input').val());
     if ($('.quantity-input').val() > $('.quantity-input').attr('max')) {
         displayError()
         $('.error__content').html("You cannot order more than the maximum quantity");
@@ -729,6 +731,7 @@ function confirmSelectedPanel() {
         localStorage.setItem("quantity", quantity);
         
         var url = new URL(window.location);
+        url.searchParams.set('name', 'Fitting');
         url.searchParams.set('page', 'parts');
         window.history.pushState({}, '', url);
         loadProducts();
@@ -740,6 +743,7 @@ function confirmSelectedFitting() {
     localStorage.setItem("fitting_slug", slug);
     var url = new URL(window.location);
 
+    url.searchParams.set('name', 'Inverter');
     url.searchParams.set('page', 'parts');
     window.history.pushState({}, '', url);
     loadProducts();
@@ -770,6 +774,7 @@ function confirmSelectedInverter(){
         var slug = $('.product-choice').data('slug');
         localStorage.setItem("inverter_slug", slug);
         var url = new URL(window.location);
+        url.searchParams.set('page', 'Storage System');
         url.searchParams.set('page', 'cable-length');
         window.history.pushState({}, '', url);
         $.get("/templates/quote/quote_pages/cable-length.html", function(html_string)

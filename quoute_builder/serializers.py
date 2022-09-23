@@ -109,10 +109,10 @@ class QuoteBuilderSerializer(serializers.Serializer):
         sum_cost = sum([float(panel_price), float(inverter_price), float(fitting_price), float(extra_service_fee), float(storage_system_price)])
 
         if self.validated_data.get('panels_count') > 20:
-            total_cost = sum([sum_cost, (sum_cost * 0.2), 300])
+            total_cost = sum([sum_cost, 300])
             context['shipping_price'] = 300
         else:
-            total_cost = sum([sum_cost, (sum_cost * 0.2), 200])
+            total_cost = sum([sum_cost, 200])
             context['shipping_price'] = 200
 
         if total_cost:

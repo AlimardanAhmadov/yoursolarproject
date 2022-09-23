@@ -99,7 +99,6 @@ class ProductVariant(TimeStampedModel):
     active=models.BooleanField(default=True)
     quantity=models.PositiveIntegerField(default=0)
     shipping_price=models.FloatField(default=0.0)
-    tax=models.FloatField(default=0.0)
     size = models.CharField(max_length=10, blank=True, null=True, help_text='For cables')
     suitable_roof_style = models.CharField(max_length=10, blank=True, null=True, help_text='For Hooks/Fittings')
     wattage = models.CharField(max_length=10, blank=True, null=True)
@@ -120,8 +119,7 @@ class ProductVariant(TimeStampedModel):
             if primary_variant_changed and self.primary_variant is True:
                 self.selected_product.primary_image_url = self.image.url
                 self.selected_product.save()
-
-        if image_changed:
+        else:
             if image and image.size > (0.3 * 1024 * 1024):
                 self.image = compress_image(image)
         super(ProductVariant, self).save(*args, **kwargs)
