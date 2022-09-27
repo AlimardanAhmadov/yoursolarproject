@@ -14,7 +14,7 @@ import os, environ, datetime
 from datetime import timedelta
 from pathlib import Path
 
-import django
+import django, django_heroku
 from django.utils.encoding import force_str, smart_str
 from django.utils.translation import gettext_lazy
 from django.utils.six import python_2_unicode_compatible
@@ -346,3 +346,5 @@ COMPRESS_FILTERS = {
 }
 HTML_MINIFY = True
 KEEP_COMMENTS_ON_MINIFYING = True
+
+django_heroku.settings(locals())
