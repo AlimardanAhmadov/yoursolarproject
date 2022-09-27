@@ -1,5 +1,4 @@
 import json, stripe, os
-from locale import currency
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.conf import settings
@@ -54,7 +53,7 @@ class CreateCheckoutSessionView(View):
                 inclusive=False,
             )
 
-            # createa customer for successful/failed notification
+            # create customer for successful/failed notification
             try:
                 stripe.Customer.retrieve(request.user.email)
             except Exception:
@@ -63,30 +62,37 @@ class CreateCheckoutSessionView(View):
                     email=request.user.email,
                 )
 
-
             if order_items:
                 for item in CartItem.objects.filter(cart=cart):
                     
                     product = item.content_object
+                    if isinstance(product, ProductVariant):
+                        product_qty = product.quantity
+                        item_price = item.price
+                    else:
+                        product_qty = 1
+                        item_price = item.content_object.total_cost
 
-                    if item.quantity > product.quantity:
-                        if product.quantity < 1:
+                    if item.quantity > product_qty:
+                        if product_qty < 1:
                             message = '{} is out of stock!'.format(product.title)
                             response = HttpResponse(json.dumps({'err': message}), 
                                 content_type='application/json')
                             response.status_code = 400
                             return response
                         else:
-                            message = 'You cannot order more than {} of {}'.format(product.quantity, product.title)
+                            message = 'You cannot order more than {} of {}'.format(product_qty, product.title)
                             response = HttpResponse(json.dumps({'err': message}), 
                                 content_type='application/json')
                             response.status_code = 400
                             return response
 
                     if isinstance(product, Quote):
-                        image = MY_DOMAIN + product.selected_panel.image.url
+                        image = product.selected_panel.image.url
+                        product_id = product.slug
                     elif isinstance(product, ProductVariant):
-                        image = MY_DOMAIN + product.image.url
+                        image = product.image.url
+                        product_id = product.slug
                     else:
                         image = "https://i.imgur.com/EHyR2nP.png"
                                 
@@ -94,10 +100,10 @@ class CreateCheckoutSessionView(View):
                         {
                             'price_data': {
                                 'currency': 'usd',
-                                'unit_amount': int(item.price) * 100,
+                                'unit_amount': int(item_price) * 100,
                                 'product_data': {
                                     'name': product.title,
-                                    'images': [image],
+                                    'images': [image, ],
                                 },
                             },
                             'quantity': item.quantity,
@@ -108,10 +114,10 @@ class CreateCheckoutSessionView(View):
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card', 'afterpay_clearpay'],
                 line_items=line_items,
-                metadata={"order_id": no_generator(),'user_email': request.user.email, 'user_username': request.user.username},
+                metadata={"order_id": no_generator(),'user_email': request.user.email, 'user_username': request.user.username, 'ordered_product_id': product_id},
                 customer_email=request.user.email,
                 mode='payment',
-                success_url=MY_DOMAIN + '/success',
+                success_url=MY_DOMAIN + "/success?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=MY_DOMAIN + '/cancel',
                 billing_address_collection="required",
                 shipping_address_collection={
@@ -181,7 +187,7 @@ class SingleProductCreateCheckoutSessionView(View):
                     response.status_code = 400
                     return response
 
-                image = MY_DOMAIN + selected_product.selected_panel.image.url
+                image = selected_product.selected_panel.image.url
                 price = selected_product.total_cost
                 title = selected_product.title
                 shipping_price = 0.0
@@ -194,15 +200,20 @@ class SingleProductCreateCheckoutSessionView(View):
                 if not selected_product:
                     selected_product = ProductVariant.objects.get(slug=slug)
 
-                image = MY_DOMAIN + selected_product.image.url
-                price = selected_product.price
+                image = selected_product.image.url
+                if selected_product.discount:
+                    price = selected_product.discount
+                else:
+                    price = selected_product.price
                 shipping_price = selected_product.shipping_price
                 title = selected_product.title
                 max_qty = selected_product.quantity
                 order_id = no_generator()
                 product_id = selected_product.slug
             
-            # createa customer for successful/failed notification
+            print(image)
+            
+            # create customer for successful/failed notification
             try:
                 stripe.Customer.retrieve(request.user.email)
             except Exception:
@@ -232,7 +243,6 @@ class SingleProductCreateCheckoutSessionView(View):
                     },
                     'adjustable_quantity': {
                         'enabled': True,
-                        'minimum': 1,
                         'maximum': int(max_qty),
                     },
                     'quantity': 1,
@@ -243,10 +253,10 @@ class SingleProductCreateCheckoutSessionView(View):
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card', 'afterpay_clearpay'],
                 line_items=line_items,
-                metadata={"order_id": order_id,'user_email': request.user.email, 'product_id': product_id},
+                metadata={"order_id": order_id,'user_email': request.user.email, 'product_id': product_id, 'ordered_product_id': product_id},
                 mode='payment',
                 customer_email=request.user.email,
-                success_url=MY_DOMAIN + '/success',
+                success_url=MY_DOMAIN + "/success?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=MY_DOMAIN + '/cancel',
                 billing_address_collection="required",
                 shipping_address_collection={

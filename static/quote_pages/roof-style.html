@@ -1,12 +1,12 @@
 <div class="toolbar__section">
     <div class="toolbar__section-middle">
-        <a type="button" class="btn-back" data-back="roof-style" data-href="Installation Details">
+        <a type="button" class="btn-back" data-back="spare-way" data-href="Installation Details">
             <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
             </svg>
         </a>
-        <span class="current-step small">Roof Dimensions</span>
-        <a type="button" class="btn-next" id="validateRoofDimensions" data-href="Panels">
+        <span class="current-step small">Roof Style</span>
+        <a type="button" class="btn-next" id="validateRoofStyle">
             <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
             </svg>
@@ -14,9 +14,9 @@
     </div>
 </div>
 <div class="page-title-wrap text-center">
-    <h4 class="sub-title">What are the dimensions of your roof?</h4>
+    <h4 class="sub-title">What is the style of your roof?</h4>
 </div>
-<form style="max-width: 40rem;margin: 3rem auto auto;">
+<form style="max-width: 60rem;margin: 3rem auto auto;" id="roof__type">
     <div class="form__error small" role="alert">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="red" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
@@ -24,27 +24,36 @@
         <span class="error__content">
         </span>
     </div>
-    <div class="input-row">
-        <div class="input-group">
-            <div class="field">
-                <input id="widthField" type="number" name="width" placeholder=" ">
-                <label for="widthField">Width</label>
+    <div class="choices-rows">
+        <div class="choices-wrapper">
+            <div class="choice-card">
+                <h3 class="choice-text">Flat Roof</h3>
+            </div>
+            <div class="choice-card">
+                <h3 class="choice-text">Pantile Roof</h3>
+            </div>
+            <div class="choice-card">
+                <h3 class="choice-text">Flat tile or slate</h3>
             </div>
         </div>
-        <div class="input-group">
-            <div class="field">
-                <input id="heightField" type="number" name="height" placeholder=" ">
-                <label for="heightField">Height</label>
+        <div class="choices-wrapper">
+            <div class="choice-card">
+                <h3 class="choice-text">Metal roof</h3>
+            </div>
+            <div class="choice-card">
+                <h3 class="choice-text">New build</h3>
             </div>
         </div>
     </div>
 </form>
 <!--<div class="btn-group-footer">
-    <a type="button" data-back="roof-style" data-href="Installation Details" class="btn primary-btn btn-back">
+    <a data-back="spare-way" data-href="Installation Details" type="button" class="btn primary-btn btn-back">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
         </svg>
         Back
     </a>
-    <a type="button" class="btn button-black btn-next" id="validateRoofDimensions" data-href="Panels">Next</a>
+    <div class="button-couple">
+        <a type="button" id="validateRoofStyle" class="btn button-black btn-next">Next</a>
+    </div>
 </div>-->

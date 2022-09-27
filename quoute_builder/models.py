@@ -7,8 +7,9 @@ from django.db.models.signals import post_save
 from django.core.cache import cache
 from django.db.models.signals import post_save, post_delete
 
+from datetime import datetime
+
 from main.utils import id_generator
-from datetime import date
 
 from product.models import ProductVariant
 from order.tasks import confirm_payment_email
@@ -38,15 +39,21 @@ class Quote(models.Model):
     property_type = models.CharField(max_length=50)
     no_floors = models.IntegerField("Number of floors")
     no_bedrooms = models.IntegerField("Number of bedrooms")
-    selected_panel = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='panel')
-    inverter = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='selected_inverter')
+    selected_panel = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='panel', blank=True, null=True)
+    panel_price = models.FloatField(default=0.0)
+    inverter = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='selected_inverter', blank=True, null=True)
+    inverter_price = models.FloatField(default=0.0)
+    rail_type = models.CharField(max_length=5, blank=True, null=True)
     rail_length = models.CharField(max_length=100, blank=True, null=True)
+    no_rails = models.CharField("Quantity of rails", max_length=100, blank=True, null=True)
+    rail_price = models.CharField("Total rail cost", max_length=100, blank=True, null=True)
     bill_rate = models.CharField(max_length=100, blank=True, null=True)
     roof_style = models.CharField(max_length=20, blank=True, null=True)
     roof_width = models.FloatField(default=0.0)
     roof_height = models.FloatField(default=0.0)
     panels_count = models.IntegerField(blank=True, null=True)
-    fitting = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='selected_fitting')
+    fitting = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='selected_fitting', blank=True, null=True)
+    fitting_price = models.FloatField(default=0.0)
     cable_length_bat_inv = models.FloatField("Cable Length from battery location to the inverter", blank=True, null=True)
     cable_length_panel_cons = models.FloatField("Cable length from panels to the consumer unit via the Inverter", blank=True, null=True)
     storage_cable = models.FloatField(blank=True, null=True)
@@ -57,6 +64,7 @@ class Quote(models.Model):
     total_cost = models.FloatField(default=0.0)
     tax = models.FloatField(default=20)
     paid = models.BooleanField(default=False)
+    created = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         verbose_name = 'Quote'
@@ -120,8 +128,12 @@ class Quote(models.Model):
         instance = kwargs.get('instance')
         created = kwargs.get('created')
         if created:
+            createDate = datetime.now()
+            formatedDate = createDate.strftime("%Y-%m-%d %H:%M:%S")
+
             instance.slug = slugify(str(id_generator()) + "-" + str(instance.id))
             instance.title = slugify(str(id_generator()) + "-" + str(instance.id))
+            instance.created = formatedDate
             instance.save()
 
             instance.confirmation()

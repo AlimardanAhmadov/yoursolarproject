@@ -24,10 +24,9 @@ class QuoteBuilderSerializer(serializers.Serializer):
     roof_height = serializers.FloatField(required=False, default=0.0)
     panels_count = serializers.IntegerField(required=False, default=0)
     fitting = serializers.CharField(required=False, allow_blank=True)
-    rail = serializers.CharField(required=False, allow_blank=True)
-    cable_length_bat_inv = serializers.FloatField(required=False, default=0.0)
-    cable_length_panel_cons = serializers.FloatField(required=False, default=0.0)
-    storage_cable = serializers.FloatField(required=False, default=0.0)
+    cable_length_bat_inv = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    cable_length_panel_cons = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    storage_cable = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     storage_system = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     extra_service = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     
@@ -50,14 +49,37 @@ class QuoteBuilderSerializer(serializers.Serializer):
         selected_panel = ProductVariant.cache_by_slug(self.validated_data.get("selected_panel"))
         inverter = ProductVariant.cache_by_slug(self.validated_data.get("inverter"))
         fitting = ProductVariant.cache_by_slug(self.validated_data.get('fitting'))
-
+        
         rows = roof_height/float(selected_panel.height)
 
         if (panels_count * float(selected_panel.width)) < 3.3:
             rail_length = round((rows*2) * 3.3, 2)
+            no_rails = round(rail_length/3.3)
+            rail_price = round(no_rails * 40)
+            rail_type = "3.3m"
         else:
             rail_length = round((rows*2) * 4.4, 2)
+            no_rails = round(rail_length/4.4)
+            rail_price = round(no_rails * 50)
+            rail_type = "4.4m"
 
+        if selected_panel.discount != 0.0:
+            panel_price = (float(selected_panel.discount) * float(panels_count))
+        else:
+            panel_price = (float(selected_panel.price) * float(panels_count))
+        
+        print(panel_price)
+        
+        if inverter.discount != 0.0:
+            inverter_price = inverter.discount
+        else:
+            inverter_price = inverter.price
+        
+        if fitting.discount != 0.0:
+            fitting_price = fitting.discount
+        else:
+            fitting_price = fitting.price
+        
         context = {
             "full_name": self.validated_data.get("full_name", ""),
             "address": self.validated_data.get("address", ""),
@@ -76,23 +98,16 @@ class QuoteBuilderSerializer(serializers.Serializer):
             "cable_length_panel_cons": self.validated_data.get("cable_length_panel_cons", ""),
             "panels_count": panels_count,
             "storage_cable": self.validated_data.get("storage_cable", ""),
+            "panel_price": panel_price,
+            "fitting_price": fitting_price,
+            "inverter_price": inverter_price,
             "inverter": inverter,
             "selected_panel": selected_panel,
             "rail_length": rail_length,
+            "no_rails": no_rails,
+            "rail_price": rail_price,
+            "rail_type": rail_type
         }
-
-        if extra_service_id is not None:
-            extra_service = Service.cache_by_slug(int(extra_service_id))
-            context['extra_service'] = extra_service          
-
-            if extra_service.service_title == 'Complete Installation':
-                extra_service_fee = (math.fsum([panel_price, inverter.price, fitting_price, storage_system_price])) * 2
-                
-            elif extra_service.service_title != 'Complete Installation':
-                extra_service_fee = [float(s) for s in extra_service.service_price.split() if s.isdigit()][0]
-
-        else:
-            extra_service_fee = 0.0
 
         if storage_system_id is not None:
             storage_system = StorageSystem.cache_by_slug(int(storage_system_id))
@@ -101,12 +116,21 @@ class QuoteBuilderSerializer(serializers.Serializer):
             context['storage_system'] = storage_system
         else:
             storage_system_price = 0.0
-        
-        panel_price = (float(selected_panel.price) * float(panels_count))
-        inverter_price = inverter.price
-        fitting_price = fitting.price
 
-        sum_cost = sum([float(panel_price), float(inverter_price), float(fitting_price), float(extra_service_fee), float(storage_system_price)])
+        if extra_service_id is not None:
+            extra_service = Service.cache_by_slug(int(extra_service_id))
+            context['extra_service'] = extra_service          
+
+            if extra_service.service_title == 'Complete Installation':
+                extra_service_fee = (math.fsum([panel_price, inverter.price, rail_price, fitting_price, storage_system_price])) * 2
+                
+            elif extra_service.service_title != 'Complete Installation':
+                extra_service_fee = [float(s) for s in extra_service.service_price.split() if s.isdigit()][0]
+
+        else:
+            extra_service_fee = 0.0
+
+        sum_cost = sum([float(panel_price), float(inverter_price), float(rail_price), float(fitting_price), float(extra_service_fee), float(storage_system_price)])
 
         if self.validated_data.get('panels_count') > 20:
             total_cost = sum([sum_cost, 300])
@@ -118,7 +142,7 @@ class QuoteBuilderSerializer(serializers.Serializer):
         if total_cost:
             context['total_cost'] = round(total_cost)
         
-        context['equipment_cost'] = sum([float(panel_price), float(inverter_price), float(fitting_price), float(storage_system_price)])
+        context['equipment_cost'] = sum([float(panel_price), float(inverter_price), float(rail_price), float(fitting_price), float(storage_system_price)])
         
         return context
 
@@ -170,9 +194,6 @@ class QuoteSerializer(serializers.ModelSerializer):
     panel_title = serializers.CharField(source='selected_panel.title', read_only=True)
     inverter_title = serializers.CharField(source='inverter.title', read_only=True)
     fitting_title = serializers.CharField(source='fitting.title', read_only=True)
-    panel_price = serializers.CharField(source='selected_panel.price', read_only=True)
-    inverter_price = serializers.CharField(source='inverter.price', read_only=True)
-    fitting_price = serializers.CharField(source='fitting.price', read_only=True)
     service_title = serializers.CharField(source='extra_service.service_title', read_only=True)
     service_price = serializers.CharField(source='extra_service.service_price', read_only=True)
 

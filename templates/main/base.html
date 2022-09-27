@@ -1,6 +1,8 @@
 {% load static %}
 {% load countries %}
+{% load compress %}
 {% get_countries as countries %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,15 +22,17 @@
 	<link rel='stylesheet' href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
+    {% compress css %}
+    <link rel="stylesheet" href="{% static 'css/base.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.min.css' %}">
+    {% endcompress %}
 
     <!-- Stripe -->
     <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <!-- Stripe END -->
-
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-	<link rel="stylesheet" href="{% static 'css/custom.css' %}">
-    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
 </head>
 
 <header>
@@ -38,6 +42,10 @@
                 <!--<img src="https://assets.website-files.com/5c6c5d537c647f619adce5fc/5c6cd9d0d51c7732ac8771ac_space%20posters%20logo%20WHITE.png" width="170" alt="" class="nav-image">-->
                 <span style="color: #fff;">LOGO</span>
 			</a>
+            <button class="menu-link plain-btn cart-btn mobile-cart">
+                <img src="https://assets.website-files.com/5c6c5d537c647f619adce5fc/5c6cec0bd51c77695d8796d5_Cart%20White.svg" alt="cart" class="cart-icon" width="20" height="auto">
+                <span class="cart-quantity">{{ qty }}</span>
+            </button>
 			<div class="burger" id="burger">
 				<span class="burger-line"></span>
 				<span class="burger-line"></span>
@@ -46,10 +54,14 @@
 			<span class="overlay"></span>
 			<div class="menu" id="menu">
 				<ul class="menu-inner">
-					<!--<li class="menu-item brand-item"><a href="/" class="brand"><img loading="lazy" src="https://d3apclsnivitb5.cloudfront.net/static/img/logo.png" alt="LOGO"></a></li>-->
 					<li class="menu-item">
                         <a href="{% url 'quote_builder' %}" class="menu-link">
                             Quote Builder
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{% url 'quotes' %}" class="menu-link">
+                            Quotes
                         </a>
                     </li>
 					<li class="menu-item">
@@ -71,7 +83,8 @@
                         <a href="{% url 'profile' %}" class="menu-link">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
                                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                             </svg>
+                            </svg>
+                            <span class="mobile-account">Account</span>
                         </a>
                     </li>
 					<li class="menu-item">
@@ -379,7 +392,7 @@
             <section class="services">
                 <div class="service-item">
                     <a data-modal="bottle-modal" class="plain-btn modal-btn">
-                        <img src="/static/images/plastic-bottle.png" alt="Plastic Bottle">
+                        <img src="{% static 'images/plastic-bottle.png' %}" alt="Plastic Bottle">
                     </a>
                     <div id="bottle-modal" class="modal-window">
                         <div class="modal-block">
@@ -404,7 +417,7 @@
                 <div class="service-item">
                     
                     <a data-modal="leaves-modal" class="plain-btn modal-btn">
-                        <img src="/static/images/leaves.png" alt="Leaves">
+                        <img src="{% static 'images/leaves.png' %}" alt="Leaves">
                     </a>
                     <div id="leaves-modal" class="modal-window">
                         <div class="modal-block">
@@ -429,7 +442,7 @@
                 <div class="service-item">
                     
                     <a data-modal="recycle-modal" class="plain-btn modal-btn">
-                        <img src="/static/images/recycle.png" alt="Recycle">
+                        <img src="{% static 'images/recycle.png' %}" alt="Recycle">
                     </a>
                     <div id="recycle-modal" class="modal-window">
                         <div class="modal-block">
@@ -454,7 +467,7 @@
                 <div class="service-item">
                     
                     <a data-modal="co2-modal" class="plain-btn modal-btn">
-                        <img src="/static/images/co2.png" alt="CO2">
+                        <img src="{% static 'images/co2.png' %}" alt="CO2">
                     </a>
                     <div id="co2-modal" class="modal-window">
                         <div class="modal-block">
@@ -479,100 +492,103 @@
         </div>
     {% endblock %}
     </div>
-</body>
-<footer class="border-top">
-	<!-- Footer main -->
-	<section class="ft-main">
-		<div class="ft-main-item">
-			<h2 class="ft-title">Newsletter</h2>
-			<div class="ft-title-border"></div>
-            <form class="newsletter">
-                <label for="newsletter">Subscribe to your newsletter</label>
-                <div class="field">
-                    <input id="newsletter" type="text" name="email" placeholder="Email" autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true">
-                    <button class="plain-btn" type="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-                        </svg>
-                    </button>
-                </div>
-            </form>
-		</div>
-		<div class="ft-main-item">
-			<h2 class="ft-title">Quick Links</h2>
-			<div class="ft-title-border"></div>
-			<ul>
-                <li><a href="#">Search</a></li>
-                <li><a href="#">Terms of Service</a></li>
-                <li><a href="#">Refund Policy</a></li>
-			</ul>
-		</div>
-		<div class="ft-main-item">
-			<h2 class="ft-title">Contact Us</h2>
-			<div class="ft-title-border"></div>
-			<ul>
-                <li><p href="#">497 Evergreen Rd. Roseville, CA 95673</p></li>
-                <li><p href="#">+44 345 678 903</p></li>
-                <li><p href="#">adobexd@mail.com</p></li> 
-			</ul>
-		</div> 
-	</section>
-  
-	<!-- Footer legal -->
-	<section class="ft-legal border-top">
-        <div class="footer-content__bottom">
-            <div class="select-countries">
-                <label class="small-label" for="">Country/Region</label>
-                <div class="field">
-                    <select name="" id="">
-                        {% for country in countries %}
-                        {% if country.name == location_country %}
-                        <option value="{{ country.name }}" selected>{{ country.name }}</option>
-                        {% else %}
-                        <option value="">{{ country.name }}</option>
-                        {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
+    <div class="footer border-top">
+        <!-- Footer main -->
+        <section class="ft-main">
+            <div class="ft-main-item">
+                <h2 class="ft-title">Newsletter</h2>
+                <div class="ft-title-border"></div>
+                <form class="newsletter">
+                    <label for="newsletter">Subscribe to your newsletter</label>
+                    <div class="field">
+                        <input id="newsletter" type="text" name="email" placeholder="Email" autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true">
+                        <button class="plain-btn" type="button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="cards-list">
-                <ul class="list-payment">
-                    <li class="list-payment__item">
-                        <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="35px" height="35px"><path fill="#1565C0" d="M45,35c0,2.209-1.791,4-4,4H7c-2.209,0-4-1.791-4-4V13c0-2.209,1.791-4,4-4h34c2.209,0,4,1.791,4,4V35z"/><path fill="#FFF" d="M15.186 19l-2.626 7.832c0 0-.667-3.313-.733-3.729-1.495-3.411-3.701-3.221-3.701-3.221L10.726 30v-.002h3.161L18.258 19H15.186zM17.689 30L20.56 30 22.296 19 19.389 19zM38.008 19h-3.021l-4.71 11h2.852l.588-1.571h3.596L37.619 30h2.613L38.008 19zM34.513 26.328l1.563-4.157.818 4.157H34.513zM26.369 22.206c0-.606.498-1.057 1.926-1.057.928 0 1.991.674 1.991.674l.466-2.309c0 0-1.358-.515-2.691-.515-3.019 0-4.576 1.444-4.576 3.272 0 3.306 3.979 2.853 3.979 4.551 0 .291-.231.964-1.888.964-1.662 0-2.759-.609-2.759-.609l-.495 2.216c0 0 1.063.606 3.117.606 2.059 0 4.915-1.54 4.915-3.752C30.354 23.586 26.369 23.394 26.369 22.206z"/><path fill="#FFC107" d="M12.212,24.945l-0.966-4.748c0,0-0.437-1.029-1.573-1.029c-1.136,0-4.44,0-4.44,0S10.894,20.84,12.212,24.945z"/></svg>
-                    </li>
-                    <li class="list-payment__item">
-                        <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="35px" height="35px"><linearGradient id="NgmlaCv2fU27PJOuiUvQVa" x1="20.375" x2="28.748" y1="1365.061" y2="1394.946" gradientTransform="translate(0 -1354)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00b3ee"/><stop offset="1" stop-color="#0082d8"/></linearGradient><path fill="url(#NgmlaCv2fU27PJOuiUvQVa)" d="M43.125,9H4.875C3.287,9,2,10.287,2,11.875v24.25C2,37.713,3.287,39,4.875,39h38.25	C44.713,39,46,37.713,46,36.125v-24.25C46,10.287,44.713,9,43.125,9z"/><circle cx="17.053" cy="24.053" r="10.053" fill="#cf1928"/><linearGradient id="NgmlaCv2fU27PJOuiUvQVb" x1="20" x2="40.107" y1="24.053" y2="24.053" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fede00"/><stop offset="1" stop-color="#ffd000"/></linearGradient><circle cx="30.053" cy="24.053" r="10.053" fill="url(#NgmlaCv2fU27PJOuiUvQVb)"/><path fill="#d97218" d="M20,24.053c0,3.072,1.382,5.818,3.553,7.662c2.172-1.844,3.553-4.59,3.553-7.662	s-1.382-5.818-3.553-7.662C21.382,18.235,20,20.981,20,24.053z"/></svg>
-                    </li>
-                    <li class="list-payment__item">
-                        <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="35px" height="35px"><path fill="#1976D2" d="M45,35c0,2.209-1.791,4-4,4H7c-2.209,0-4-1.791-4-4V13c0-2.209,1.791-4,4-4h34c2.209,0,4,1.791,4,4V35z"/><path fill="#FFF" d="M22.255 20l-2.113 4.683L18.039 20h-2.695v6.726L12.341 20h-2.274L7 26.981h1.815l.671-1.558h3.432l.682 1.558h3.465v-5.185l2.299 5.185h1.563l2.351-5.095v5.095H25V20H22.255zM10.135 23.915l1.026-2.44 1.066 2.44H10.135zM37.883 23.413L41 20.018h-2.217l-1.994 2.164L34.86 20H28v6.982h6.635l2.092-2.311L38.767 27h2.21L37.883 23.413zM33.728 25.516h-4.011v-1.381h3.838v-1.323h-3.838v-1.308l4.234.012 1.693 1.897L33.728 25.516z"/></svg>
-                    </li>
-                    <li class="list-payment__item">
-                        <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="35px" height="35px"><path fill="#E1E7EA" d="M45,35c0,2.2-1.8,4-4,4H7c-2.2,0-4-1.8-4-4V13c0-2.2,1.8-4,4-4h34c2.2,0,4,1.8,4,4V35z"/><path fill="#FF6D00" d="M45,35c0,2.2-1.8,4-4,4H16c0,0,23.6-3.8,29-15V35z M22,24c0,1.7,1.3,3,3,3s3-1.3,3-3c0-1.7-1.3-3-3-3S22,22.3,22,24z"/><path d="M11.2,21h1.1v6h-1.1V21z M17.2,24c0,1.7,1.3,3,3,3c0.5,0,0.9-0.1,1.4-0.3v-1.3c-0.4,0.4-0.8,0.6-1.4,0.6c-1.1,0-1.9-0.8-1.9-2c0-1.1,0.8-2,1.9-2c0.5,0,0.9,0.2,1.4,0.6v-1.3c-0.5-0.2-0.9-0.4-1.4-0.4C18.5,21,17.2,22.4,17.2,24z M30.6,24.9L29,21h-1.2l2.5,6h0.6l2.5-6h-1.2L30.6,24.9z M33.9,27h3.2v-1H35v-1.6h2v-1h-2V22h2.1v-1h-3.2V27z M41.5,22.8c0-1.1-0.7-1.8-2-1.8h-1.7v6h1.1v-2.4h0.1l1.6,2.4H42l-1.8-2.5C41,24.3,41.5,23.7,41.5,22.8z M39.2,23.8h-0.3v-1.8h0.3c0.7,0,1.1,0.3,1.1,0.9C40.3,23.4,40,23.8,39.2,23.8z M7.7,21H6v6h1.6c2.5,0,3.1-2.1,3.1-3C10.8,22.2,9.5,21,7.7,21z M7.4,26H7.1v-4h0.4c1.5,0,2.1,1,2.1,2C9.6,24.4,9.5,26,7.4,26z M15.3,23.3c-0.7-0.3-0.9-0.4-0.9-0.7c0-0.4,0.4-0.6,0.8-0.6c0.3,0,0.6,0.1,0.9,0.5l0.6-0.8C16.2,21.2,15.7,21,15,21c-1,0-1.8,0.7-1.8,1.7c0,0.8,0.4,1.2,1.4,1.6c0.6,0.2,1.1,0.4,1.1,0.9c0,0.5-0.4,0.8-0.9,0.8c-0.5,0-1-0.3-1.2-0.8l-0.7,0.7c0.5,0.8,1.1,1.1,2,1.1c1.2,0,2-0.8,2-1.9C16.9,24.2,16.5,23.8,15.3,23.3z"/></svg>
-                    </li>
+            <div class="ft-main-item">
+                <h2 class="ft-title">Quick Links</h2>
+                <div class="ft-title-border"></div>
+                <ul>
+                    <li><a href="#">Search</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Refund Policy</a></li>
                 </ul>
-                <div class="footer__copyright caption">
-                    <small class="copyright__content">© 2022, <a href="/" title="">Solar Panels</a></small>
-                    <small class="copyright__content"><a target="_blank" rel="nofollow" href="">Powered by Company</a></small>
+            </div>
+            <div class="ft-main-item">
+                <h2 class="ft-title">Contact Us</h2>
+                <div class="ft-title-border"></div>
+                <ul>
+                    <li><p href="#">497 Evergreen Rd. Roseville, CA 95673</p></li>
+                    <li><p href="#">+44 345 678 903</p></li>
+                    <li><p href="#">adobexd@mail.com</p></li> 
+                </ul>
+            </div> 
+        </section>
+      
+        <!-- Footer legal -->
+        <section class="ft-legal border-top">
+            <div class="footer-content__bottom">
+                <div class="select-countries">
+                    <label class="small-label" for="">Country/Region</label>
+                    <div class="field">
+                        <select name="" id="">
+                            {% for country in countries %}
+                            {% if country.name == location_country %}
+                            <option value="{{ country.name }}" selected>{{ country.name }}</option>
+                            {% else %}
+                            <option value="">{{ country.name }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="cards-list">
+                    <ul class="list-payment">
+                        <li class="list-payment__item">
+                            <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="35px" height="35px"><path fill="#1565C0" d="M45,35c0,2.209-1.791,4-4,4H7c-2.209,0-4-1.791-4-4V13c0-2.209,1.791-4,4-4h34c2.209,0,4,1.791,4,4V35z"/><path fill="#FFF" d="M15.186 19l-2.626 7.832c0 0-.667-3.313-.733-3.729-1.495-3.411-3.701-3.221-3.701-3.221L10.726 30v-.002h3.161L18.258 19H15.186zM17.689 30L20.56 30 22.296 19 19.389 19zM38.008 19h-3.021l-4.71 11h2.852l.588-1.571h3.596L37.619 30h2.613L38.008 19zM34.513 26.328l1.563-4.157.818 4.157H34.513zM26.369 22.206c0-.606.498-1.057 1.926-1.057.928 0 1.991.674 1.991.674l.466-2.309c0 0-1.358-.515-2.691-.515-3.019 0-4.576 1.444-4.576 3.272 0 3.306 3.979 2.853 3.979 4.551 0 .291-.231.964-1.888.964-1.662 0-2.759-.609-2.759-.609l-.495 2.216c0 0 1.063.606 3.117.606 2.059 0 4.915-1.54 4.915-3.752C30.354 23.586 26.369 23.394 26.369 22.206z"/><path fill="#FFC107" d="M12.212,24.945l-0.966-4.748c0,0-0.437-1.029-1.573-1.029c-1.136,0-4.44,0-4.44,0S10.894,20.84,12.212,24.945z"/></svg>
+                        </li>
+                        <li class="list-payment__item">
+                            <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="35px" height="35px"><linearGradient id="NgmlaCv2fU27PJOuiUvQVa" x1="20.375" x2="28.748" y1="1365.061" y2="1394.946" gradientTransform="translate(0 -1354)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00b3ee"/><stop offset="1" stop-color="#0082d8"/></linearGradient><path fill="url(#NgmlaCv2fU27PJOuiUvQVa)" d="M43.125,9H4.875C3.287,9,2,10.287,2,11.875v24.25C2,37.713,3.287,39,4.875,39h38.25	C44.713,39,46,37.713,46,36.125v-24.25C46,10.287,44.713,9,43.125,9z"/><circle cx="17.053" cy="24.053" r="10.053" fill="#cf1928"/><linearGradient id="NgmlaCv2fU27PJOuiUvQVb" x1="20" x2="40.107" y1="24.053" y2="24.053" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fede00"/><stop offset="1" stop-color="#ffd000"/></linearGradient><circle cx="30.053" cy="24.053" r="10.053" fill="url(#NgmlaCv2fU27PJOuiUvQVb)"/><path fill="#d97218" d="M20,24.053c0,3.072,1.382,5.818,3.553,7.662c2.172-1.844,3.553-4.59,3.553-7.662	s-1.382-5.818-3.553-7.662C21.382,18.235,20,20.981,20,24.053z"/></svg>
+                        </li>
+                        <li class="list-payment__item">
+                            <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="35px" height="35px"><path fill="#1976D2" d="M45,35c0,2.209-1.791,4-4,4H7c-2.209,0-4-1.791-4-4V13c0-2.209,1.791-4,4-4h34c2.209,0,4,1.791,4,4V35z"/><path fill="#FFF" d="M22.255 20l-2.113 4.683L18.039 20h-2.695v6.726L12.341 20h-2.274L7 26.981h1.815l.671-1.558h3.432l.682 1.558h3.465v-5.185l2.299 5.185h1.563l2.351-5.095v5.095H25V20H22.255zM10.135 23.915l1.026-2.44 1.066 2.44H10.135zM37.883 23.413L41 20.018h-2.217l-1.994 2.164L34.86 20H28v6.982h6.635l2.092-2.311L38.767 27h2.21L37.883 23.413zM33.728 25.516h-4.011v-1.381h3.838v-1.323h-3.838v-1.308l4.234.012 1.693 1.897L33.728 25.516z"/></svg>
+                        </li>
+                        <li class="list-payment__item">
+                            <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="35px" height="35px"><path fill="#E1E7EA" d="M45,35c0,2.2-1.8,4-4,4H7c-2.2,0-4-1.8-4-4V13c0-2.2,1.8-4,4-4h34c2.2,0,4,1.8,4,4V35z"/><path fill="#FF6D00" d="M45,35c0,2.2-1.8,4-4,4H16c0,0,23.6-3.8,29-15V35z M22,24c0,1.7,1.3,3,3,3s3-1.3,3-3c0-1.7-1.3-3-3-3S22,22.3,22,24z"/><path d="M11.2,21h1.1v6h-1.1V21z M17.2,24c0,1.7,1.3,3,3,3c0.5,0,0.9-0.1,1.4-0.3v-1.3c-0.4,0.4-0.8,0.6-1.4,0.6c-1.1,0-1.9-0.8-1.9-2c0-1.1,0.8-2,1.9-2c0.5,0,0.9,0.2,1.4,0.6v-1.3c-0.5-0.2-0.9-0.4-1.4-0.4C18.5,21,17.2,22.4,17.2,24z M30.6,24.9L29,21h-1.2l2.5,6h0.6l2.5-6h-1.2L30.6,24.9z M33.9,27h3.2v-1H35v-1.6h2v-1h-2V22h2.1v-1h-3.2V27z M41.5,22.8c0-1.1-0.7-1.8-2-1.8h-1.7v6h1.1v-2.4h0.1l1.6,2.4H42l-1.8-2.5C41,24.3,41.5,23.7,41.5,22.8z M39.2,23.8h-0.3v-1.8h0.3c0.7,0,1.1,0.3,1.1,0.9C40.3,23.4,40,23.8,39.2,23.8z M7.7,21H6v6h1.6c2.5,0,3.1-2.1,3.1-3C10.8,22.2,9.5,21,7.7,21z M7.4,26H7.1v-4h0.4c1.5,0,2.1,1,2.1,2C9.6,24.4,9.5,26,7.4,26z M15.3,23.3c-0.7-0.3-0.9-0.4-0.9-0.7c0-0.4,0.4-0.6,0.8-0.6c0.3,0,0.6,0.1,0.9,0.5l0.6-0.8C16.2,21.2,15.7,21,15,21c-1,0-1.8,0.7-1.8,1.7c0,0.8,0.4,1.2,1.4,1.6c0.6,0.2,1.1,0.4,1.1,0.9c0,0.5-0.4,0.8-0.9,0.8c-0.5,0-1-0.3-1.2-0.8l-0.7,0.7c0.5,0.8,1.1,1.1,2,1.1c1.2,0,2-0.8,2-1.9C16.9,24.2,16.5,23.8,15.3,23.3z"/></svg>
+                        </li>
+                    </ul>
+                    <div class="footer__copyright caption">
+                        <small class="copyright__content">© 2022, <a href="/" title="">Solar Panels</a></small>
+                        <small class="copyright__content"><a target="_blank" rel="nofollow" href="">Powered by Company</a></small>
+                    </div>
                 </div>
             </div>
-        </div>
-	</section>
-</footer>
-<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
-<script src="{% static 'js/waypoints/jquery.waypoints.min.js' %}"></script>
-<script src="{% static 'js/waypoints/infinite.min.js' %}"></script>
-<script>
-    const infinite = new Waypoint.Infinite({
-        element: $('.infinite-container')[0],
+        </section>
+    </div>
 
-        offset: 'bottom-in-view',
-        handler: function(direction) {
-            alert('You have scrolled to a thing')
-        },
-    });
-</script>
-<script src="{% static 'js/custom.js' %}"></script>
-<script src="{% static 'js/quote.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+
+    <script src="{% static 'js/waypoints/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'js/waypoints/infinite.min.js' %}"></script>
+    <script>
+        const infinite = new Waypoint.Infinite({
+            element: $('.infinite-container')[0],
+
+            offset: 'bottom-in-view',
+            handler: function(direction) {
+                alert('You have scrolled to a thing')
+            },
+        });
+    </script>
+    <script src="{% static 'js/custom.js' %}"></script>
+    <script src="{% static 'js/quote.js' %}"></script>
+
+</body>
 </html>

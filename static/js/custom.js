@@ -2,17 +2,20 @@ const navbarMenu = document.getElementById("menu");
 const burgerMenu = document.getElementById("burger");
 const bgOverlay = document.querySelector(".overlay");
 
+
 // Show Menu when Click the Burger
 // Hide Menu when Click the Overlay
 if (burgerMenu && navbarMenu && bgOverlay) {
 	burgerMenu.addEventListener("click", () => {
 		navbarMenu.classList.toggle("is-active");
 		bgOverlay.classList.toggle("is-active");
+        $('.toolbar__section').css('z-index', '0'); 
 	});
 
 	bgOverlay.addEventListener("click", () => {
 		navbarMenu.classList.toggle("is-active");
-		bgOverlay.classList.toggle("is-active");
+		bgOverlay.classList.toggle("is-active"); 
+        $('.toolbar__section').css('z-index', '1');
 	});
 }
 
@@ -21,6 +24,7 @@ document.querySelectorAll(".menu-link").forEach((link) => {
 	link.addEventListener("click", () => {
 		navbarMenu.classList.remove("is-active");
 		bgOverlay.classList.remove("is-active");
+        $('.toolbar__section').css('z-index', '1'); 
 	});
 });
 
@@ -705,7 +709,7 @@ $(document).on('click', 'button[data-remove-cart-item]', function(event){
     var $this = $(this);
     var slug = $this.attr('data-remove-cart-item');
     var request_parameters = {'slug': slug};
-    $this.html('<div class="lds-ring" style="margin: auto"><div></div><div></div><div></div><div></div></div>');
+    $this.html('<div class="lds-ring" style="margin: auto;padding-left: 10px;"><div></div><div></div><div></div><div></div></div>');
 
     $.ajax({
 		type: 'POST',
@@ -1081,13 +1085,26 @@ $(document).on('submit', '.signup', function(event){
 		success: function (data) {
             setTimeout(function() {
                 $this.removeClass('disabled');
-                window.location.href = '/login/';
+                $("#flexibleSignup").html(
+                    '<div class="user signup" style="text-align: left;gap: 0;">' +
+                        '<h2>Account created!</h2>' +
+                        '<div style="color: #565e69; font-size: 16px">' +
+                            'To log in, please click the verification link we sent to' +
+                        '</div>' +
+                        '<legend style="font-size: 16px;font-weight: 900;">' + $('input[name="email"]').val() + '' +
+                        '<hr>' +
+                        '<div style="color: #565e69; font-size: 16px">' +
+                            'Didn’t receive an email? Be sure to check your spam folder, or <a data-email="' + $('input[name="email"]').val() + '" id="resend-email" style="text-decoration: underline; color: #3869d4; cursor: pointer">resend link.</a>' +
+                        '</div>' +
+                    '</div>'
+                )
             }, delay_by_in_ms);
 		},
         error: function (xhr, ajaxOptions, thrownError) {
             setTimeout(function() {
                 $this.removeClass('disabled');
                 $('.button-black').html('Sign up');
+
                 var list_of_errors = xhr.responseJSON['error'];
                 $('.form__error').fadeIn('slow');
                 $('.form__error').addClass('active');
@@ -1316,6 +1333,7 @@ $(document).on('click', '.logout-btn', function(event){
 		headers: { 'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"  },
 		success: function (data) {
             setTimeout(function() {
+                localStorage.clear();
 			    window.location.href = "";
             }, delay_by_in_ms);
 		},
@@ -1381,7 +1399,6 @@ var init = function() {
 init();
 
 
-
 $(document).on('submit', '.stripe-form', function(event){
     event.preventDefault();
     var $this = $(this);
@@ -1415,3 +1432,69 @@ $(document).on('submit', '.stripe-form', function(event){
 		}
 	}); 
 })
+
+
+$(window).on('load', function(event){
+    event.preventDefault();
+    var url = new URL(window.location);
+    if (url.href.includes('account-confirm-email')) {
+        var key = url.href.split('email/')[1];
+        $.ajax({
+            type: 'POST',
+            url: '/account-confirm-email/' + key,
+            data: JSON.stringify({'key': key}),
+            dataType: 'json',
+            headers: { 'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"  },
+            success: function (data) {
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                setTimeout(function() {
+                    $('.form__error').fadeIn('slow');
+                    $('.form__error').addClass('active').css({'display': 'flex', 'margin-top': '15px'});
+                    $( ".error__content" ).html("Something went wrong! Please contact us");
+                }, delay_by_in_ms);
+                setTimeout(function() {
+                    $('.form__error').fadeOut('slow');
+                    $('.form__error').removeClass('active');
+                }, 10000); 
+            }
+        });
+    }
+})
+
+
+$(document).on('click', '#resend-email', function(event){
+    event.preventDefault();
+    var $this = $(this);
+    $this.html('<div class="lds-ring" style="justify-content: flex-start"><div></div><div></div><div></div><div></div></div>');
+    $this.addClass('disabled');
+    var email = $this.data('email');
+    console.log(email);
+    $.ajax({
+		type: 'POST',
+		url: '/resend-verification-email/',
+        data: JSON.stringify({'email': email}),
+		dataType: 'json',
+		headers: { 'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"  },
+		success: function (data) {
+            setTimeout(function() {
+                $this.remove();
+                $('<span style="color: #1a971a">New link has been sent to your email address!</span>').insertAfter('legend');
+            }, delay_by_in_ms);
+		},
+        error: function (xhr, ajaxOptions, thrownError) {
+            $this.removeClass('disabled');
+            $this.html('<a data-email="' + email + '" id="resend-email" style="text-decoration: underline; color: #3869d4;">resend link.</a>');
+            setTimeout(function() {
+                $('.form__error').fadeIn('slow');
+                $('.form__error').addClass('active').css({'display': 'flex', 'margin-top': '15px'});
+                $( ".error__content" ).html(xhr.responseJSON['err']);
+            }, delay_by_in_ms);
+            setTimeout(function() {
+                $('.form__error').fadeOut('slow');
+                $('.form__error').removeClass('active');
+            }, 10000); 
+		}
+	}); 
+})
+

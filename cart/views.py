@@ -59,6 +59,7 @@ class CreateCartItemView(ListCreateAPIView):
                     }
                     return JsonResponse(context)
                 else:
+                    transaction.set_rollback(True)
                     data = []
                     emessage=serializer.errors
                     for key in emessage:
@@ -113,6 +114,7 @@ class UpdateCartView(ListCreateAPIView):
                     self.perform_create(serializer)
                     return JsonResponse(serializer.data, status=status.HTTP_200_OK)
                 else:
+                    transaction.set_rollback(True)
                     data = []
                     emessage=serializer.errors
                     for key in emessage:

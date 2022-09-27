@@ -1,20 +1,36 @@
 <div class="toolbar__section">
     <div class="toolbar__section-middle">
-        <a type="button" class="btn-back" data-back="storage-cable" data-href="Storage System">
+        <a type="button" class="btn-back" onclick="history.back();">
             <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
             </svg>
         </a>
         <span class="current-step small">Extra Requirements</span>
-        <!--<a type="button" class="btn-next" data-href="Summary" id="concludeQuote">
-            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
-            </svg>
-        </a>-->
     </div>
-    <a type="button" class="prp-btn" id="concludeQuote">
+    <a type="button" data-modal="finalize-quote" class="prp-btn modal-btn">
         Finish Quote
     </a>
+    <div id="finalize-quote" class="modal-window">
+        <div class="modal-block modal-white" style="width: 500px;">
+            <a data-modal="finalize-quote" title="Close" class="modal-close">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#000" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
+                </svg>
+            </a>
+            <div class="modal-content" style="flex-direction: column;gap:0;margin-bottom: 50px;">
+                <p>You must inform the DNO (distribution network operator) of your solar panel instalation. There are differnet requirements depending on the size or complexity of your installation but they can advise what is needed and lots of information can be found online.</p>
+
+                <p>In the future we are looking to bring this service in house so keep an eye out on our website!</p>
+
+                <p>The YSP team</p>
+            </div>
+            <div class="modal-actions">
+                <div class="button-couple" style="justify-content: center;">
+                    <button class="btn button-black btn-next" id="concludeQuote" style="border-radius: 6px;">Agree</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="page-title-wrap text-center">
     <h4 class="sub-title">Would you like help with</h4>
@@ -25,7 +41,6 @@
         {% for item in objects %}
         <button class="btn primary-btn" data-id="{{ item.id }}" type="button" style="border-radius: 3px;padding: 15px 50px;border: 1px solid #a3a3a3;flex-direction: column;gap: 1px;">
             {{ item.service_title }}
-            <span class="small-price disabled" style="font-size: 13px;">Price: {{ item.service_price }}</span>
         </button>
         {% endfor %}
     </div>

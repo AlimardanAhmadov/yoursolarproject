@@ -1,18 +1,22 @@
 import re, json
 from django.db import transaction
 from django.conf import settings
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
 from django.contrib.auth.decorators import login_required 
-from allauth.account.models import EmailAddress, EmailConfirmationHMAC
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.utils.translation import gettext_lazy as _
+from allauth.account.models import EmailAddress, EmailConfirmation, EmailConfirmationHMAC
 from rest_framework.response import Response
 from rest_auth.utils import jwt_encode 
 from rest_auth.serializers import PasswordResetConfirmSerializer
 from rest_auth.app_settings import JWTSerializer
 from rest_framework import permissions, status
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_auth.registration.views import VerifyEmailView
+from rest_auth.registration.serializers import VerifyEmailSerializer
 from rest_auth.views import (
     LoginView, APIView
 )
@@ -20,12 +24,14 @@ from rest_framework.generics import (
     ListCreateAPIView,
 )
 from main.html_renderer import MyHTMLRenderer
+from order.models import Order
 from .models import Customer
-from .send_mail import send_reset_password_email
+from .send_mail import send_register_mail, send_reset_password_email
 from .serializers import (
     ChangePasswordSerializer, 
     CustomRegisterSerializer, 
-    LoginSerializer, 
+    LoginSerializer,
+    ResendEmailSerializer,
     SendResetPasswordSerializer, 
     GoogleSocialAuthSerializer, 
     GoogleLoginSerializer,
@@ -153,13 +159,11 @@ class RegisterAPIView(ListCreateAPIView):
 
     def perform_create(self, serializer):
         user = serializer.save(self.request)
-        if getattr(settings, "REST_USE_JWT", False):
-            self.token = jwt_encode(user)
-
         email = EmailAddress.objects.get(email=user.email, user=user)
-        confirmation = EmailConfirmationHMAC(email)
-        key = confirmation.key
-        #send_register_mail.delay(user.id, key)
+        if not email.verified:
+            confirmation = EmailConfirmationHMAC(email)
+            key = confirmation.key
+            send_register_mail.delay(user.id, key)
         return user
 
 
@@ -197,7 +201,7 @@ class PasswordResetView(ListCreateAPIView):
             else:
                 data = []
                 emessage=serializer.errors 
-                print(emessage)
+                
                 for key in emessage:
                     err_message = str(emessage[key])
                     err_string = re.search("string='(.*)', ", err_message) 
@@ -345,9 +349,6 @@ class GoogleLoginAPIView(ListCreateAPIView):
                 'data': self.serializer.data,
                 'status': status.HTTP_200_OK,
             }
-            if get_prev_url(request) is not None:
-                next_url = get_prev_url(request)
-                context['next_url'] = next_url
             response = JsonResponse(context)
 
             return response
@@ -381,14 +382,27 @@ class ProfileAPIView(APIView):
         return UserSerializer(*args, **kwargs)
     
     def get(self, request):
+        page = request.GET.get('page', 1)
+
         current_user = request.user
         self.serializer = self.get_serializer(current_user)
+        
+        orders = Order.objects.filter(user=current_user)
+
+        paginator = Paginator(orders, 10)
+
+        try:
+            orders = paginator.page(page)
+        except PageNotAnInteger:
+            orders = paginator.page(1)
+        except EmptyPage:
+            orders = paginator.page(paginator.num_pages)
         context = {
             'data': self.serializer.data,
+            'orders': orders,
             'status': status.HTTP_200_OK,
         }
         return Response(context)
-
 
 
 class LogoutView(ListCreateAPIView):
@@ -405,3 +419,51 @@ class LogoutView(ListCreateAPIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class VerifyEmailView(ListCreateAPIView, VerifyEmailView):
+    permission_classes = (permissions.AllowAny,)
+    allowed_methods = ("POST", "OPTIONS", "HEAD")
+    renderer_classes = [MyHTMLRenderer,]
+    template_name = "user/login.html"
+    queryset = ""
+
+    def get_serializer(self, *args, **kwargs):
+        return VerifyEmailSerializer(*args, **kwargs)
+
+    def get_object(self, queryset=None):
+        key = self.kwargs['key']
+        email_confirmation = EmailConfirmationHMAC.from_key(key)
+        if not email_confirmation:
+            if queryset is None:
+                queryset = self.get_queryset()
+            try:
+                email_confirmation = queryset.get(key=key.lower())
+            except EmailConfirmation.DoesNotExist:
+                return HttpResponseRedirect('/')
+        return email_confirmation
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.kwargs["key"] = serializer.validated_data["key"]
+        confirmation = self.get_object()
+        confirmation.confirm(self.request)
+        return JsonResponse({'status': status.HTTP_200_OK})
+
+
+class ResendEmailVerificationView(ListCreateAPIView):
+    permission_classes = (permissions.AllowAny,)
+    allowed_methods = ("POST", "OPTIONS", "HEAD")
+    queryset = ""
+
+    def get_serializer(self, *args, **kwargs):
+        return ResendEmailSerializer(*args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.serializer = self.get_serializer(data=request.data, context={"request": request})
+        if self.serializer.is_valid():
+            self.serializer.save()
+            return JsonResponse({'status': status.HTTP_200_OK})
+        else:
+            return JsonResponse({'status': status.HTTP_400_BAD_REQUEST})

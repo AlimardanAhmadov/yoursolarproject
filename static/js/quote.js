@@ -6,6 +6,9 @@ $(document).on('click', '.btn-next', function(event){
     var $nextpageName = $this.data('next-page');
     var steps = document.querySelectorAll('.step');
 
+    $this.html('<div class="lds-ring" style="margin: 6px 12px;height: 10px;"><div></div><div></div><div></div><div></div></div>');
+    $('.lds-ring div').css({'width': '12px', 'height': '12px'});
+
     // change url 
     if ($href) {
         if (!$('.form__error.active').length) {
@@ -109,7 +112,7 @@ $(document).on("click", ".skip-btn", function(){
         }
     }
 
-    var html = "/templates/quote/quote_pages/" + $nextpage + ".html"
+    var html = "/static/quote_pages/" + $nextpage + ".html"
     $.get(html, function(html_string)
     {
         $("#content").html(html_string);
@@ -146,7 +149,7 @@ $(document).on("click", ".btn-back", function(){
     }
 
     if (url.href.includes('section?name') && (url.searchParams.get('page')) != 'parts' && (url.searchParams.get('page')) != 'storage-system-size' && (url.searchParams.get('page')) != 'extra-help') {
-        var html = "/templates/quote/quote_pages/" + $previouspage + ".html"
+        var html = "/static/quote_pages/" + $previouspage + ".html"
         $.get(html, function(html_string)
         {
             $("#content").html(html_string);
@@ -177,7 +180,7 @@ $(document).on('click', '#installation__type .choice-card', function(){
     var url = new URL(window.location);
     if ($this.text() == 'Roof') {
         url.searchParams.set('page', "single-phase");
-        $.get("/templates/quote/quote_pages/single-phase.html", function(html_string)
+        $.get("/static/quote_pages/single-phase.html", function(html_string)
         {
             $("#content").html(html_string);
         },'html');
@@ -185,7 +188,7 @@ $(document).on('click', '#installation__type .choice-card', function(){
     else if ($this.text() == 'Standalone') {
         var url = new URL(window.location);
         url.searchParams.set('page', "standalone-installation");
-        $.get("/templates/quote/quote_pages/standalone-installation.html", function(html_string)
+        $.get("/static/quote_pages/standalone-installation.html", function(html_string)
         {
             $("#content").html(html_string);
         },'html');
@@ -244,12 +247,13 @@ $(document).on('click', '#singlePhase button', function(){
                 '</a>' +
             '</div>'
         );
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else {
         var url = new URL(window.location);
         url.searchParams.set('page', "spare-way");
         window.history.pushState({}, '', url);
-        $.get("/templates/quote/quote_pages/spare-way.html", function(html_string)
+        $.get("/static/quote_pages/spare-way.html", function(html_string)
         {
             $("#content").html(html_string);
         },'html');
@@ -273,11 +277,12 @@ $(document).on('click', '#spareWay button', function(){
                 '</a>' +
             '</div>'
         );
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else {
         url.searchParams.set('page', "roof-style");
         window.history.pushState({}, '', url);
-        $.get("/templates/quote/quote_pages/roof-style.html", function(html_string)
+        $.get("/static/quote_pages/roof-style.html", function(html_string)
         {
             $("#content").html(html_string);
         },'html');
@@ -286,23 +291,28 @@ $(document).on('click', '#spareWay button', function(){
 
 $(document).on('click', '#storageSystem button', function() {
     var $this = $(this);
+    var url = new URL(window.location);
     if ($this.text() == 'Yes') {
-        var url = new URL(window.location);
-
         url.searchParams.set('page', "storage-system-size");
         window.history.pushState({}, '', url);
         loadObjects();
     }
     else {
-        $.get("/templates/quote/quote_pages/summary.html", function(html_string)
-        {
-            $(".quote-builder-container").html(html_string);
-        },'html');
+        if (localStorage.getItem('storage_system')) {
+            localStorage.removeItem('storage_system');
+        }
+        url.searchParams.set('page', "extra-help");
+        window.history.pushState({}, '', url);
+        loadObjects();
     }
 })
 
+$(document).on('click', '#extraRequiremet button', function(e){
+    e.preventDefault();
+    $('.prp-btn').click();
+})
 
-$(document).on('click', '#extraRequiremet button, #concludeQuote', function(e) {
+$(document).on('click', '#concludeQuote, #extraRequiremet button', function(e) {
     e.preventDefault();
     
     // loading page
@@ -340,7 +350,6 @@ $(document).on('click', '#extraRequiremet button, #concludeQuote', function(e) {
         'selected_panel': localStorage.getItem("panel_slug"),
         'fitting': localStorage.getItem("fitting_slug"),
         'inverter': localStorage.getItem("inverter_slug"),
-        'rail': localStorage.getItem("inverter_slug"),
         'cable_length_panel_cons': localStorage.getItem("fattened_consumer_cable_length"),
         'cable_length_bat_inv': localStorage.getItem("fattened_cable_length"),
         'storage_cable': localStorage.getItem("fattened_storage_cable_length"),
@@ -398,6 +407,7 @@ function loadProducts() {
 	const request_parameters = {
 		"product_type": url.searchParams.get('name'),
 		"slug": localStorage.getItem('panel_slug'),
+		"roof_type": localStorage.getItem("roof_style"),
 	}
     $('#content').html('<div class="lds-ellipsis" style="display: flex;-webkit-box-pack: center;justify-content: center;margin: auto;"><div></div><div></div><div></div><div></div></div>');
 
@@ -449,7 +459,7 @@ function updateCurrentSection() {
         window.history.pushState({}, '', url);
         $('#content').html('<div class="lds-ellipsis" style="display: flex;-webkit-box-pack: center;justify-content: center;margin: auto;"><div></div><div></div><div></div><div></div></div>');
         setTimeout(function() {
-            $.get("/templates/quote/quote_pages/personal-information.html", function(html_string)
+            $.get("/static/quote_pages/personal-information.html", function(html_string)
             {
                 $('#content').html(html_string);
             },'html');
@@ -458,7 +468,7 @@ function updateCurrentSection() {
     else if ((url.searchParams.get('page')) == 'summary') {
         $('.quote-builder-container').html('<div class="lds-ellipsis" style="display: flex;-webkit-box-pack: center;justify-content: center;margin: auto;"><div></div><div></div><div></div><div></div></div>');
         setTimeout(function() {
-            $.get("/templates/quote/quote_pages/summary.html", function(html_string)
+            $.get("/static/quote_pages/summary.html", function(html_string)
             {
                 $(".quote-builder-container").html(html_string);
             },'html');
@@ -472,7 +482,7 @@ function updateCurrentSection() {
     }
     else if(url.href.includes('section?name') && (url.searchParams.get('page')) != 'parts') {
         $('#content').html('<div class="lds-ellipsis" style="display: flex;-webkit-box-pack: center;justify-content: center;margin: auto;"><div></div><div></div><div></div><div></div></div>');
-        var html = "/templates/quote/quote_pages/" + url.searchParams.get('page') + ".html"
+        var html = "/static/quote_pages/" + url.searchParams.get('page') + ".html"
         setTimeout(function() {
             $.get(html, function(html_string)
             {
@@ -483,7 +493,7 @@ function updateCurrentSection() {
     else if ((url.searchParams.get('page')) == 'Summary') {
         $('#content').html('<div class="lds-ellipsis" style="display: flex;-webkit-box-pack: center;justify-content: center;margin: auto;"><div></div><div></div><div></div><div></div></div>');
         setTimeout(function() {
-            $.get("/templates/quote/quote_pages/summary.html", function(html_string)
+            $.get("/static/quote_pages/summary.html", function(html_string)
             {
                 $('.quote-builder').html(html_string);
             },'html');
@@ -497,7 +507,10 @@ function updateCurrentSection() {
 }
 
 $(window).on('load popstate hashchange', function(){
-    updateCurrentSection();
+    var url = new URL(window.location);
+    if (url.href.includes('build-quote/section')) {
+        updateCurrentSection()
+    }
 })
 
 // display data saved with localStorage 
@@ -542,23 +555,28 @@ function validateEmail($email) {
 function validatePersonalInformation(){
     if (!$("#housetypeField").val()) {
         displayError()
-        $('.error__content').html("Type of house: This field cannot be blank")
+        $('.error__content').html("Type of house: This field cannot be blank");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else if (!$("#nobedroomsField").val()) {
         displayError()
-        $('.error__content').html("Number of bedrooms: This field cannot be blank")
+        $('.error__content').html("Number of bedrooms: This field cannot be blank");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else if (!$("#nofloorsField").val()) {
         displayError()
-        $('.error__content').html("Number of floors: This field cannot be blank")
+        $('.error__content').html("Number of floors: This field cannot be blank");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else if (!$("input[name='agreement']").is(':checked')) {
         displayError()
-        $('.error__content').html("You must agree to Solar Panels Terms of Service, including the User Agreement and Privacy Policy.")
+        $('.error__content').html("You must agree to Solar Panels Terms of Service, including the User Agreement and Privacy Policy.");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else if (!(validateEmail($('input[name="email"]').val()))) {
         displayError()
-        $('.error__content').html("You have entered an invalid email address!")
+        $('.error__content').html("You have entered an invalid email address!");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else{
         var inputs = document.querySelectorAll('input');
@@ -569,7 +587,7 @@ function validatePersonalInformation(){
         url.searchParams.set('name', 'monthly-bill-rate');
         url.searchParams.set('page', 'bill-rate');
         window.history.pushState({}, '', url);
-        $.get("/templates/quote/quote_pages/bill-rate.html", function(html_string)
+        $.get("/static/quote_pages/bill-rate.html", function(html_string)
         {
             $("#content").html(html_string);
         },'html');
@@ -579,7 +597,8 @@ function validatePersonalInformation(){
 function validateElectricityBill(){
     if (parseInt($("#billrateField").val()) <= 0) {
         displayError()
-        $('.error__content').html("Amount cannot be less than or equal to 0 USD")
+        $('.error__content').html("Amount cannot be less than or equal to 0 USD");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else{
         var input = document.getElementById('billrateField');
@@ -588,7 +607,7 @@ function validateElectricityBill(){
         var url = new URL(window.location);
         url.searchParams.set('page', "installation-type");
         window.history.pushState({}, '', url);
-        $.get("/templates/quote/quote_pages/installation-type.html", function(html_string)
+        $.get("/static/quote_pages/installation-type.html", function(html_string)
         {
             $("#content").html(html_string);
         },'html');
@@ -599,12 +618,13 @@ function validateInstallationType(){
     if (!$('.choice-card.selected').length) {
         displayError()
         $('.error__content').html("You should choose one of the options");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else {
         var url = new URL(window.location);
         if ($('.choice-card.selected .choice-text').text() == 'Standalone') {
             url.searchParams.set('page', "single-phase");
-            $.get("/templates/quote/quote_pages/standalone-installation.html", function(html_string)
+            $.get("/static/quote_pages/standalone-installation.html", function(html_string)
             {
                 $("#content").html(html_string);
             },'html');
@@ -613,7 +633,7 @@ function validateInstallationType(){
             url.searchParams.set('page', "standalone-installation");
             var selected_choice = $('.choice-card.selected .choice-text').text();
             localStorage.setItem("installation_type", selected_choice);
-            $.get("/templates/quote/quote_pages/single-phase.html", function(html_string)
+            $.get("/static/quote_pages/single-phase.html", function(html_string)
             {
                 $("#content").html(html_string);
             },'html');
@@ -626,6 +646,7 @@ function validateRoofStyle(){
     if (!$('.choice-card.selected').length) {
         displayError()
         $('.error__content').html("You should choose one of the options");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else {
         var selected_choice = $('.choice-card.selected .choice-text').text();
@@ -633,7 +654,7 @@ function validateRoofStyle(){
         var url = new URL(window.location);
         url.searchParams.set('page', 'roof-dimensions');
         window.history.pushState({}, '', url);
-        $.get("/templates/quote/quote_pages/roof-dimensions.html", function(html_string)
+        $.get("/static/quote_pages/roof-dimensions.html", function(html_string)
         {
             $("#content").html(html_string);
         },'html');
@@ -644,18 +665,22 @@ function validateRoofDimensions(){
     if (!$("#widthField").val()) {
         displayError();
         $('.error__content').html("This field cannot be blank");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else if (!$("#heightField").val()) {
         displayError();
         $('.error__content').html("This field cannot be blank");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else if (parseInt($("#heightField").val()) <= 0) {
         displayError();
         $('.error__content').html("Roof's height cannot be less than or equal to zero");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else if (parseInt($("#widthField").val()) <= 0) {
         displayError();
         $('.error__content').html("Roof's width cannot be less than or equal to zero");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else {
         var inputs = document.querySelectorAll('input');
@@ -663,6 +688,7 @@ function validateRoofDimensions(){
             localStorage.setItem(item.id, item.value);
         });
         var url = new URL(window.location);
+        url.searchParams.set('name', 'Panel');
         url.searchParams.set('page', 'parts');
         window.history.pushState({}, '', url);
         loadProducts();
@@ -682,18 +708,20 @@ $(document).on('change', '#cablelengthField', function(){
 function validateCableLength(){
     if (!$("#cablelengthField").val()) {
         displayError()
-        $('.error__content').html("This field cannot be blank")
+        $('.error__content').html("This field cannot be blank");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else if (parseInt($("#cablelengthField").val()) <= 0) {
         displayError();
         $('.error__content').html("Invalid length value!");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else{
         var url = new URL(window.location);
         url.searchParams.set('name', 'Storage System');
         url.searchParams.set('page', 'storage-system');
         window.history.pushState({}, '', url);
-        $.get("/templates/quote/quote_pages/storage-system.html", function(html_string)
+        $.get("/static/quote_pages/storage-system.html", function(html_string)
         {
             $("#content").html(html_string);
         },'html');
@@ -713,15 +741,13 @@ function possibleMaxPanels() {
 }
 
 function confirmSelectedPanel() {
-    console.log(possibleMaxPanels());
-    console.log($('.quantity-input').val());
-    if ($('.quantity-input').val() > $('.quantity-input').attr('max')) {
+    if ($('input[name="panels_count"]').val() > $('.quantity-input').attr('max')) {
         displayError()
         $('.error__content').html("You cannot order more than the maximum quantity");
     }
-    else if ($('.quantity-input').val() > possibleMaxPanels()) {
+    else if ($('input[name="panels_count"]').val() > possibleMaxPanels()) {
         displayError()
-        $('.error__content').html("Based on your roof dimensions, max amount of panels you can order is "+ possibleMaxPanels() +"");
+        $('.error__content').html("Based on your roof dimensions, max amount of panels you can order is " + possibleMaxPanels() + "");
     }
     else {
         var slug = $('.product-choice.selected').data('slug');
@@ -751,15 +777,13 @@ function confirmSelectedFitting() {
 
 $(document).on('click', '#storageSystemSize button', function() {
     var $this = $(this);
-    localStorage.setItem("storage_size", $this.text());
-
     var url = new URL(window.location);
     url.searchParams.set('name', "Cable Length from Battery to Inverter");
     url.searchParams.set('page', "cable-length-battery-inverter");
     window.history.pushState({}, '', url);
     localStorage.setItem('storage_system', $this.data('slug'));
 
-    $.get("/templates/quote/quote_pages/cable-length-battery-inverter.html", function(html_string)
+    $.get("/static/quote_pages/cable-length-battery-inverter.html", function(html_string)
     {
         $("#content").html(html_string);
     },'html');
@@ -769,6 +793,7 @@ function confirmSelectedInverter(){
     if (!$('.product-choice.selected').length) {
         displayError()
         $('.error__content').html("You should choose an inverter");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else {
         var slug = $('.product-choice').data('slug');
@@ -777,7 +802,7 @@ function confirmSelectedInverter(){
         url.searchParams.set('page', 'Storage System');
         url.searchParams.set('page', 'cable-length');
         window.history.pushState({}, '', url);
-        $.get("/templates/quote/quote_pages/cable-length.html", function(html_string)
+        $.get("/static/quote_pages/cable-length.html", function(html_string)
         {
             $("#content").html(html_string);
         },'html');
@@ -798,16 +823,18 @@ function confirmInvBatteryLength(){
     if (parseInt($("#cablelengthbtoinvField").val()) <= 0) {
         displayError();
         $('.error__content').html("Invalid length value!");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else if (!($("#cablelengthbtoinvField").val()).length) {
         displayError();
         $('.error__content').html("This field cannot be blank!");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else {
         var url = new URL(window.location);
         url.searchParams.set('page', 'storage-cable');
         window.history.pushState({}, '', url);
-        $.get("/templates/quote/quote_pages/storage-cable.html", function(html_string)
+        $.get("/static/quote_pages/storage-cable.html", function(html_string)
         {
             $("#content").html(html_string);
         },'html');
@@ -818,10 +845,12 @@ function confirmStorageCable(){
     if (parseInt($("#storagecableField").val()) <= 0) {
         displayError();
         $('.error__content').html("Invalid length value!");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else if (!$("#storagecableField").val().length) {
         displayError();
         $('.error__content').html("This field cannot be blank");
+        $('.toolbar__section-middle .btn-next').html('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path></svg>');
     }
     else {
         var input = document.getElementById("storagecableField");

@@ -28,7 +28,7 @@ class ProductDetailView(APIView):
         if not selected_product:
             selected_product = get_object_or_404(Product, slug=slug)
         
-        product_variants = ProductVariant.objects.filter(selected_product=selected_product)
+        product_variants = ProductVariant.objects.filter(selected_product=selected_product).exclude(availability='Out of stock')
 
         product_serializer = ProductSerializer(selected_product)
         variant_serializer = ProductVariantSerializer(product_variants, many=True)

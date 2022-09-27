@@ -37,6 +37,7 @@ class QuoteView(APIView):
             selected_quote = get_object_or_404(Quote, slug=slug)
 
         serializer = QuoteSerializer(selected_quote, many=False)
+        print(serializer.data)
 
         context = {
             'data': serializer.data,
@@ -66,39 +67,32 @@ class QuoteBuilderView(ListCreateAPIView):
         return Response(data=serializer.data)
 
     def create(self, request, *args, **kwargs):
-        with transaction.atomic():
-            try:
-                serializer = self.get_serializer(data=request.data, context={'request': request})
-                if serializer.is_valid():
-                    self.perform_create_quote(serializer)
-                    context = {
-                        'data': serializer.data,
-                        'status': status.HTTP_200_OK,
-                        'redirect_url': serializer.data['slug']
-                    }
-                    return JsonResponse(context)
-                else:
-                    data = []
-                    emessage=serializer.errors
-                    for key in emessage:
-                        err_message = str(emessage[key])
-                        err_string = re.search("string='(.*)', ", err_message)
-                        message_value = err_string.group(1)
-                        final_message = f"{key} - {message_value}"
-                        data.append(final_message)
+        with transaction.atomic(): 
+            serializer = self.get_serializer(data=request.data, context={'request': request})
+            if serializer.is_valid():
+                self.perform_create_quote(serializer)
+                context = {
+                    'data': serializer.data,
+                    'status': status.HTTP_200_OK,
+                    'redirect_url': serializer.data['slug']
+                }
+                return JsonResponse(context)
+            else:
+                data = []
+                emessage=serializer.errors
 
-                    response = HttpResponse(json.dumps({'err': data}), 
-                        content_type='application/json')
-                    response.status_code = 400
-                    return response
+                for key in emessage:
+                    err_message = str(emessage[key])
+                    err_string = re.search("string='(.*)', ", err_message)
+                    message_value = err_string.group(1)
+                    final_message = f"{key} - {message_value}"
+                    data.append(final_message)
 
-            except Exception as exc:
-                print(exc)
-                transaction.set_rollback(True)
-                response = HttpResponse(json.dumps({'err': ["Something went wrong!"]}), 
+                response = HttpResponse(json.dumps({'err': data}), 
                     content_type='application/json')
                 response.status_code = 400
                 return response
+
 
     def perform_create_quote(self, serializer):
         quote = serializer.save()
@@ -113,15 +107,23 @@ class UploadProductsView(APIView):
         if is_ajax(request=request):
             page = request.GET.get('page', 1)
             product_type = request.GET.get('product_type')
+            roof_type = request.GET.get('roof_type')
             slug = request.GET.get('slug')
 
-            variants = ProductVariant.objects.filter(Q(selected_product__category=product_type))
             if product_type == 'Inverter':
                 selected_panel = ProductVariant.cache_by_slug(slug)
                 if selected_panel is None:
                     selected_panel = get_object_or_404(ProductVariant, slug=slug)
-                variants = ProductVariant.objects.filter(Q(selected_product__category=product_type) & Q(wattage__gte=selected_panel.wattage))
+                variants = ProductVariant.objects.filter(Q(selected_product__category__iexact=product_type) & Q(wattage__gte=selected_panel.wattage)).exclude(availability='Out of stock')
             
+            elif product_type == 'Fitting':
+                if roof_type:
+                    variants = ProductVariant.objects.filter(Q(selected_product__category__iexact=product_type) & Q(suitable_roof_style__iexact=roof_type)).exclude(availability='Out of stock')
+
+            else:
+                variants = ProductVariant.objects.filter(Q(selected_product__category=product_type)).exclude(availability='Out of stock')
+                
+
             paginator = Paginator(variants, 10)
 
             try:
@@ -133,7 +135,7 @@ class UploadProductsView(APIView):
             
             serializer = ProductVariantSerializer(variants, many=True)
 
-            if product_type == 'Panels':
+            if product_type == 'Panel':
                 template_name="quote/quote_pages/choose-solar-panel.html"
             elif product_type == 'Fitting':
                 template_name="quote/quote_pages/select-fittings.html"
@@ -161,7 +163,7 @@ class DisplayVariantDetailsView(APIView):
             if variant is None:
                 variant = get_object_or_404(ProductVariant, slug=slug)
             
-            serializer = ProductVariantSerializer(variant, many=False)
+            serializer = ProductVariantSerializer(variant)
 
             html = render_to_string(
                 template_name="quote/quote_pages/selected-product-modal.html",
@@ -199,3 +201,39 @@ class LoadObjectsView(APIView):
             data_dict = {"html_from_view": html}
 
             return JsonResponse(data=data_dict, safe=False)
+
+
+class QuotesAPIView(APIView):
+    serializer_class = QuoteSerializer
+    permission_class = (permissions.IsAuthenticated, )
+    template_name = 'quote/quotes.html'
+    renderer_classes = [MyHTMLRenderer, ]
+
+    @method_decorator(login_required(login_url='/login/'))
+    def dispatch(self, *args, **kwargs):
+        return super(QuotesAPIView, self).dispatch(*args, **kwargs)
+
+    def get_serializer(self, *args, **kwargs):
+        return QuoteSerializer(*args, **kwargs)
+    
+    def get(self, request):
+        page = request.GET.get('page', 1)
+
+        current_user = request.user
+        
+        quotes = Quote.objects.filter(user=current_user)
+        self.serializer = self.get_serializer(quotes, many=True)
+
+        paginator = Paginator(quotes, 10)
+
+        try:
+            quotes = paginator.page(page)
+        except PageNotAnInteger:
+            quotes = paginator.page(1)
+        except EmptyPage:
+            quotes = paginator.page(paginator.num_pages)
+        context = {
+            'quotes': quotes,
+            'status': status.HTTP_200_OK,
+        }
+        return Response(context)

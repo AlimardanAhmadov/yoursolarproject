@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.utils.text import slugify
-from phonenumber_field.modelfields import PhoneNumberField
-from djrichtextfield.models import RichTextField
 
 from main.models import TimeStampedModel
 from main.utils import id_generator
@@ -34,7 +32,6 @@ class Customer(TimeStampedModel):
     
     def __str__(self):
         return "%s" % self.user.username
-
 
     @staticmethod
     def post_save(sender, **kwargs):

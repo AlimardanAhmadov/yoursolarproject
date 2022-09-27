@@ -30,20 +30,18 @@ class ProductsAPIView(APIView):
         
         q = request.GET.get('q', None)
         categories = request.GET.getlist('category[]')
-        availability = request.GET.getlist('availability[]')
         brand = request.GET.getlist('brand[]')
-        #wattage = request.GET.getlist('wattage[]')
         is_ajax = request.GET.get('is_ajax')
 
-        nested_list = [[q,], categories, availability, brand, wattage]
+        nested_list = [[q,], categories, brand, wattage]
 
         if nested_list[0][0] is None and not any(nested_list[1:4]):
             matching_items = Product.objects.all()
         elif q is None:
-            product_lookup = Q(brand__in=brand) & Q(availability__in=availability) & Q(category__in=categories)
+            product_lookup = Q(brand__in=brand) & Q(category__in=categories)
             matching_items = Product.objects.filter(product_lookup)
         else:
-            product_lookup = Q(title__icontains=q) & Q(brand__in=brand) & Q(availability__in=availability) & Q(category__in=categories)
+            product_lookup = Q(title__icontains=q) & Q(brand__in=brand) & Q(category__in=categories)
             matching_items = Product.objects.filter(product_lookup)
 
         if is_ajax == 'True':

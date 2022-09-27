@@ -1,14 +1,14 @@
 import os
 from django.contrib.auth import get_user_model, authenticate, login
-from django.utils.text import slugify
 from django.conf import settings
 from django.contrib.auth.forms import SetPasswordForm
-from allauth.account.models import EmailAddress
-from cart.models import Cart
+from django.utils.translation import gettext_lazy as _
+from allauth.account.models import EmailAddress, EmailConfirmationHMAC
 from rest_framework import serializers, exceptions
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_auth.registration.serializers import RegisterSerializer
-from django.utils.translation import gettext_lazy as _
+from user.send_mail import send_register_mail
+
 from .models import Business, Customer
 from . import google_validate
 
@@ -135,7 +135,6 @@ class CustomRegisterSerializer(RegisterSerializer):
             "company_name": self.validated_data.get("company_name", ""),
         }
     
-    
     def validate(self, attrs):
         agreement = attrs['agreement']
         account_type = attrs['account_type']
@@ -178,8 +177,6 @@ class CustomRegisterSerializer(RegisterSerializer):
         )
 
         if self.validated_data.get('provider') == 'Google':
-            Cart.objects.create(user=user, slug=slugify(self.validated_data.get('username')))
-
             login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
 
     def create_business(self, user, validated_data):
@@ -200,8 +197,6 @@ class CustomRegisterSerializer(RegisterSerializer):
         )
 
         if self.validated_data.get('provider') == 'Google':
-            Cart.objects.create(user=user, slug=slugify(self.validated_data.get('company_name')))
-
             login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
 
     def custom_signup(self, request, user):
@@ -374,3 +369,20 @@ class GoogleLoginSerializer(serializers.Serializer):
         user = login(self.request, user)
 
         return token
+
+
+class ResendEmailSerializer(serializers.Serializer):
+    email = serializers.CharField(required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(ResendEmailSerializer, self).__init__(*args, **kwargs)
+
+        self.request = self.context.get("request")
+    
+    def create(self, validated_data):
+        email = self.validated_data.get('email')
+        email_adddres = EmailAddress.objects.get(email=email)
+        confirmation = EmailConfirmationHMAC(email_adddres)
+        key = confirmation.key
+        send_register_mail.delay(email_adddres.user.id, key)
+        return key

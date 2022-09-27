@@ -29,7 +29,7 @@
         </div>
     </div>
     <div class="variant-details">
-        {% ifequal product.category 'Panels' %}
+        {% ifequal product.category 'Panel' %}
         <span class="detail">
             Height : <p id="panel-height" style="padding-left: 4px;margin: 0;">{{ product.height }}</p>m
         </span>
@@ -51,7 +51,7 @@
         <span class="error__content">
         </span>
     </div>
-    {% ifequal product.category 'Panels' %}
+    {% ifequal product.category 'Panel' %}
     <div class="quantity-control" data-quantity="">
         <input type="number" class="quantity-input" data-quantity-target="" value="1" step="1" min="1" max="{{ product.quantity }}" name="panels_count">
     </div>
@@ -61,7 +61,7 @@
     </div>
     <div class="modal-actions">
         <div class="button-couple" style="float: right;">
-            {% ifequal product.category 'Panels' %}
+            {% ifequal product.category 'Panel' %}
             <a type="button" class="btn button-black btn-next" id="confirmSelectedPanel">Choose Panel</a>
             {% endifequal %}
             

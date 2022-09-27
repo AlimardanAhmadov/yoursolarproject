@@ -69,6 +69,25 @@ input[type="text"]:focus + .field {
     outline: 1px solid rgb(146, 146, 146);
 }
 
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.65);
+    transition: all 0.3s ease-in-out;
+}
+.overlay.is-active {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+
 #overlay {
     position: fixed;
     height: 100%;

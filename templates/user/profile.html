@@ -29,29 +29,86 @@
         </button>
     </div>
 
-    <!--<div class="profile__content">
-        <h4>Order History</h4>
+    <div class="profile__content">
+        <h5>Order History</h5>
+        <br>
         <div class="order-list">
             <table class="table">
                 <thead>
-                    <th>ID</th>
-                    <th>Status</th>
-                    <th>Items</th>
-                    <th>Date</th>
-                    <th>Amount</th>
+                    <th style="width: 100px;">ORDER ID</th>
+                    <th style="width: 100px;">GRAND TOTAL</th>
+                    <th>ADDRESS</th>
+                    <th>STATUS</th>
+                    <th>CREATED</th>
                 </thead>
                 <tbody>
+                    {% for order in orders %}
                     <tr>
-                        <td>1</td>
-                        <td></td>
-                        <td>3</td>
-                        <td>January 12, 2022</td>
-                        <td>$ 450.89 USD</td>
+                        <td data-label="ORDER ID">{{ order.order_number }}</td>
+                        <td data-label="GRAND TOTAL">$ {{ order.total }} USD</td>
+                        <td data-label="ADDRESS">{{ order.address }}</td>
+                        <td data-label="STATUS"><span class="small-badge">{{ order.status }}</span></td>
+                        <td data-label="CREATED">{{ order.created|date:'Y-m-d H:i' }}</td>
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
-    </div>-->
+    </div>
+    <ul class="pagination">
+        {% if orders.has_previous %}
+            <li class="page">
+                <a type="button" href="?page={{ orders.previous_page_number }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 320 512">
+                        <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+                    </svg>
+                </a>
+            </li>
+        {% else %}
+            <li class="page">
+                <a type="button" class="disabled">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 320 512">
+                        <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+                    </svg>
+                </a>
+            </li>
+        {% endif %}
+        
+        {% if orders.number|add:'-3' > 1 %}
+            <li class="page"><a href="?page={{ orders.number|add:'-3' }}">...</a></li>
+        {% endif %}
+        
+        {% for i in orders.paginator.page_range %}
+            {% if orders.number == i %}
+                <li class="page selected"><a href="#">{{ i }}</a></li>
+            {% elif i > orders.number|add:'-2' and i < orders.number|add:'2' %}
+                <li class="page"><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        
+        {% if orders.paginator.num_pages > orders.number|add:'4' %}
+            <li class="page"><a href="?page={{ orders.number|add:'5' }}">&hellip;</a></li>
+        {% endif %}
+        
+        {% if orders.has_next %}
+            <li class="page">
+                <a type="button" href="?page={{ orders.next_page_number }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 320 512">
+                        <path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/>
+                    </svg>
+                </a>
+            </li>
+        {% else %}
+            <li class="page disabled">
+                <a type="button" href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 320 512">
+                        <path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/>
+                    </svg>
+                </a>
+            </li>
+        {% endif %}
+        
+    </ul>
 </div>
 
 {% endblock %}

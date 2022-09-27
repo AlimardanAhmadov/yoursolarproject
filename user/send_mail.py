@@ -17,22 +17,18 @@ url = "http://localhost:8000/"
 
 
 @shared_task(bind=True, max_retries=20)
-def send_register_mail(self, user, key):
-    body = """<p>
-    Hello from Solar Panels!<br><br>
-    Confirmation Mail: %s
-    You can see more details in this link: %saccount-confirm-email/%s<br><br>
-    Thank you from Solar Panels! <br><br>
-    <p>""" % (
-        user.username,
-        url,
-        key,
-    )
+def send_register_mail(self, user_id, key):
+    user = User.objects.filter(id=user_id).first()
 
-    subject = "Registration Mail"
+    body = {
+        'username': user.username,
+        'key': url + 'account-confirm-email/' + key
+    }
+
+    subject = "Verify Email Address"
     recipients = [user.email]
 
-    template_name = 'email/welcome.html'
+    template_name = 'email/activate.html'
     
     try:
         send_email(body, subject, recipients, template_name, "html")

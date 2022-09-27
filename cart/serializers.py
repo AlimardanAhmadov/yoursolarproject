@@ -34,7 +34,7 @@ class CreateCartItemSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 {"variant": 'Please select a product variant'}
             )
-
+        
         quantity = self.get_variant(attrs).quantity
         quantity_match = (
             int(attrs["quantity"]) > quantity,
@@ -80,14 +80,28 @@ class UpdateCartSerializer(serializers.Serializer):
         self.item = self.context.get("product")
 
     def validate(self, attrs):
-        quantity = self.item.content_object.quantity
-        quantity_match = (
-            attrs["quantity"] > quantity,
+        if isinstance(self.item.content_object, ProductVariant):
+            quantity = self.item.content_object.quantity
+            quantity_match = (
+                attrs["quantity"] > quantity,
+            )
+        else:
+            quantity = 1
+            quantity_match = (
+                attrs["quantity"] > 1,
+            )
+        
+        quantity_min = (
+            attrs["quantity"] < 1,
         )
 
         if all(quantity_match):
             raise serializers.ValidationError(
                 {"quantity": 'You cannot order more than %s of this item' % quantity}
+            )
+        elif all(quantity_min):
+            raise serializers.ValidationError(
+                {"quantity": 'Item quantity cannot be less than zero!'}
             )
         
         return attrs

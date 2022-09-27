@@ -89,6 +89,47 @@
         display: none;
         visibility: hidden;
     }
+    .mobile-cart {
+        display: none;
+        visibility: hidden;
+    }
+
+    .mobile-account {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 48rem) {
+    .overlay {
+        display: none;
+    }
+
+    .mobile-cart {
+        padding: 0;
+    }
+
+    .menu-link {
+        color: var(--color-black);
+    }
+
+    .menu-inner {
+        gap: 0.75rem;
+    }
+
+    .menu-inner .menu-item:nth-child(7){
+        display: none;
+    }
+
+    .menu-inner .menu-item:nth-child(6) {
+        position: absolute;
+        bottom: 20px;
+    }
+
+    .menu-inner .menu-item:nth-child(6) a{
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
 }
 
 @media only screen and (min-width: 963px) {
@@ -180,5 +221,94 @@
 @media screen and (max-width:1000px) {
     .select-btn-group-footer {
         padding: 25px 44px;
+    }
+}
+
+@media screen and (max-width:1165px) {
+    .summary {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 895px) {
+    #roof__type .choices-wrapper:nth-child(2) {
+        margin: 0;
+    }
+    .banner-right {
+        display: none;
+    }
+
+    .steps-list button {
+        width: 100%;
+    }
+
+    .steps-list {
+        margin-bottom: 40px;
+    }
+    .quote-pricing {
+        margin-top: 40px;
+    }
+}
+
+@media screen and (max-width:1300px){
+    .summary-section {
+        min-width: 100%;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width:520px) {
+    .input-row {
+        flex-direction: column;
+    }
+}
+
+
+@media screen and (max-width: 600px) {
+    table {
+        border: 0;
+    }
+  
+    table caption {
+        font-size: 1.3em;
+    }
+    
+    table thead {
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+    
+    table tr {
+        border-bottom: 3px solid #ddd;
+        display: block;
+        margin-bottom: 1.8rem;
+    }
+    
+    table td {
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: .8em;
+        text-align: right;
+    }
+    
+    table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    
+    table td:last-child {
+        border-bottom: 0;
+    }
+
+    .order-list table tr th:not(:first-child), .order-list table tr td:not(:first-child) {
+        text-align: right;
     }
 }

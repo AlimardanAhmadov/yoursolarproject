@@ -1,0 +1,105 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+
+<section class="page-header padding">
+    <div class="container">
+        <div class="page-content">
+            <h2>Quotes</h2>
+        </div>
+    </div>
+</section>
+
+<div class="container profile">
+    <div class="profile__content">
+        <h5>Quotes</h5>
+        <br>
+        <div class="order-list">
+            <table class="table">
+                <thead>
+                    <th>TITLE</th>
+                    <th>SHIPPING PRICE</th>
+                    <th>EQUIPMENT COST</th>
+                    <th>TAX</th>
+                    <th>TOTAL COST</th>
+                    <th>CREATED</th>
+                    <th>STATUS</th>
+                </thead>
+                <tbody>
+                    {% for quote in quotes %}
+                    <tr>
+                        <td data-label="TITLE"> <span>{{ quote.title }}</span></td>
+                        <td data-label="SHIPPING PRICE"> <span>$ {{ quote.shipping_price }} USD</span></td>
+                        <td data-label="EQUIPMENT COST"> <span>$ {{ quote.equipment_cost }} USD</span></td>
+                        <td data-label="TAX"> <span>%20</span></td>
+                        <td data-label="TOTAL COST"> <span>$ {{ quote.total_cost }} USD</span></td>
+                        <td data-label="CREATED"> <span>{{ quote.created|date:'Y-m-d H:i' }}</span></td>
+                        {% if quote.paid %}
+                        <td data-label="STATUS"><a class="prp-btn disabled" style="position: inherit;">Paid</a></td>
+                        {% else %}
+                        <td data-label="STATUS"><a href="{% url 'quote' quote.slug %}" class="prp-btn" style="position: inherit;">Pay</a></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <ul class="pagination">
+        {% if quotes.has_previous %}
+            <li class="page">
+                <a type="button" href="?page={{ quotes.previous_page_number }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 320 512">
+                        <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+                    </svg>
+                </a>
+            </li>
+        {% else %}
+            <li class="page">
+                <a type="button" class="disabled">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 320 512">
+                        <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+                    </svg>
+                </a>
+            </li>
+        {% endif %}
+        
+        {% if quotes.number|add:'-3' > 1 %}
+            <li class="page"><a href="?page={{ quotes.number|add:'-3' }}">...</a></li>
+        {% endif %}
+        
+        {% for i in quotes.paginator.page_range %}
+            {% if quotes.number == i %}
+                <li class="page selected"><a href="#">{{ i }}</a></li>
+            {% elif i > quotes.number|add:'-2' and i < quotes.number|add:'2' %}
+                <li class="page"><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        
+        {% if quotes.paginator.num_pages > quotes.number|add:'4' %}
+            <li class="page"><a href="?page={{ quotes.number|add:'5' }}">&hellip;</a></li>
+        {% endif %}
+        
+        {% if quotes.has_next %}
+            <li class="page">
+                <a type="button" href="?page={{ quotes.next_page_number }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 320 512">
+                        <path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/>
+                    </svg>
+                </a>
+            </li>
+        {% else %}
+            <li class="page disabled">
+                <a type="button" href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 320 512">
+                        <path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/>
+                    </svg>
+                </a>
+            </li>
+        {% endif %}
+        
+    </ul>
+</div>
+
+{% endblock %}

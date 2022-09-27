@@ -83,12 +83,14 @@ class CartItem(models.Model):
 
     def save(self, *args, **kwargs):
         quantity = self.tracker.has_changed('quantity')
+        
         if quantity:
-            if self.model_type == ContentType.objects.get_for_model(ProductVariant):
+            if isinstance(self.content_object, ProductVariant):
+                print("ads")
                 total_cost = float(self.price) * int(self.quantity)
                 grand_total = total_cost + float(self.content_object.shipping_price)
             else:
-                total_cost = float(self.total_cost) * int(self.quantity)
+                total_cost = float(self.content_object.total_cost) * int(self.quantity)
                 grand_total = total_cost
 
             self.total_cost = total_cost
@@ -100,11 +102,11 @@ class CartItem(models.Model):
         instance = kwargs.get('instance')
         created = kwargs.get('created')
 
-        if instance.model_type == ContentType.objects.get_for_model(ProductVariant):
+        if isinstance(instance.content_object, ProductVariant):
             total_cost = float(instance.price) * int(instance.quantity)
             grand_total = total_cost + float(instance.content_object.shipping_price)
         else:
-            total_cost = float(instance.total_cost) * int(instance.quantity)
+            total_cost = float(instance.content_object.total_cost) * int(instance.quantity)
             grand_total = total_cost
 
         if created:

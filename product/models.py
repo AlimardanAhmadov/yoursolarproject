@@ -26,17 +26,36 @@ AV_CHOICES = (
     ('Out of stock', 'Out of stock'),
 )
 
+CATEGORY_CHOICES = (
+    ('Inverter', 'Inverter'),
+    ('Panel', 'Panel'),
+    ('Rail', 'Rail'),
+    ('Fitting', 'Fitting'),
+    ('Battery', 'Battery'),
+    ('Clip', 'Clip'),
+    ('Other', 'Other'),
+)
+
+
+ROOF_TYPES = (
+    ('Flat Roof', 'Flat Roof'),
+    ('Pantile Roof', 'Pantile Roof'),
+    ('Flat tile or slate', 'Flat tile or slate'),
+    ('Meta Roof', 'Metal Roof'),
+    ('New build', 'New build'),
+)
+
 class Product(TimeStampedModel):
-    slug=models.SlugField(blank=True, null=True)
+    slug=models.SlugField(blank=True, null=True, max_length=500)
     title=models.CharField(max_length=250)
-    category=models.CharField(max_length=50)
+    category=models.CharField(max_length=50, choices=CATEGORY_CHOICES)
     return_policy=models.TextField(blank=True, default='This product has no return policy')
     shipping_policy=models.TextField(blank=True, default='This product has no shipping policy')
-    availability=models.CharField(max_length=15, choices=AV_CHOICES)
     brand=models.CharField(max_length=100)
     primary_price=models.FloatField(default=0.0)
     primary_discount=models.FloatField(default=0.0)
     primary_image_url=models.TextField(blank=True, null=True)
+    special_offer=models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Product'
@@ -89,6 +108,7 @@ class ProductVariant(TimeStampedModel):
     slug=models.SlugField(blank=True, null=True)
     primary_variant=models.BooleanField(default=False)
     description=RichTextField()
+    availability=models.CharField(max_length=15, choices=AV_CHOICES)
     width = models.CharField(max_length=50, blank=True, null=True, help_text="For panels. (metres)")
     height = models.CharField(max_length=50, blank=True, null=True, help_text="For panels. (metres)")
     materials=models.TextField(blank=True, null=True)
@@ -100,7 +120,7 @@ class ProductVariant(TimeStampedModel):
     quantity=models.PositiveIntegerField(default=0)
     shipping_price=models.FloatField(default=0.0)
     size = models.CharField(max_length=10, blank=True, null=True, help_text='For cables')
-    suitable_roof_style = models.CharField(max_length=10, blank=True, null=True, help_text='For Hooks/Fittings')
+    suitable_roof_style = models.CharField(max_length=20, blank=True, null=True, choices=ROOF_TYPES, help_text='For Hooks/Fittings')
     wattage = models.CharField(max_length=10, blank=True, null=True)
     tracker = FieldTracker()
 
@@ -109,19 +129,28 @@ class ProductVariant(TimeStampedModel):
         verbose_name_plural = 'Variants'
         indexes = [models.Index(fields=['selected_product', 'slug', 'id', 'active',])]
     
+
+    def __str__(self):
+        return "Product ID: {} -- Title: {}".format(self.slug, self.title)
+    
     def save(self, *args, **kwargs):
         image_changed = self.tracker.has_changed('image')
+        quantity = self.tracker.has_changed('quantity')
         primary_variant_changed = self.tracker.has_changed('primary_variant')
 
         image = self.image
 
-        if not image_changed:
+        if quantity:
+            if self.quantity <= 0:
+                self.availability = 'Out of stock'
+
+        if image_changed:
             if primary_variant_changed and self.primary_variant is True:
                 self.selected_product.primary_image_url = self.image.url
                 self.selected_product.save()
-        else:
-            if image and image.size > (0.3 * 1024 * 1024):
-                self.image = compress_image(image)
+
+        if image and image.size > (0.3 * 1024 * 1024):
+            self.image = compress_image(image)
         super(ProductVariant, self).save(*args, **kwargs)
 
     @staticmethod

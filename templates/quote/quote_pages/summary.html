@@ -1,5 +1,5 @@
 {% extends 'main/base.html' %}
-
+{% load static %}
 {% block content %}
 <style>
     .main {
@@ -212,7 +212,7 @@
                             <tr>
                                 <td style="display: flex; align-items: center; gap: 10px;">
                                     <div class="item-cover">
-                                        <img src="{{ data.panel_image }}" alt="selected part" width="60" height="auto">
+                                        <img src="{{ data.panel_image }}" alt="{{ data.panel_title }}" width="60" height="auto">
                                     </div>
                                     <div class="item-description">
                                         <span class="item-title">{{ data.panel_title }}</span>
@@ -225,7 +225,7 @@
                             <tr>
                                 <td style="display: flex; align-items: center; gap: 10px;">
                                     <div class="item-cover">
-                                        <img src="{{ data.inverter_image }}" alt="selected part" width="60" height="auto">
+                                        <img src="{{ data.inverter_image }}" alt="{{ data.inverter_title }}" width="60" height="auto">
                                     </div>
                                     <div class="item-description">
                                         <span class="item-title">{{ data.inverter_title }}</span>
@@ -238,7 +238,7 @@
                             <tr>
                                 <td style="display: flex; align-items: center; gap: 10px;">
                                     <div class="item-cover">
-                                        <img src="{{ data.fitting_image }}" alt="selected part" width="60" height="auto">
+                                        <img src="{{ data.fitting_image }}" alt="{{ data.fitting_title }}" width="60" height="auto">
                                     </div>
                                     <div class="item-description">
                                         <span class="item-title">{{ data.fitting_title }}</span>
@@ -246,6 +246,18 @@
                                 </td>
                                 <td>1</td>
                                 <td>$ {{ data.fitting_price }} USD</td>
+                            </tr>
+                            <tr>
+                                <td style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="item-cover">
+                                        <img src="{% static 'images/rail_img.png' %}" alt="Rail" width="60" height="auto">
+                                    </div>
+                                    <div class="item-description">
+                                        <span class="item-title">Rail ({{ data.rail_type }})</span>
+                                    </div>
+                                </td>
+                                <td>{{ data.no_rails }}</td>
+                                <td>$ {{ data.rail_price }} USD</td>
                             </tr>
                         </tbody>
                     </table>

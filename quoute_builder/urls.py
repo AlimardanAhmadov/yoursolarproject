@@ -7,4 +7,5 @@ urlpatterns = [
     path('upload-objects/', views.LoadObjectsView.as_view(), name='upload_objects'),
     path('variant-details/<slug:slug>', views.DisplayVariantDetailsView.as_view(), name='variant_details'),
     path('quote/<slug:slug>', views.QuoteView.as_view(), name='quote'),
+    path('quotes', views.QuotesAPIView.as_view(), name='quotes'),
 ]
