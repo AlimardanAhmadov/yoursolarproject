@@ -86,7 +86,6 @@ class CartItem(models.Model):
         
         if quantity:
             if isinstance(self.content_object, ProductVariant):
-                print("ads")
                 total_cost = float(self.price) * int(self.quantity)
                 grand_total = total_cost + float(self.content_object.shipping_price)
             else:
