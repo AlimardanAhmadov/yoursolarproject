@@ -136,8 +136,8 @@ class RegisterAPIView(ListCreateAPIView):
         serializer = self.get_serializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             user = self.perform_create(serializer)
-            if getattr(settings, "REST_USE_JWT", False):
-                self.token = jwt_encode(user)
+            #if getattr(settings, "REST_USE_JWT", False):
+                #self.token = jwt_encode(user)
             return JsonResponse(serializer.data, status=status.HTTP_200_OK)
         else:
             data = []
