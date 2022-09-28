@@ -130,7 +130,7 @@ WSGI_APPLICATION = 'solar_panels.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-"""DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.environ['DB_NAME'],
@@ -139,11 +139,7 @@ WSGI_APPLICATION = 'solar_panels.wsgi.application'
         'HOST': os.environ['DB_HOST'],
         'PORT': os.environ['DB_PORT'],
     }
-}"""
-
-DATABASES = {}
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
+}
 
 DJRICHTEXTFIELD_CONFIG = {
     'js': ['//cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js'],
