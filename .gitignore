@@ -1,0 +1,5 @@
+.env
+spenv/
+db.sqlite3
+*.pyc
+geoip/

@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os, environ, datetime
-import dj_database_url, djcelery
 from datetime import timedelta
 from pathlib import Path
 
@@ -349,4 +348,3 @@ HTML_MINIFY = True
 KEEP_COMMENTS_ON_MINIFYING = True
 
 django_heroku.settings(locals())
-djcelery.setup_loader()
