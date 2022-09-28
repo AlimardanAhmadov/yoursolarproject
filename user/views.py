@@ -201,7 +201,6 @@ class PasswordResetView(ListCreateAPIView):
             else:
                 data = []
                 emessage=serializer.errors 
-                
                 for key in emessage:
                     err_message = str(emessage[key])
                     err_string = re.search("string='(.*)', ", err_message) 
@@ -222,6 +221,8 @@ class PasswordResetView(ListCreateAPIView):
 class PasswordResetConfirmView(ListCreateAPIView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = PasswordResetConfirmSerializer
+    renderer_classes = [MyHTMLRenderer,]
+    template_name = "user/reset-password.html"
 
     @sensitive_post_parameters_m
     def dispatch(self, *args, **kwargs):

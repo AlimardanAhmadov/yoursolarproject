@@ -829,7 +829,7 @@ categories.forEach(function (category) {
 // LOCAL STORAGE END
 
 // SIGN UP & SIGN IN 
-$(document).on('click', '.recover', function(event) {
+$(document).on('click', '#popRecover', function(event) {
     event.preventDefault();
     $('.user-layout').html(
         '<form class="user" id="recover">' +
@@ -1229,7 +1229,62 @@ $(document).on('submit', '#recover', function(event){
             setTimeout(function() {
                 $this.removeClass('disabled');
                 $('.button-black').html('Submit');
-                var list_of_errors = xhr.responseJSON['error'];
+                var list_of_errors = xhr.responseJSON['err'];
+                $('.form__error').fadeIn('slow');
+                $('.form__error').addClass('active');
+
+                for(let i = 0; i < list_of_errors.length; i++){
+                    var newItem = list_of_errors[i];
+                    $( ".error__content" ).html( newItem );
+                }
+            }, delay_by_in_ms);
+            setTimeout(function() {
+                $('.form__error').fadeOut('slow');
+                $('.form__error').removeClass('active');
+            }, 10000); 
+		}
+	}); 
+});
+
+
+$(document).on('submit', '#resetPassword', function(event){
+	event.preventDefault();
+	var input_data = {
+		'password1': $('input[name="password1"]').val(),
+		'password2': $('input[name="password2"]').val(),
+	}
+
+	$this.addClass('disabled');
+    $('.button-black').html('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
+  
+	$.ajax({
+		type: 'POST',
+		url: '/password/reset/confirm/',
+		data: JSON.stringify(input_data),
+		dataType: 'json',
+		headers: { 'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"},
+		success: function (data) {
+            setTimeout(function() {
+                $(".user-layout").html(
+                    '<div class="user signup" style="text-align: left;gap: 0;">' +
+                        '<h2>Successfull!</h2>' +
+                        '<div style="color: #565e69; font-size: 16px">' +
+                            'We have sent you an email with a link to update your password.' +
+                        '</div>' +
+                        '<legend style="font-size: 16px;font-weight: 900;">' + $('input[name="email"]').val() + '' +
+                        '<hr>' +
+                        '<div style="color: #565e69; font-size: 16px">' +
+                            'Didn’t receive an email? Be sure to check your spam folder' +
+                        '</div>' +
+                    '</div>'
+                )
+            }, delay_by_in_ms);
+		},
+        error: function (xhr, ajaxOptions, thrownError) {
+            setTimeout(function() {
+                $this.removeClass('disabled');
+                $('.button-black').html('Submit');
+                var list_of_errors = xhr.responseJSON['err'];
                 $('.form__error').fadeIn('slow');
                 $('.form__error').addClass('active');
 

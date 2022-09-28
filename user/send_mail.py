@@ -40,15 +40,10 @@ def send_register_mail(self, user_id, key):
 @shared_task(bind=True, max_retries=1)
 def send_reset_password_email(self, user_id):
     user = User.objects.get(id=user_id)
-    body = """
-    %spassword/reset/confirm/%s/%s
-    """ % (
-        url,
-        urlsafe_base64_encode(force_bytes(user.pk)),
-        default_token_generator.make_token(user),
-    )
-    print(body)
-    subject = "Reset password Mail"
+    body = {
+        'url': url + 'password/reset/confirm/' + urlsafe_base64_encode(force_bytes(user.pk)) + '/' + default_token_generator.make_token(user)
+    }
+    subject = "Reset Your password"
     recipients = [user.email]
 
     template_name = 'email/reset_password.html'
