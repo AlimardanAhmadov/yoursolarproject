@@ -1212,7 +1212,7 @@ $(document).on('submit', '#recover', function(event){
             setTimeout(function() {
                 $(".user-layout").html(
                     '<div class="user signup" style="text-align: left;gap: 0;">' +
-                        '<h2>Successfull!</h2>' +
+                        '<h2>Successful!</h2>' +
                         '<div style="color: #565e69; font-size: 16px">' +
                             'We have sent you an email with a link to update your password.' +
                         '</div>' +
@@ -1249,40 +1249,33 @@ $(document).on('submit', '#recover', function(event){
 
 $(document).on('submit', '#resetPassword', function(event){
 	event.preventDefault();
+    var url = window.location.pathname;
+    var uid = url.split('/')[4];
+    var token = url.split('/')[5];
+    console.log(token, uid);
+
 	var input_data = {
-		'password1': $('input[name="password1"]').val(),
-		'password2': $('input[name="password2"]').val(),
+		'new_password1': $('input[name="new_password1"]').val(),
+		'new_password2': $('input[name="new_password2"]').val(),
+        'token': token,
+        'uid': uid
 	}
 
-	$this.addClass('disabled');
     $('.button-black').html('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
   
 	$.ajax({
 		type: 'POST',
-		url: '/password/reset/confirm/',
+		url: window.location.pathname,
 		data: JSON.stringify(input_data),
 		dataType: 'json',
 		headers: { 'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"},
-		success: function (data) {
+		success: function () {
             setTimeout(function() {
-                $(".user-layout").html(
-                    '<div class="user signup" style="text-align: left;gap: 0;">' +
-                        '<h2>Successfull!</h2>' +
-                        '<div style="color: #565e69; font-size: 16px">' +
-                            'We have sent you an email with a link to update your password.' +
-                        '</div>' +
-                        '<legend style="font-size: 16px;font-weight: 900;">' + $('input[name="email"]').val() + '' +
-                        '<hr>' +
-                        '<div style="color: #565e69; font-size: 16px">' +
-                            'Didn’t receive an email? Be sure to check your spam folder' +
-                        '</div>' +
-                    '</div>'
-                )
+                window.location.href = '/profile/';
             }, delay_by_in_ms);
 		},
         error: function (xhr, ajaxOptions, thrownError) {
             setTimeout(function() {
-                $this.removeClass('disabled');
                 $('.button-black').html('Submit');
                 var list_of_errors = xhr.responseJSON['err'];
                 $('.form__error').fadeIn('slow');
