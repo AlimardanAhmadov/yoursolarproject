@@ -58,6 +58,26 @@ var swiper = new Swiper(".slide-content", {
     },
 });
 
+function getParams (url = window.location) {
+
+	// Create a params object
+	let params = {};
+
+	new URL(url).searchParams.forEach(function (val, key) {
+		if (params[key] !== undefined) {
+			if (!Array.isArray(params[key])) {
+				params[key] = [params[key]];
+			}
+			params[key].push(val);
+		} else {
+			params[key] = val;
+		}
+	});
+
+	return params;
+
+}
+
 function makePassword(length) {
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -258,21 +278,6 @@ $(document).on('click', '.category-item, .close-badge', function(event){
         }).get();
     }
 
-    var av_checkboxes = $('input[name=availability]:checked').map(function(_, el) {
-        return $(el).val();
-    }).get();
-
-    if (av_checkboxes.length > 0) {
-        availability = av_checkboxes
-        url.searchParams.set('availability', availability);
-    }
-    else {
-        var availability = $('input[name="availability"]').map(function(_, el) {
-            return $(el).val();
-        }).get();
-        url.searchParams.delete('availability');
-    }
-
     var b_checkboxes = $('input[name="brand"]:checked').map(function(_, el) {
         return $(el).val();
     }).get();
@@ -286,26 +291,10 @@ $(document).on('click', '.category-item, .close-badge', function(event){
             return $(el).val();
         }).get();
         url.searchParams.delete('brand');
-    }
-
-    var w_checkboxes = $('input[name="wattage"]:checked').map(function(_, el) {
-        return $(el).val();
-    }).get();
+    } 
     
-    if (w_checkboxes.length > 0) {
-        wattage = w_checkboxes
-        url.searchParams.set('wattage', wattage);
-    }
-    else {
-        var wattage = $('input[name="wattage"]').map(function(_, el) {
-            return $(el).val();
-        }).get();
-        url.searchParams.delete('wattage');
-    }
 	const request_parameters = {
-		"availability[]": availability,
-		"brand[]": brand,
-		"wattage[]": wattage,
+		"brand[]": brand, 
         "category[]": category,
         "q": title,
         "is_ajax": "True"
@@ -357,21 +346,6 @@ $(document).on('change', '.choice-input-wrapper .form-check-input, input[name="t
         }).get();
     }
 
-    var av_checkboxes = $('input[name=availability]:checked').map(function(_, el) {
-        return $(el).val();
-    }).get();
-
-    if (av_checkboxes.length > 0) {
-        availability = av_checkboxes
-        url.searchParams.set('availability', availability);
-    }
-    else {
-        var availability = $('input[name="availability"]').map(function(_, el) {
-            return $(el).val();
-        }).get();
-        url.searchParams.delete('availability');
-    }
-
     var b_checkboxes = $('input[name="brand"]:checked').map(function(_, el) {
         return $(el).val();
     }).get();
@@ -386,26 +360,9 @@ $(document).on('change', '.choice-input-wrapper .form-check-input, input[name="t
         }).get();
         url.searchParams.delete('brand');
     }
-
-    var w_checkboxes = $('input[name="wattage"]:checked').map(function(_, el) {
-        return $(el).val();
-    }).get();
-    
-    if (w_checkboxes.length > 0) {
-        wattage = w_checkboxes
-        url.searchParams.set('wattage', wattage);
-    }
-    else {
-        var wattage = $('input[name="wattage"]').map(function(_, el) {
-            return $(el).val();
-        }).get();
-        url.searchParams.delete('wattage');
-    }
-    
+ 
 	const request_parameters = {
-		"availability[]": availability,
-		"brand[]": brand,
-		"wattage[]": wattage,
+		"brand[]": brand, 
         "category[]": category,
         "q": title,
         "is_ajax": "True"
@@ -442,19 +399,6 @@ $(window).on('load', function(){
             }).get();
         }
 
-        var av_checkboxes = $('input[name=availability]:checked').map(function(_, el) {
-            return $(el).val();
-        }).get();
-
-        if (av_checkboxes.length > 0) {
-            availability = av_checkboxes
-        }
-        else {
-            var availability = $('input[name="availability"]').map(function(_, el) {
-                return $(el).val();
-            }).get();
-        }
-
         var b_checkboxes = $('input[name="brand"]:checked').map(function(_, el) {
             return $(el).val();
         }).get();
@@ -467,24 +411,9 @@ $(window).on('load', function(){
                 return $(el).val();
             }).get();
         }
-
-        var w_checkboxes = $('input[name="wattage"]:checked').map(function(_, el) {
-            return $(el).val();
-        }).get();
-        
-        if (w_checkboxes.length > 0) {
-            wattage = w_checkboxes
-        }
-        else {
-            var wattage = $('input[name="wattage"]').map(function(_, el) {
-                return $(el).val();
-            }).get();
-        }
         
         const request_parameters = {
-            "availability[]": availability,
-            "brand[]": brand,
-            "wattage[]": wattage,
+            "brand[]": brand, 
             "category[]": category,
             "q": title,
             "is_ajax": "True"

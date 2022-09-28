@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from django.conf import settings
 from django.utils.decorators import method_decorator
+from main.ajax_decorator import ajax_login_required
 
 from main.utils import no_generator
 
@@ -29,7 +30,7 @@ class CancelView(TemplateView):
 
 
 class CreateCheckoutSessionView(View):
-    @method_decorator(csrf_exempt)
+    @method_decorator([csrf_exempt, ajax_login_required])
     def dispatch(self, *args, **kwargs):
         return super(CreateCheckoutSessionView, self).dispatch(*args, **kwargs)
 
@@ -61,6 +62,8 @@ class CreateCheckoutSessionView(View):
                     description=request.user.username,
                     email=request.user.email,
                 )
+            
+            total_shipping = 0
 
             if order_items:
                 for item in CartItem.objects.filter(cart=cart):
@@ -90,9 +93,11 @@ class CreateCheckoutSessionView(View):
                     if isinstance(product, Quote):
                         image = product.selected_panel.image.url
                         product_id = product.slug
+                        total_shipping = 0
                     elif isinstance(product, ProductVariant):
                         image = product.image.url
                         product_id = product.slug
+                        total_shipping += product.shipping_price
                     else:
                         image = "https://i.imgur.com/EHyR2nP.png"
                                 
@@ -123,6 +128,18 @@ class CreateCheckoutSessionView(View):
                 shipping_address_collection={
                     'allowed_countries': ['GB',],
                 },
+                shipping_options=[
+                    {
+                        'shipping_rate_data': {
+                            'type': 'fixed_amount',
+                            'fixed_amount': {
+                            'amount': int(total_shipping) * 100,
+                            'currency': 'usd',
+                            },
+                            'display_name': 'Shipping price',
+                        }
+                    },
+                ],
             )
             
             return JsonResponse({
@@ -138,7 +155,7 @@ class CreateCheckoutSessionView(View):
 
 
 class SingleProductCreateCheckoutSessionView(View):
-    @method_decorator(csrf_exempt)
+    @method_decorator([csrf_exempt, ajax_login_required])
     def dispatch(self, *args, **kwargs):
         return super(SingleProductCreateCheckoutSessionView, self).dispatch(*args, **kwargs)
 
@@ -211,8 +228,6 @@ class SingleProductCreateCheckoutSessionView(View):
                 order_id = no_generator()
                 product_id = selected_product.slug
             
-            print(image)
-            
             # create customer for successful/failed notification
             try:
                 stripe.Customer.retrieve(request.user.email)
@@ -235,7 +250,7 @@ class SingleProductCreateCheckoutSessionView(View):
                 {
                     'price_data': {
                         'currency': 'usd',
-                        'unit_amount': int(sum([price,shipping_price])) * 100,
+                        'unit_amount': int(price) * 100,
                         'product_data': {
                             'name': title,
                             'images': [image,],
@@ -262,6 +277,18 @@ class SingleProductCreateCheckoutSessionView(View):
                 shipping_address_collection={
                     'allowed_countries': ['GB',],
                 },
+                shipping_options=[
+                    {
+                        'shipping_rate_data': {
+                            'type': 'fixed_amount',
+                            'fixed_amount': {
+                            'amount': int(shipping_price) * 100,
+                            'currency': 'usd',
+                            },
+                            'display_name': 'Shipping price',
+                        }
+                    },
+                ],
             )
 
             return JsonResponse({

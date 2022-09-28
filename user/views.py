@@ -80,9 +80,6 @@ class LoginAPIView(LoginView):
             'data': serializer.data,
             'status': status.HTTP_200_OK,
         }
-        if get_prev_url(request) is not None:
-            next_url = get_prev_url(request)
-            context['next_url'] = next_url
         response = JsonResponse(context)
 
         return response

@@ -25,7 +25,7 @@ class ProductsAPIView(APIView):
     def dispatch(self, *args, **kwargs):
         return super(ProductsAPIView, self).dispatch(*args, **kwargs)
 
-    def get(self, request, q=None, category=None, availability=None, brand=None, wattage=None):
+    def get(self, request, q=None, category=None, brand=None):
         page = request.GET.get('page', 1)
         
         q = request.GET.get('q', None)
@@ -33,16 +33,17 @@ class ProductsAPIView(APIView):
         brand = request.GET.getlist('brand[]')
         is_ajax = request.GET.get('is_ajax')
 
-        nested_list = [[q,], categories, brand, wattage]
+        nested_list = [[q,], categories, brand]
 
-        if nested_list[0][0] is None and not any(nested_list[1:4]):
+        if nested_list[0][0] is None and not any(nested_list[1]):
             matching_items = Product.objects.all()
-        elif q is None:
+        elif nested_list[0][0] is None:
             product_lookup = Q(brand__in=brand) & Q(category__in=categories)
             matching_items = Product.objects.filter(product_lookup)
         else:
             product_lookup = Q(title__icontains=q) & Q(brand__in=brand) & Q(category__in=categories)
             matching_items = Product.objects.filter(product_lookup)
+        
 
         if is_ajax == 'True':
             html = render_to_string(

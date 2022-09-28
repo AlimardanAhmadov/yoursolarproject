@@ -5,8 +5,11 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required 
 from django.db import transaction
 from django.http import JsonResponse, HttpResponse
+from django.core.exceptions import PermissionDenied
+from main.ajax_decorator import ajax_login_required
 from rest_framework.generics import (ListCreateAPIView,)
 from rest_framework import permissions, status
+from user.views import get_prev_url
 
 from .serializers import CartDetailsItemSerializer, CreateCartItemSerializer, UpdateCartSerializer
 from .models import Cart, CartItem
@@ -19,7 +22,7 @@ class CreateCartItemView(ListCreateAPIView):
     serializer_class = CreateCartItemSerializer
     queryset = ""
 
-    @method_decorator(login_required(login_url='/login/'))
+    @method_decorator(ajax_login_required)
     def dispatch(self, *args, **kwargs):
         return super(CreateCartItemView, self).dispatch(*args, **kwargs)
 
@@ -57,6 +60,7 @@ class CreateCartItemView(ListCreateAPIView):
                         'serializer': serializer.data,
                         'status': status.HTTP_200_OK,
                     }
+
                     return JsonResponse(context)
                 else:
                     transaction.set_rollback(True)
@@ -73,6 +77,7 @@ class CreateCartItemView(ListCreateAPIView):
                         content_type='application/json')
                     response.status_code = 400
                     return response
+
             except Exception as e:
                 print("Error: ", e)
                 transaction.set_rollback(True)
@@ -112,7 +117,11 @@ class UpdateCartView(ListCreateAPIView):
                 )
                 if serializer.is_valid():
                     self.perform_create(serializer)
-                    return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+                    context = {
+                        'data': serializer.data,
+                        'status': status.HTTP_200_OK,
+                    }
+                    return JsonResponse(context)
                 else:
                     transaction.set_rollback(True)
                     data = []
@@ -141,7 +150,6 @@ class UpdateCartView(ListCreateAPIView):
         return update_serializer
 
 
-
 class DestroyCartItemAPIView(ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CartDetailsItemSerializer
@@ -159,4 +167,9 @@ class DestroyCartItemAPIView(ListCreateAPIView):
     def create(self, request, slug):
         instance = self.get_object(slug)
         instance.delete()
-        return JsonResponse({"detail": "Product deleted"})
+
+        context = {
+            'detail': 'Product delete'
+        }
+
+        return JsonResponse(context)

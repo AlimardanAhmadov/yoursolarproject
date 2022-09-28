@@ -109,8 +109,8 @@ class ProductVariant(TimeStampedModel):
     primary_variant=models.BooleanField(default=False)
     description=RichTextField()
     availability=models.CharField(max_length=15, choices=AV_CHOICES)
-    width = models.CharField(max_length=50, blank=True, null=True, help_text="For panels. (metres)")
-    height = models.CharField(max_length=50, blank=True, null=True, help_text="For panels. (metres)")
+    width=models.CharField(max_length=50, blank=True, null=True, help_text="For panels. (metres)")
+    height=models.CharField(max_length=50, blank=True, null=True, help_text="For panels. (metres)")
     materials=models.TextField(blank=True, null=True)
     price=models.FloatField(default=0.0)
     discount=models.FloatField(default=0.0)
@@ -119,10 +119,10 @@ class ProductVariant(TimeStampedModel):
     active=models.BooleanField(default=True)
     quantity=models.PositiveIntegerField(default=0)
     shipping_price=models.FloatField(default=0.0)
-    size = models.CharField(max_length=10, blank=True, null=True, help_text='For cables')
-    suitable_roof_style = models.CharField(max_length=20, blank=True, null=True, choices=ROOF_TYPES, help_text='For Hooks/Fittings')
-    wattage = models.CharField(max_length=10, blank=True, null=True)
-    tracker = FieldTracker()
+    size=models.CharField(max_length=10, blank=True, null=True, help_text='For cables')
+    suitable_roof_style=models.CharField(max_length=20, blank=True, null=True, choices=ROOF_TYPES, help_text='For Hooks/Fittings')
+    wattage=models.CharField(max_length=10, blank=True, null=True)
+    tracker=FieldTracker()
 
     class Meta:
         verbose_name = 'Variant'
