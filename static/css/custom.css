@@ -1233,7 +1233,7 @@ header {
 }
 
 .cart-notification .card.active {
-    transform: translateY(25%);
+    transform: translateY(29%);
     transition: transform var(--duration-default) ease,visibility 0s;
     visibility: visible;
     z-index: 1;

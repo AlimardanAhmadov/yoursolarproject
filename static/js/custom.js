@@ -565,7 +565,9 @@ $(document).on('click', '#addCart', function(event){
                     '<span class="notification-product__feature">Price: ' + product_price + '</span>'+
                 '</div>'
             )
+            $(".menu-item .cart-btn").load(location.href + " .menu-item .cart-btn");
             setTimeout(function() {
+                $('.cart-wrapper').load(location.href + " .cart-wrapper .card");
                 $('#addCart').html('Add to Cart');
                 $('.cart-notification .card').addClass('active');
                 // if error message length is more than 0    
@@ -574,7 +576,7 @@ $(document).on('click', '#addCart', function(event){
             }, delay_by_in_ms);
             setTimeout(function() {
                 $('.cart-notification .card').removeClass('active');
-            }, 10000); 
+            }, 8000); 
 		},
         error: function (xhr, ajaxOptions, thrownError) {
             setTimeout(function() {
