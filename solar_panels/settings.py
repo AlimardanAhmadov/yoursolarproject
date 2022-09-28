@@ -244,9 +244,9 @@ EMAIL_USE_TLS = True
 
 DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
 
-BROKER_URL = 'redis://localhost:6379/0'
-BACKEND_URL = 'redis://localhost:6379/1'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+BROKER_URL = os.environ['REDIS_URL']
+BACKEND_URL = os.environ['REDIS_URL']
+CELERY_RESULT_BACKEND = os.environ['REDIS_URL']
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
