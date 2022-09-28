@@ -829,6 +829,37 @@ categories.forEach(function (category) {
 // LOCAL STORAGE END
 
 // SIGN UP & SIGN IN 
+$(document).on('click', '.recover', function(event) {
+    event.preventDefault();
+    $('.user-layout').html(
+        '<form class="user" id="recover">' +
+            '<h1>Reset your password</h1>' +
+            '<span class="section__caption">' +
+                'We will send you an email to reset your password' +
+            '</span>' +
+            '<div class="form__error small" role="alert">' +
+                '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="red" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">' +
+                    '<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>' +
+                '</svg>' +
+                '<span class="error__content">' +
+                '</span>' +
+            '</div>' +
+            '<div class="input-group">' +
+                '<div class="field">' +
+                    '<input id="emailField" type="text" name="email" placeholder=" ">' +
+                    '<label for="emailField">Email</label>' +
+                '</div>' +
+            '</div>' +
+            '<div>' +
+                '<button class="btn button-black">Submit</button>' +
+            '</div>' +
+            '<div class="signup__recover">' +
+                '<a href="/profile/" class="small">Cancel</a>' +
+            '</div>' +
+        '</form>'
+    )
+})
+
 $(document).on('submit', '.login', function(event){
 	event.preventDefault();
     var $this = $(this);
@@ -951,7 +982,7 @@ $(document).on('click', '.local-account__type', function(event){
 
                     '<div id="googlebtnDiv"></div>' +
                     '<div class="signup__recover">'+
-                        '<a href="{% url "account_login" %}" class="recover small">Already have an account?</a>'+
+                        '<a href="/profile/" class="recover small">Already have an account?</a>'+
                     '</div>'+
                     '<div id="signin">'+
                         '<button class="btn button-black">Sign Up</button>'+
@@ -1006,7 +1037,7 @@ $(document).on('click', '.local-account__type', function(event){
                     
                     '<div id="googlebtnDiv"></div>' +
                     '<div class="signup__recover">' +
-                        '<a href="{% url "account_login" %}" class="recover small">Already have an account?</a>' +
+                        '<a href="/profile/" class="recover small">Already have an account?</a>' +
                     '</div>' +
                     '<div id="signin">' +
                         '<button class="btn button-black">Sign Up</button>' +
@@ -1159,6 +1190,62 @@ function handleGoogleLogin(data) {
 		}
 	}); 
 }
+
+
+$(document).on('submit', '#recover', function(event){
+	event.preventDefault();
+    var $this = $(this);
+	var input_data = {
+		'email': $('input[name="email"]').val(),
+	}
+
+	$this.addClass('disabled');
+    $('.button-black').html('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
+  
+	$.ajax({
+		type: 'POST',
+		url: '/reset/password/',
+		data: JSON.stringify(input_data),
+		dataType: 'json',
+		headers: { 'X-CSRFTOKEN': csrftoken, "Content-type": "application/json"},
+		success: function (data) {
+            setTimeout(function() {
+                $(".user-layout").html(
+                    '<div class="user signup" style="text-align: left;gap: 0;">' +
+                        '<h2>Successfull!</h2>' +
+                        '<div style="color: #565e69; font-size: 16px">' +
+                            'We have sent you an email with a link to update your password.' +
+                        '</div>' +
+                        '<legend style="font-size: 16px;font-weight: 900;">' + $('input[name="email"]').val() + '' +
+                        '<hr>' +
+                        '<div style="color: #565e69; font-size: 16px">' +
+                            'Didn’t receive an email? Be sure to check your spam folder' +
+                        '</div>' +
+                    '</div>'
+                )
+            }, delay_by_in_ms);
+		},
+        error: function (xhr, ajaxOptions, thrownError) {
+            setTimeout(function() {
+                $this.removeClass('disabled');
+                $('.button-black').html('Submit');
+                var list_of_errors = xhr.responseJSON['error'];
+                $('.form__error').fadeIn('slow');
+                $('.form__error').addClass('active');
+
+                for(let i = 0; i < list_of_errors.length; i++){
+                    var newItem = list_of_errors[i];
+                    $( ".error__content" ).html( newItem );
+                }
+            }, delay_by_in_ms);
+            setTimeout(function() {
+                $('.form__error').fadeOut('slow');
+                $('.form__error').removeClass('active');
+            }, 10000); 
+		}
+	}); 
+});
+
 // SIGN UP & SIGN IN END
 
 

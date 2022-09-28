@@ -190,12 +190,12 @@ class PasswordResetView(ListCreateAPIView):
                     user = User.objects.get(email=email)
                     send_reset_password_email.delay(user.pk)
                 except User.DoesNotExist:
-                    response = HttpResponse(json.dumps({'err': ['Please enter a valid email']}), 
+                    response = HttpResponse(json.dumps({'err': ['This email does not exist']}), 
                         content_type='application/json')
                     response.status_code = 400
                     return response
                 return Response(
-                    {"detail": _("Password reset e-mail has been sent.")},
+                    {"detail": _("A password reset link has been sent to your email address")},
                     status=status.HTTP_200_OK,
                 )
             else:
