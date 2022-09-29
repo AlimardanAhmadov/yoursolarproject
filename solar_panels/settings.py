@@ -413,7 +413,7 @@ def get_cache():
     except:
         return {
             'default': {
-                'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
+                'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache'
             }
         }
 
