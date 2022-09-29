@@ -291,7 +291,7 @@ SIMPLE_JWT = {
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'social_core.backends.google.GoogleOAuth2',
+    #'social_core.backends.google.GoogleOAuth2',
 ]
 
 JWT_AUTH = {
