@@ -3,7 +3,7 @@ from main.utils import send_email
 from .models import Quote
 
 
-url = "http://localhost:8000/"
+url = "https://sopanel.herokuapp.com/"
 
 
 @shared_task(bind=True, max_retries=20)

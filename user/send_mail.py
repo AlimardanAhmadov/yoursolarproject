@@ -13,7 +13,7 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 User = get_user_model()
 
-url = "http://localhost:8000/"
+url = "https://sopanel.herokuapp.com/"
 
 
 @shared_task(bind=True, max_retries=20)
