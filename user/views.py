@@ -68,15 +68,15 @@ class LoginAPIView(LoginView):
 
     def get_response(self, request):
         serializer_class = self.get_response_serializer()
-        if getattr(settings, "REST_USE_JWT", False):
+        """if getattr(settings, "REST_USE_JWT", False):
             data = {"user": self.user, "token": self.token}
             serializer = serializer_class(
                 instance=data, context={"request": self.request}
             )
-        else:
-            serializer = serializer_class(
-                instance=self.token, context={"request": self.request}
-            )
+        else:"""
+        serializer = serializer_class(
+            instance=self.token, context={"request": self.request}
+        )
         context = {
             'data': serializer.data,
             'status': status.HTTP_200_OK,
