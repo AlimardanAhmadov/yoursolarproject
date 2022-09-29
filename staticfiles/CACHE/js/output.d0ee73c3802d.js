@@ -163,7 +163,7 @@ $(document).on('click','#spareWay button',function(){var $this=$(this);var url=n
 else{url.searchParams.set('page',"roof-style");window.history.pushState({},'',url);$.get("/static/quote_pages/roof-style.html",function(html_string)
 {$("#content").html(html_string);},'html');}})
 $(document).on('click','#storageSystem button',function(){var $this=$(this);var url=new URL(window.location);if($this.text()=='Yes'){url.searchParams.set('page',"storage-system-size");window.history.pushState({},'',url);loadObjects();}
-else{if(localStorage.getItem('storage_system')){localStorage.removeItem('storage_system');}
+else{if(localStorage.getItem('storage_system')){localStorage.removeItem('storage_system');localStorage.removeItem('fattened_storage_cable_length');localStorage.removeItem('storagecableField');localStorage.removeItem('fattened_cable_length');storagecableField}
 url.searchParams.set('page',"extra-help");window.history.pushState({},'',url);loadObjects();}})
 $(document).on('click','#extraRequiremet button',function(e){e.preventDefault();$('.prp-btn').click();})
 $(document).on('click','#concludeQuote, #extraRequiremet button',function(e){e.preventDefault();$('#content').html('<div class="text">'+'<h2>'+'<span class="words-wrapper">'+'<b class="is-visible">We are working on it, give us a minute...</b>'+'<b>Setting up stuff...</b>'+'<b>Getting things ready...</b>'+'<b>Almost done...</b>'+'</span>'+'<h2>'+'</div>')

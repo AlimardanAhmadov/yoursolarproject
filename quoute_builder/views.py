@@ -119,7 +119,6 @@ class UploadProductsView(APIView):
             elif product_type == 'Fitting':
                 if roof_type:
                     variants = ProductVariant.objects.filter(Q(selected_product__category__iexact=product_type) & Q(suitable_roof_style__iexact=roof_type)).exclude(availability='Out of stock')
-
             else:
                 variants = ProductVariant.objects.filter(Q(selected_product__category=product_type)).exclude(availability='Out of stock')
                 
