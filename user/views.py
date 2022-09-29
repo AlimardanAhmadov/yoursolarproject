@@ -15,6 +15,7 @@ from rest_auth.serializers import PasswordResetConfirmSerializer
 from rest_auth.app_settings import JWTSerializer
 from rest_framework import permissions, status
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 from rest_auth.registration.views import VerifyEmailView
 from rest_auth.registration.serializers import VerifyEmailSerializer
 from rest_auth.views import (
@@ -406,9 +407,22 @@ class ProfileAPIView(APIView):
 class LogoutView(ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     allowed_methods = ('GET', 'POST')
-    
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
+        try:
+            if self.request.data.get('all'):
+                token: OutstandingToken
+                for token in OutstandingToken.objects.filter(user=request.user):
+                    _, _ = BlacklistedToken.objects.get_or_create(token=token)
+                return Response({"status": "OK, goodbye, all refresh tokens blacklisted"})
+            refresh_token = self.request.data.get('refresh_token')
+            token = RefreshToken(token=refresh_token)
+            token.blacklist()
+            return Response({"status": "OK, goodbye"})
+        except Exception:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    """def post(self, request):
         try:
             refresh_token = request.data["refresh_token"]
             token = RefreshToken(refresh_token)
@@ -416,7 +430,7 @@ class LogoutView(ListCreateAPIView):
 
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST)"""
 
 
 class VerifyEmailView(ListCreateAPIView, VerifyEmailView):
