@@ -98,11 +98,11 @@ class LoginSerializer(serializers.Serializer):
                     raise serializers.ValidationError(_("E-mail is not verified."))
 
         attrs["user"] = user
-        token = RefreshToken.for_user(attrs["user"])
+        """token = RefreshToken.for_user(attrs["user"])
         token = {
             "refresh_token": str(token),
             "access_token": str(token.access_token)
-        }
+        }"""
         return attrs
 
 
