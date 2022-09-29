@@ -371,12 +371,53 @@ STATICFILES_FINDERS = (
 )
 
 
-CACHES = {
+"""CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1.11211',
     }
-}
+}"""
+
+def get_cache():
+    import os
+    try:
+        servers = os.environ['MEMCACHIER_SERVERS']
+        username = os.environ['MEMCACHIER_USERNAME']
+        password = os.environ['MEMCACHIER_PASSWORD']
+
+        return {
+            'default': {
+                'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+                'TIMEOUT': None,
+                'LOCATION': servers,
+                'OPTIONS': {
+                'binary': True,
+                'username': username,
+                'password': password,
+                'behaviors': {
+                    'no_block': True,
+                    'tcp_nodelay': True,
+                    'tcp_keepalive': True,
+                    'connect_timeout': 2000,
+                    'send_timeout': 750 * 1000,
+                    'receive_timeout': 750 * 1000,
+                    '_poll_timeout': 2000,
+                    'ketama': True,
+                    'remove_failed': 1,
+                    'retry_timeout': 2,
+                    'dead_timeout': 30,
+                }
+                }
+            }
+        }
+    except:
+        return {
+            'default': {
+                'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
+            }
+        }
+
+CACHES = get_cache()
 
 COMPRESS_ENABLED = True
 COMPRESS_CSS_HASHING_METHOD = 'content'
