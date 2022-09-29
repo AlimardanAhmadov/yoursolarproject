@@ -370,21 +370,12 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-
-"""CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1.11211',
-    }
-}"""
-COMPRESS_CACHE_BACKEND = 'compressor'
-
 def get_cache():
     import os
     try:
-        servers = os.environ['MEMCACHIER_SERVERS']
-        username = os.environ['MEMCACHIER_USERNAME']
-        password = os.environ['MEMCACHIER_PASSWORD']
+        servers = os.environ['MEMCACHEDCLOUD_SERVERS']
+        username = os.environ['MEMCACHEDCLOUD_USERNAME']
+        password = os.environ['MEMCACHEDCLOUD_PASSWORD']
 
         return {
             'default': {
@@ -394,13 +385,8 @@ def get_cache():
                 'OPTIONS': {
                     'username': username,
                     'password': password,
-                    }
+                }
             },
-            'compressor': {
-                'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-                'BINARY': True,
-                'LOCATION': '127.0.0.1.11211',
-            }
         }
     except:
         return {
