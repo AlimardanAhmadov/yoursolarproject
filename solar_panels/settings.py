@@ -377,6 +377,7 @@ STATICFILES_FINDERS = (
         'LOCATION': '127.0.0.1.11211',
     }
 }"""
+COMPRESS_CACHE_BACKEND = 'compressor'
 
 def get_cache():
     import os
@@ -408,13 +409,20 @@ def get_cache():
                     'dead_timeout': 30,
                 }
                 }
+            },
+            'compressor': {
+                'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+                'BINARY': True,
+                'LOCATION': '127.0.0.1.11211',
             }
         }
     except:
         return {
             'default': {
-                'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache'
-            }
+                'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+                'BINARY': True,
+                'LOCATION': '127.0.0.1.11211',
+            },
         }
 
 CACHES = get_cache()

@@ -1,7 +1,6 @@
 from django.contrib.gis.geoip2 import GeoIP2
 from django.utils.text import slugify
 from django.conf import settings
-from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 
 from cart.serializers import CartItemSerializer, CartSerializer
