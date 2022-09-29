@@ -303,7 +303,7 @@ $(document).on('click', '#storageSystem button', function() {
             localStorage.removeItem('fattened_storage_cable_length');
             localStorage.removeItem('storagecableField');
             localStorage.removeItem('fattened_cable_length');
-            storagecableField
+            localStorage.removeItem('cablelengthbtoinvField');
         }
         url.searchParams.set('page', "extra-help");
         window.history.pushState({}, '', url);
