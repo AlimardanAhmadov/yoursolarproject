@@ -117,3 +117,4 @@ whitenoise==6.2.0
 wrapt==1.14.1
 yarl==1.8.1
 pylibmc==1.6.3
+django-bmemcached==0.3.0
