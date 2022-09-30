@@ -1,3 +1,4 @@
+from email.quoprimime import quote
 import json, re
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
@@ -13,6 +14,7 @@ from user.views import get_prev_url
 
 from .serializers import CartDetailsItemSerializer, CreateCartItemSerializer, UpdateCartSerializer
 from .models import Cart, CartItem
+from quoute_builder.models import Quote
 from product.models import Product
 
 
@@ -166,8 +168,18 @@ class DestroyCartItemAPIView(ListCreateAPIView):
     
     def create(self, request, slug):
         instance = self.get_object(slug)
-        instance.delete()
 
+        if isinstance(instance.content_object, Quote):
+            quote_slug = instance.content_object.slug
+            quote = Quote.cache_by_slug(quote_slug)
+
+            if not quote:
+                quote = instance.content_object
+            
+            quote.delete()
+
+        instance.delete()
+        
         context = {
             'detail': 'Product delete'
         }
