@@ -37,6 +37,7 @@ class CreateCartItemView(ListCreateAPIView):
     
     def get_cart(self, variant=None):
         username = self.request.user.username
+        print(username)
         current_cart = Cart.cache_by_slug(slugify(username))
 
         if not current_cart:
@@ -48,7 +49,7 @@ class CreateCartItemView(ListCreateAPIView):
         with transaction.atomic():
             try:
                 serializer = CreateCartItemSerializer(
-                    data=request.data, 
+                    data=request.data,
                     context={
                         "request": request, 
                         "product": self.get_product(slug), 
