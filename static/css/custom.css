@@ -1770,6 +1770,7 @@ input[type="email"]:focus + label{
     padding: 25px 100px;
     margin: 0 !important;
     width: 100%;
+    z-index: 1;
 }
 
 .choices-rows {
