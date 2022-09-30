@@ -24,7 +24,7 @@ class CreateCartItemSerializer(serializers.Serializer):
         return selected_variant
 
     def validate(self, attrs):
-        cart_item = CartItem.objects.filter(variant_id=attrs['variant_slug']).exists()
+        cart_item = CartItem.objects.filter(variant_id=attrs['variant_slug'], cart=self.cart).exists()
         if cart_item:
             raise serializers.ValidationError(
                 {"cart": 'You already have this item in your shopping cart'}
