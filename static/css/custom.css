@@ -868,7 +868,12 @@ header {
     background-size: cover;
     padding: 50px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.1s;
+}
+
+.category-item.selected {
+    outline: 3px solid #5a5b5a;
+    outline-offset: 2px;
 }
 
 .category-item:nth-child(1) {
@@ -1009,7 +1014,7 @@ header {
 
 .primary {
     width: 600px;
-    height: auto;
+    height: 800px;
     max-height: 800px;
     background-size: contain;
     background-position: center center;
@@ -1187,20 +1192,21 @@ header {
     margin-top: 60px;
     font-family: 'Nunito', sans-serif;
 }
-#down-slide {
-    position: absolute;
-    /*bottom: 9.4rem;*/
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-}
+
+/*@media screen and (min-width: 768px) {
+    #down-slide {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+    }
+}*/
 .img-list {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    /*max-height: 67%;*/
-    max-height: 87%;
+    max-height: 54.7%;
     overflow-y: hidden;
 }
 
@@ -1210,7 +1216,7 @@ header {
 
 .product-description{
     max-width: 380px;
-    max-height: 500px;
+    max-height: 250px;
     overflow-y: scroll;
     margin-top: 40px;
 }
@@ -1563,7 +1569,7 @@ input[type="email"]:focus + label{
 }
 
 [data-section] {
-    margin: 4rem auto auto;
+    margin: 10rem auto auto;
 }
 
 [data-section] .input-group {
@@ -1586,7 +1592,7 @@ input[type="email"]:focus + label{
 
 /* PROGRESS BAR */
 
-.progress-section {
+/*.progress-section {
     display: -ms-flexbox;
     display: flex;
     -ms-flex-direction: row;
@@ -1600,6 +1606,29 @@ input[type="email"]:focus + label{
     background-color: #edf1f3;
     padding: 20px;
     border-radius: 10px;
+    margin: 70px auto;
+}*/
+
+.progress-section {
+    height: 64px;
+    width: 100%;
+    border-bottom: 1px solid rgba(0,0,0,0.13);
+    position: fixed;
+    top: 108px;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    font-weight: 600;
+    font-size: .875rem;
+    float: left;
+    border-radius: 10px;
+    margin: 30px auto;
+    padding: 21px 0 9px;
 }
 
 .step {
@@ -1767,7 +1796,7 @@ input[type="email"]:focus + label{
     background-size: cover;
     padding: 90px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.1s;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -1874,7 +1903,9 @@ input[type="email"]:focus + label{
 }
 
 .choice-card.selected{
-    --light-card-gradient: 0%
+    --light-card-gradient: 0%;
+    outline: 3px solid #5a5b5a;
+    outline-offset: 2px;
 }
 
 .product-choice {
@@ -1990,7 +2021,6 @@ h6.section__title {
     right: 0;
     z-index: 1;
     background-color: #fff;
-    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 8%), 0 3px 8px 0 rgb(0 0 0 / 4%);
     display: flex;
     align-items: center;
     flex-direction: row;

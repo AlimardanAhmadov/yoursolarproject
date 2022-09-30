@@ -139,7 +139,9 @@ $(document).on("click", ".btn-back", function(){
                     if (index != 0) {
                         steps[index-1].classList.remove('active');
                     }
-                    steps[index + 1].classList.remove('active');
+                    if (index != 5) {
+                        steps[index + 1].classList.remove('active');
+                    }
 
                     // switch to the current step
                     item.classList.add('active')
@@ -316,8 +318,10 @@ $(document).on('click', '#extraRequiremet button', function(e){
     $('.prp-btn').click();
 })
 
-$(document).on('click', '#concludeQuote, #extraRequiremet button', function(e) {
+$(document).on('click', '#concludeQuote', function(e) {
     e.preventDefault();
+
+    $('.progress-section').remove();
     
     // loading page
     $('#content').html(

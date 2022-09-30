@@ -3,19 +3,19 @@ const burgerMenu = document.getElementById("burger");
 const bgOverlay = document.querySelector(".overlay");
 
 
-// Show Menu when Click the Burger
-// Hide Menu when Click the Overlay
 if (burgerMenu && navbarMenu && bgOverlay) {
 	burgerMenu.addEventListener("click", () => {
 		navbarMenu.classList.toggle("is-active");
 		bgOverlay.classList.toggle("is-active");
         $('.toolbar__section').css('z-index', '0'); 
+        $('.progress-section').css('z-index', '0'); 
 	});
 
 	bgOverlay.addEventListener("click", () => {
 		navbarMenu.classList.toggle("is-active");
 		bgOverlay.classList.toggle("is-active"); 
         $('.toolbar__section').css('z-index', '1');
+        $('.progress-section').css('z-index', '2'); 
 	});
 }
 
@@ -36,13 +36,13 @@ var swiper = new Swiper(".slide-content", {
     fade: 'true',
     grabCursor: 'true',
     pagination: {
-      el: ".swiper-pagination",
-      clickable: true,
-      dynamicBullets: true,
+        el: ".swiper-pagination",
+        clickable: true,
+        dynamicBullets: true,
     },
     navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
     },
 
     breakpoints:{
@@ -57,6 +57,7 @@ var swiper = new Swiper(".slide-content", {
         },
     },
 });
+
 
 function getParams (url = window.location) {
 
@@ -168,6 +169,7 @@ $(document).on('click', '.modal-btn', function(){
         'opacity': 1,
         'pointer-events': 'auto',
     });
+    $('.progress-section').css('z-index', '0'); 
 })
 
 $(document).on('click', '.modal-close', function(){
@@ -177,6 +179,7 @@ $(document).on('click', '.modal-close', function(){
         'opacity': 0,
         'pointer-events': 'none',
     });
+    $('.progress-section').css('z-index', '2'); 
 })
 
 $(document).on('click', '.remove__notification', function(){
@@ -566,8 +569,9 @@ $(document).on('click', '#addCart', function(event){
                 '</div>'
             )
             $(".menu-item .cart-btn").load(location.href + " .menu-item .cart-btn");
+            $(".mobile-cart").load(location.href + " .mobile-cart");
+            $('.cart-wrapper').load(location.href + " .cart-wrapper .card");
             setTimeout(function() {
-                $('.cart-wrapper').load(location.href + " .cart-wrapper .card");
                 $('#addCart').html('Add to Cart');
                 $('.cart-notification .card').addClass('active');
                 // if error message length is more than 0    

@@ -62,15 +62,15 @@
     <div class="modal-actions">
         <div class="button-couple" style="float: right;">
             {% ifequal product.category 'Panel' %}
-            <a type="button" class="btn button-black btn-next" id="confirmSelectedPanel">Choose Panel</a>
+            <a type="button" class="btn button-black btn-next" data-href="Fitting" id="confirmSelectedPanel">Choose Panel</a>
             {% endifequal %}
             
             {% ifequal product.category 'Fitting' %}
-            <a type="button"class="btn button-black btn-next" id="confirmSelectedFitting">Choose Fitting</a>
+            <a type="button" class="btn button-black btn-next" data-href="Inverter" id="confirmSelectedFitting">Choose Fitting</a>
             {% endifequal %}
 
             {% ifequal product.category 'Inverter' %}
-            <a type="button" class="btn button-black btn-next" id="confirmSelectedInverter">Choose Inverter</a>
+            <a type="button" class="btn button-black btn-next" data-href="Storage System" id="confirmSelectedInverter">Choose Inverter</a>
             {% endifequal %}
         </div>
     </div>
