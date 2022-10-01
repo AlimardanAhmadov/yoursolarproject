@@ -14,6 +14,7 @@ from main.utils import no_generator
 from cart.models import Cart, CartItem
 from product.models import ProductVariant
 from quoute_builder.models import Quote
+from user.views import get_prev_url
 
 
 stripe.api_key = getattr(settings, 'STRIPE_SECRET_KEY')
@@ -123,7 +124,7 @@ class CreateCheckoutSessionView(View):
                 customer_email=request.user.email,
                 mode='payment',
                 success_url=MY_DOMAIN + "/success?session_id={CHECKOUT_SESSION_ID}",
-                cancel_url=MY_DOMAIN + '/cancel',
+                cancel_url=get_prev_url(request),
                 billing_address_collection="required",
                 shipping_address_collection={
                     'allowed_countries': ['GB',],
@@ -272,7 +273,7 @@ class SingleProductCreateCheckoutSessionView(View):
                 mode='payment',
                 customer_email=request.user.email,
                 success_url=MY_DOMAIN + "/success?session_id={CHECKOUT_SESSION_ID}",
-                cancel_url=MY_DOMAIN + '/cancel',
+                cancel_url=get_prev_url(request),
                 billing_address_collection="required",
                 shipping_address_collection={
                     'allowed_countries': ['GB',],
