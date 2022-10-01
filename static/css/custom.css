@@ -785,10 +785,26 @@ header {
     align-items: flex-end;
 }
 
-.list-payment{
+.icon-list{
     display: flex;
     gap: 7px;
     margin-bottom: 5px;
+}
+
+.socials {
+    gap: 26px;
+    margin-top: 20px;
+}
+
+.list-social__item a {
+    padding: 8.5px 10px 11.5px;
+    background: #eaeaea;
+    border-radius: 50%;
+    transition: 0.2s;
+}
+
+.list-social__item a:hover {
+    background: #d1d0d0;
 }
 
 .footer__copyright{

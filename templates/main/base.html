@@ -8,20 +8,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
-    <meta name="author" content="IISC">
-    <meta name="description" content="Quality inspection of foods, vegetables and fruits all around the world">
+    <title>Your Solar Project | Solar Products | Quote Builder</title>
+    <meta name="author" content="Your Solar Project">
+    <meta name="description" content="Your Solar Project | Solar Products | Quote Builder">
     <meta property="og:url" content="https://sopanel.herokuapp.com/" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="HDM SOLAR | Renewable Energy Specialist | Solar Accessories | HDMSolar" />
-    <meta property="og:description" content="Local East Yorkshire supplier of solar panels, solar kits, accessories, cables and mounting kits. Renewable energy specialists. We have warehouses in Yorkshire and Hampshire providing nationwide coverage for all your solar and alternative energy needs. Visit Now: www.hdmsolar.co.uk" />
-    <meta property="og:image" content="https://sopanel.herokuapp.com/favicon.ico" />
-    <meta property="og:site_name" content="HDMSolar">
+    <meta property="og:title" content="Your Solar Project | Solar Products | Quote Builder" />
+    <meta property="og:description" content="Local East Yorkshire upplier of solar panels, solar kits, accessories, cables and mounting kits. Renewable energy specialists. We have warehouses in Yorkshire and Hampshire providing nationwide coverage for all your solar and alternative energy needs. Visit Now: www.hdmsolar.co.uk" />
+    <meta property="og:image" content="https://sopanel.herokuapp.com/images/favicon.png" />
+    <meta property="og:site_name" content="Your Solar Project">
     <meta property="og:locale" content="en_US" />
     
-    <link rel="apple-touch-icon" href="/static/img/favicon.png">
-    <link rel="icon" href="/static/img/favicon.png">
-    <link rel="shortcut icon" type="/static/image/x-icon" href="/static/img/favicon.ico">
+    <link rel="apple-touch-icon" href="{% static 'images/favicon.png' %}">
+    <link rel="icon" href="{% static 'images/favicon.png' %}">
+    <link rel="shortcut icon" type="/static/image/x-icon" href="{% static 'images/favicon.png' %}">
 
     <!-- Google Sing Up & In -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -52,8 +52,7 @@
 	<div class="container">
 		<nav class="navbar">
 			<a href="/" class="brand" id="main-logo">
-                <!--<img src="https://assets.website-files.com/5c6c5d537c647f619adce5fc/5c6cd9d0d51c7732ac8771ac_space%20posters%20logo%20WHITE.png" width="170" alt="" class="nav-image">-->
-                <span style="color: #fff;">LOGO</span>
+                <img src="{% static 'images/logo.png' %}" width="170" alt="Navbar Logo" class="nav-image">
 			</a>
             <button class="menu-link plain-btn cart-btn mobile-cart">
                 <img src="https://assets.website-files.com/5c6c5d537c647f619adce5fc/5c6cec0bd51c77695d8796d5_Cart%20White.svg" alt="cart" class="cart-icon" width="20" height="auto">
@@ -508,9 +507,40 @@
         <!-- Footer main -->
         <section class="ft-main">
             <div class="ft-main-item">
-                <h2 class="ft-title">Newsletter</h2>
-                <div class="ft-title-border"></div>
-                <form class="newsletter">
+                <div class="logo-img">
+                    <img src="{% static 'images/footer-logo.jpg' %}" alt="Footer Logo" width="160" height="auto">
+                </div>
+                <ul class="icon-list socials">
+                    <li class="list-social__item">
+                        <a href="">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="18" height="18" fill="#001C40">
+                                <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="list-social__item">
+                        <a href="">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="18" height="18" fill="#001C40">
+                                <path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="list-social__item">
+                        <a href="">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="18" height="18" fill="#001C40">
+                                <path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="list-social__item">
+                        <a href="">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="18" height="18" fill="#001C40">
+                                <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+                <!--<form class="newsletter">
                     <label for="newsletter">Subscribe to your newsletter</label>
                     <div class="field">
                         <input id="newsletter" type="text" name="email" placeholder="Email" autocapitalize="off" autocomplete="off" autocorrect="off" aria-required="true">
@@ -520,13 +550,13 @@
                             </svg>
                         </button>
                     </div>
-                </form>
+                </form>-->
             </div>
             <div class="ft-main-item">
                 <h2 class="ft-title">Quick Links</h2>
                 <div class="ft-title-border"></div>
                 <ul>
-                    <li><a href="#">Search</a></li>
+                    <li><a href="{% url 'shop' %}">Search</a></li>
                     <li><a href="#">Terms of Service</a></li>
                     <li><a href="#">Refund Policy</a></li>
                 </ul>
@@ -560,7 +590,7 @@
                     </div>
                 </div>
                 <div class="cards-list">
-                    <ul class="list-payment">
+                    <ul class="icon-list">
                         <li class="list-payment__item">
                             <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="35px" height="35px"><path fill="#1565C0" d="M45,35c0,2.209-1.791,4-4,4H7c-2.209,0-4-1.791-4-4V13c0-2.209,1.791-4,4-4h34c2.209,0,4,1.791,4,4V35z"/><path fill="#FFF" d="M15.186 19l-2.626 7.832c0 0-.667-3.313-.733-3.729-1.495-3.411-3.701-3.221-3.701-3.221L10.726 30v-.002h3.161L18.258 19H15.186zM17.689 30L20.56 30 22.296 19 19.389 19zM38.008 19h-3.021l-4.71 11h2.852l.588-1.571h3.596L37.619 30h2.613L38.008 19zM34.513 26.328l1.563-4.157.818 4.157H34.513zM26.369 22.206c0-.606.498-1.057 1.926-1.057.928 0 1.991.674 1.991.674l.466-2.309c0 0-1.358-.515-2.691-.515-3.019 0-4.576 1.444-4.576 3.272 0 3.306 3.979 2.853 3.979 4.551 0 .291-.231.964-1.888.964-1.662 0-2.759-.609-2.759-.609l-.495 2.216c0 0 1.063.606 3.117.606 2.059 0 4.915-1.54 4.915-3.752C30.354 23.586 26.369 23.394 26.369 22.206z"/><path fill="#FFC107" d="M12.212,24.945l-0.966-4.748c0,0-0.437-1.029-1.573-1.029c-1.136,0-4.44,0-4.44,0S10.894,20.84,12.212,24.945z"/></svg>
                         </li>
