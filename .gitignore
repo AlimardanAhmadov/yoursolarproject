@@ -2,6 +2,6 @@
 spenv/
 db.sqlite3
 *.pyc
-#geoip/
+geoip/
 heroku-requirements.txt
 loc-requirements.txt

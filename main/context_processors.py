@@ -8,7 +8,7 @@ from cart.models import Cart, CartItem
 
 
 def geoip(request):
-    if settings.DEBUG == True:
+    if settings.DEBUG == False:
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
             ip = x_forwarded_for.split(',')[0]
