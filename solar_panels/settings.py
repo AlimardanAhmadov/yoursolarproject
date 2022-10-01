@@ -10,15 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-import os, environ, datetime
+import datetime
+import os
 from datetime import timedelta
 from pathlib import Path
 
-import django, django_heroku
+import django
+import django_heroku
+import environ
 from django.utils.encoding import force_str, smart_str
-from django.utils.translation import gettext_lazy
 from django.utils.six import python_2_unicode_compatible
-
+from django.utils.translation import gettext_lazy
 
 django.utils.encoding.force_text = force_str
 django.utils.translation.ugettext_lazy = gettext_lazy
@@ -40,7 +42,7 @@ environ.Env.read_env()
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*', 'https://sopanel.herokuapp.com/'] 
 
@@ -77,6 +79,7 @@ INSTALLED_APPS = [
     'storages',
 
     'compressor',
+    'whitenoise.runserver_nostatic',
 
     'allauth.socialaccount.providers.google',
     #'social_django',
@@ -101,6 +104,7 @@ MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware',
     'htmlmin.middleware.HtmlMinifyMiddleware',
     'htmlmin.middleware.MarkRequestMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = 'solar_panels.urls'
@@ -363,7 +367,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
