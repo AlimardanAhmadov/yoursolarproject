@@ -117,6 +117,10 @@ class CreateCheckoutSessionView(View):
                         }
                     )
 
+            if get_prev_url(request):
+                cancel_url = get_prev_url(request)
+            else:
+                cancel_url = MY_DOMAIN
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card', 'afterpay_clearpay'],
                 line_items=line_items,
@@ -124,7 +128,7 @@ class CreateCheckoutSessionView(View):
                 customer_email=request.user.email,
                 mode='payment',
                 success_url=MY_DOMAIN + "/success?session_id={CHECKOUT_SESSION_ID}",
-                cancel_url=get_prev_url(request),
+                cancel_url=cancel_url,
                 billing_address_collection="required",
                 shipping_address_collection={
                     'allowed_countries': ['GB',],
@@ -266,6 +270,11 @@ class SingleProductCreateCheckoutSessionView(View):
                 }
             ]
 
+            if get_prev_url(request):
+                cancel_url = get_prev_url(request)
+            else:
+                cancel_url = MY_DOMAIN
+
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card', 'afterpay_clearpay'],
                 line_items=line_items,
@@ -273,7 +282,7 @@ class SingleProductCreateCheckoutSessionView(View):
                 mode='payment',
                 customer_email=request.user.email,
                 success_url=MY_DOMAIN + "/success?session_id={CHECKOUT_SESSION_ID}",
-                cancel_url=get_prev_url(request),
+                cancel_url=cancel_url,
                 billing_address_collection="required",
                 shipping_address_collection={
                     'allowed_countries': ['GB',],
