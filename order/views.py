@@ -121,6 +121,7 @@ class CreateCheckoutSessionView(View):
                 cancel_url = get_prev_url(request)
             else:
                 cancel_url = MY_DOMAIN
+
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card', 'afterpay_clearpay'],
                 line_items=line_items,
@@ -227,6 +228,7 @@ class SingleProductCreateCheckoutSessionView(View):
                     price = selected_product.discount
                 else:
                     price = selected_product.price
+                    
                 shipping_price = selected_product.shipping_price
                 title = selected_product.title
                 max_qty = selected_product.quantity

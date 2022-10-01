@@ -11,11 +11,11 @@
     <title>Your Solar Project | Solar Products | Quote Builder</title>
     <meta name="author" content="Your Solar Project">
     <meta name="description" content="Your Solar Project | Solar Products | Quote Builder">
-    <meta property="og:url" content="https://sopanel.herokuapp.com/" />
+    <meta property="og:url" content="https://www.yoursolarproject.co.uk/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Your Solar Project | Solar Products | Quote Builder" />
-    <meta property="og:description" content="Local East Yorkshire upplier of solar panels, solar kits, accessories, cables and mounting kits. Renewable energy specialists. We have warehouses in Yorkshire and Hampshire providing nationwide coverage for all your solar and alternative energy needs. Visit Now: www.hdmsolar.co.uk" />
-    <meta property="og:image" content="https://sopanel.herokuapp.com/images/favicon.png" />
+    <meta property="og:description" content="UK wide supplier of solar panels, solar kits, large projects and installations, batteries, accessories, cables and mounting kits. Renewable energy specialists. We are based in Hampshire, providing nationwide coverage for all your solar and alternative energy needs. Visit Now: www.yoursolarproject.co.uk" />
+    <meta property="og:image" content="https://www.yoursolarproject.co.uk/images/favicon.png" />
     <meta property="og:site_name" content="Your Solar Project">
     <meta property="og:locale" content="en_US" />
     
@@ -111,6 +111,25 @@
 	</div>
 </header>
 <body>
+
+    <div id="recommendation__country-modal" class="modal-window">
+        <div class="modal-block modal-white" style="width: 500px;">
+            <a data-modal="recommendation__country-modal" title="Close" class="modal-close">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#000" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
+                </svg>
+            </a>
+            <div class="modal-content" style="flex-direction: column;margin-bottom: 80px;text-align:center;align-items:center;gap: 20px;">
+                <img src="https://cdn.shopify.com/static/images/flags/{{ location_code }}.svg" alt="az" width="60" height="auto">
+                <p>Your location is set to <span style="font-size:18px;font-weight: 600;"> {{ location_country }} </span></p>
+            </div>
+            <div class="modal-actions" style="padding: 27px;">
+                <div class="button-couple" style="justify-content: center;">
+                    <a href="{% url 'home' %}" class="btn button-black" style="border-radius: 6px;">Continue</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="cart-wrapper">
         <div class="cart card">
             <div class="cart__header border-bottom">
@@ -571,8 +590,8 @@
                 </ul>
             </div> 
         </section>
-      
-        <!-- Footer legal -->
+
+        <!-- Footer Legal -->
         <section class="ft-legal border-top">
             <div class="footer-content__bottom">
                 <div class="select-countries">
@@ -611,6 +630,7 @@
                 </div>
             </div>
         </section>
+        <!-- End footer legal -->
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
@@ -620,6 +640,8 @@
     {% compress js %}
     <script src="{% static 'js/waypoints/jquery.waypoints.min.js' %}"></script>
     <script src="{% static 'js/waypoints/infinite.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+    <script src="{% static 'js/quote.js' %}"></script>
     <script>
         const infinite = new Waypoint.Infinite({
             element: $('.infinite-container')[0],
@@ -630,8 +652,6 @@
             },
         });
     </script>
-    <script src="{% static 'js/custom.js' %}"></script>
-    <script src="{% static 'js/quote.js' %}"></script>
     {% endcompress %}
 </body>
 </html>

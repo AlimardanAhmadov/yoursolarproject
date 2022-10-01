@@ -18,10 +18,11 @@ def geoip(request):
         g = GeoIP2()
         location = g.city(ip)
         location_country = location["country_name"]
+        location_code = location["country_code"].lower()
         context = {
             "location_country": location_country,
+            "location_code": location_code,
         }
-        print("Location: ", location_country)
 
         return context
     else:

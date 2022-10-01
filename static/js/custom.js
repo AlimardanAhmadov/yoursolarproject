@@ -162,6 +162,27 @@ function getCookie(name) {
   
 const csrftoken = getCookie('csrftoken');
 
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+$(document).ready(function() {
+    var visited = getCookie("visited");
+
+    if (visited !== 'true') {
+        var id = $('#recommendation__country-modal');
+        $(id).css({
+            'visibility': 'visible',
+            'opacity': 1,
+            'pointer-events': 'auto',
+        });
+        setCookie("visited", "true", 1);
+    }
+});
+
 $(document).on('click', '.modal-btn', function(){
     var id = '#' + $(this).data('modal');
     $(id).css({
@@ -560,7 +581,7 @@ $(document).on('click', '#addCart', function(event){
             }
             $('.cart-notification__product').html(
                 '<div class="cart-product__img border">'
-                    + '<img src="' + $('.thumbnail.selected .thumbnail-image').css('background-image').replace(/^url\(['"](.+)['"]\)/, '$1') + '" alt="385w JA Solar - Solar Panel - Black Frame" width="80" height="auto" loading="lazy">' 
+                    + '<img src="' + $('.thumbnail.selected .thumbnail-image').css('background-image').replace(/^url\(['"](.+)['"]\)/, '$1') + '" alt="385w JA Solar - Solar Panel - Black Frame" width="60" height="auto" loading="lazy">' 
                 + '</div>' +
                 '<div class="cart-notification__product-info">' + 
                     '<h6 style="font-weight: 500">'+ $(".product__title h1").text() +'</h6>' +
@@ -656,6 +677,7 @@ $(document).on('click', 'button[data-remove-cart-item]', function(event){
             setTimeout(function() {
                 $this.parents('.cart-notification__product').remove();
                 $(".menu-item .cart-btn").load(location.href + " .menu-item .cart-btn");
+                $(".mobile-cart").load(location.href + " .mobile-cart");
                 $("#cart-subtotal").load(location.href + " #cart-subtotal");
 
                 if ($('.cart__body .cart-notification__product').length == 0) {
