@@ -42,7 +42,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://sopanel.herokuapp.com/', 'localhost:8000']
+ALLOWED_HOSTS = ['*', 'https://sopanel.herokuapp.com/', 'localhost:8000']
 
 # Application definition
 
@@ -157,6 +157,8 @@ LOGGING = {
         },
     }
 }
+
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
