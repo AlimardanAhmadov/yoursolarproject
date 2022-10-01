@@ -1,21 +1,22 @@
+import json
+import re
 from email.quoprimime import quote
-import json, re
-from django.shortcuts import get_object_or_404
-from django.utils.text import slugify
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required 
-from django.db import transaction
-from django.http import JsonResponse, HttpResponse
-from django.core.exceptions import PermissionDenied
-from main.ajax_decorator import ajax_login_required
-from rest_framework.generics import (ListCreateAPIView,)
-from rest_framework import permissions, status
-from user.views import get_prev_url
 
-from .serializers import CartDetailsItemSerializer, CreateCartItemSerializer, UpdateCartSerializer
-from .models import Cart, CartItem
-from quoute_builder.models import Quote
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
+from django.utils.text import slugify
+from main.ajax_decorator import ajax_login_required
 from product.models import Product
+from quoute_builder.models import Quote
+from rest_framework import permissions, status
+from rest_framework.generics import ListCreateAPIView
+
+from .models import Cart, CartItem
+from .serializers import (CartDetailsItemSerializer, CreateCartItemSerializer,
+                          UpdateCartSerializer)
 
 
 class CreateCartItemView(ListCreateAPIView):

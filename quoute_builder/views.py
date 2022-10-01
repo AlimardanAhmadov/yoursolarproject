@@ -1,27 +1,27 @@
-import re, json
+import json
+import re
+
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db import transaction
+from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Q
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from main.html_renderer import MyHTMLRenderer
 from main.views import is_ajax
 from product.models import ProductVariant
 from product.serializers import ProductVariantSerializer
-
-from rest_framework.generics import (
-    ListCreateAPIView,
-)
 from rest_framework import permissions, status
-from rest_framework.views import APIView
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from django.contrib.auth.decorators import login_required 
-from django.utils.decorators import method_decorator
-from django.db import transaction
-
-from main.html_renderer import MyHTMLRenderer
-from .serializers import QuoteBuilderSerializer, QuoteSerializer, ServiceSerializer, StorageSystemSerializer
 from .models import Quote, Service, StorageSystem
+from .serializers import (QuoteBuilderSerializer, QuoteSerializer,
+                          ServiceSerializer, StorageSystemSerializer)
 
 
 class QuoteView(APIView):
@@ -31,13 +31,16 @@ class QuoteView(APIView):
     serializer_class = QuoteSerializer
 
 
+    @method_decorator(login_required(login_url='/login/'), cache_page(60 * 15))
+    def dispatch(self, *args, **kwargs):
+        return super(QuoteView, self).dispatch(*args, **kwargs)
+
     def get(self, request, slug):
         selected_quote = Quote.cache_by_slug(slug)
         if selected_quote is None:
             selected_quote = get_object_or_404(Quote, slug=slug)
 
         serializer = QuoteSerializer(selected_quote, many=False)
-        print(serializer.data)
 
         context = {
             'data': serializer.data,
@@ -55,7 +58,7 @@ class QuoteBuilderView(ListCreateAPIView):
     serializer_class = QuoteBuilderSerializer
     queryset = ""
 
-    @method_decorator(login_required(login_url='/login/'))
+    @method_decorator(login_required(login_url='/login/'), cache_page(60 * 15))
     def dispatch(self, *args, **kwargs):
         return super(QuoteBuilderView, self).dispatch(*args, **kwargs)
     
@@ -208,7 +211,7 @@ class QuotesAPIView(APIView):
     template_name = 'quote/quotes.html'
     renderer_classes = [MyHTMLRenderer, ]
 
-    @method_decorator(login_required(login_url='/login/'))
+    @method_decorator(login_required(login_url='/login/'), cache_page(60 * 15))
     def dispatch(self, *args, **kwargs):
         return super(QuotesAPIView, self).dispatch(*args, **kwargs)
 

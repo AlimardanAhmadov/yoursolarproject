@@ -1,43 +1,39 @@
-import re, json
-from django.db import transaction
+import json
+import re
+
+from allauth.account.models import (EmailAddress, EmailConfirmation,
+                                    EmailConfirmationHMAC)
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db import transaction
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.utils.decorators import method_decorator
-from django.views.decorators.debug import sensitive_post_parameters
-from django.contrib.auth.decorators import login_required 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.translation import gettext_lazy as _
-from allauth.account.models import EmailAddress, EmailConfirmation, EmailConfirmationHMAC
-from rest_framework.response import Response
-from rest_auth.utils import jwt_encode 
-from rest_auth.serializers import PasswordResetConfirmSerializer
-from rest_auth.app_settings import JWTSerializer
-from rest_framework import permissions, status
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
-from rest_auth.registration.views import VerifyEmailView
-from rest_auth.registration.serializers import VerifyEmailSerializer
-from rest_auth.views import (
-    LoginView, APIView
-)
-from rest_framework.generics import (
-    ListCreateAPIView,
-)
+from django.views.decorators.cache import cache_page
+from django.views.decorators.debug import sensitive_post_parameters
 from main.html_renderer import MyHTMLRenderer
 from order.models import Order
+from rest_auth.app_settings import JWTSerializer
+from rest_auth.registration.serializers import VerifyEmailSerializer
+from rest_auth.registration.views import VerifyEmailView
+from rest_auth.serializers import PasswordResetConfirmSerializer
+from rest_auth.utils import jwt_encode
+from rest_auth.views import APIView, LoginView
+from rest_framework import permissions, status
+from rest_framework.generics import ListCreateAPIView
+from rest_framework.response import Response
+from rest_framework_simplejwt.token_blacklist.models import (BlacklistedToken,
+                                                             OutstandingToken)
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from .models import Customer
 from .send_mail import send_register_mail, send_reset_password_email
-from .serializers import (
-    ChangePasswordSerializer, 
-    CustomRegisterSerializer, 
-    LoginSerializer,
-    ResendEmailSerializer,
-    SendResetPasswordSerializer, 
-    GoogleSocialAuthSerializer, 
-    GoogleLoginSerializer,
-    UserSerializer
-)
+from .serializers import (ChangePasswordSerializer, CustomRegisterSerializer,
+                          GoogleLoginSerializer, GoogleSocialAuthSerializer,
+                          LoginSerializer, ResendEmailSerializer,
+                          SendResetPasswordSerializer, UserSerializer)
 
 User = get_user_model()
 
@@ -60,6 +56,10 @@ class LoginAPIView(LoginView):
     renderer_classes = [MyHTMLRenderer,]
     template_name = "user/login.html"
     allowed_methods = ("POST", "OPTIONS", "HEAD", "GET")
+
+    @method_decorator(cache_page(60 * 15))
+    def dispatch(self, *args, **kwargs):
+        return super(LoginAPIView, self).dispatch(*args, **kwargs)
 
     def get(self, request):
         users = User.objects.all()
@@ -118,6 +118,7 @@ class RegisterAPIView(ListCreateAPIView):
     
     
     @sensitive_post_parameters_m
+    @method_decorator(cache_page(60 * 15))
     def dispatch(self, *args, **kwargs):
         return super(RegisterAPIView, self).dispatch(*args, **kwargs)
 
@@ -223,6 +224,7 @@ class PasswordResetConfirmView(ListCreateAPIView):
     template_name = "user/reset-password.html"
 
     @sensitive_post_parameters_m
+    @method_decorator(cache_page(60 * 15))
     def dispatch(self, *args, **kwargs):
         return super(PasswordResetConfirmView, self).dispatch(*args, **kwargs)
     
@@ -265,7 +267,7 @@ class ChangePasswordView(ListCreateAPIView):
     renderer_classes = [MyHTMLRenderer,]
     serializer_class = ChangePasswordSerializer
 
-    @method_decorator(login_required(login_url='/login/'))
+    @method_decorator(login_required(login_url='/login/'), cache_page(60 * 15))
     @sensitive_post_parameters_m
     def dispatch(self, *args, **kwargs):
         return super(ChangePasswordView, self).dispatch(*args, **kwargs)
@@ -373,7 +375,7 @@ class ProfileAPIView(APIView):
     template_name = 'user/profile.html'
     renderer_classes = [MyHTMLRenderer, ]
 
-    @method_decorator(login_required(login_url='/login/'))
+    @method_decorator(login_required(login_url='/login/'), cache_page(60 * 15))
     def dispatch(self, *args, **kwargs):
         return super(ProfileAPIView, self).dispatch(*args, **kwargs)
 

@@ -1,19 +1,15 @@
 import logging
-from django.conf import settings
-from django.db import models
-from django.utils.text import slugify
-from django.contrib.auth import get_user_model
-from django.db.models.signals import post_save
-from django.core.cache import cache
-from django.db.models.signals import post_save, post_delete
-
 from datetime import datetime
 
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.cache import cache
+from django.db import models
+from django.db.models.signals import post_delete, post_save
+from django.utils.text import slugify
 from main.utils import id_generator
-
-from product.models import ProductVariant
 from order.tasks import confirm_payment_email
-
+from product.models import ProductVariant
 
 User = get_user_model()
 

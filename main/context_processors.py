@@ -1,14 +1,13 @@
-from django.contrib.gis.geoip2 import GeoIP2
-from django.utils.text import slugify
-from django.conf import settings
-from django.db.models import Sum
-
-from cart.serializers import CartItemSerializer, CartSerializer
 from cart.models import Cart, CartItem
+from cart.serializers import CartItemSerializer, CartSerializer
+from django.conf import settings
+from django.contrib.gis.geoip2 import GeoIP2
+from django.db.models import Sum
+from django.utils.text import slugify
 
 
 def geoip(request):
-    if settings.DEBUG == True:
+    if settings.DEBUG == False:
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
             ip = x_forwarded_for.split(',')[0]

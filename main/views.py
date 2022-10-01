@@ -1,16 +1,19 @@
-from django.shortcuts import render
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
-from django.template.loader import render_to_string
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
-from rest_framework.views import APIView
+from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from product.models import Product
 from rest_framework import permissions, status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from main.html_renderer import MyHTMLRenderer
-from product.models import Product
 
 
+@cache_page(60 * 15)
 def index(request):
     return render(request, 'main/base.html')
 
@@ -21,7 +24,8 @@ class ProductsAPIView(APIView):
     permission_classes = [permissions.AllowAny]
     template_name = 'main/products.html'
     renderer_classes = [MyHTMLRenderer, ]
-
+    
+    @method_decorator(cache_page(60 * 15))
     def dispatch(self, *args, **kwargs):
         return super(ProductsAPIView, self).dispatch(*args, **kwargs)
 

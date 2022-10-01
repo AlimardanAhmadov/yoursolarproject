@@ -1,14 +1,18 @@
 import random
+
+from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
-from django.http import JsonResponse
-from django.db.models import Q
-from rest_framework import status, permissions
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from main.html_renderer import MyHTMLRenderer
+from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from main.html_renderer import MyHTMLRenderer
-from .serializers import ProductSerializer, ProductVariantSerializer
+
 from .models import Product, ProductVariant
+from .serializers import ProductSerializer, ProductVariantSerializer
 
 
 def is_ajax(request):
@@ -20,6 +24,10 @@ class ProductDetailView(APIView):
     template_name = 'main/product_details.html'
     renderer_classes = [MyHTMLRenderer,]
     serializer_class = ProductSerializer
+    
+    @method_decorator(cache_page(60 * 15))
+    def dispatch(self, *args, **kwargs):
+        return super(ProductDetailView, self).dispatch(*args, **kwargs)
 
     def get(self, request, slug, variant=None):
         variant_slug = request.GET.get('variant_slug')

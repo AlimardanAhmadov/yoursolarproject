@@ -1,13 +1,11 @@
-from django.db import models
-from django.contrib.auth import get_user_model
-from django.db.models.signals import post_save
-from django.utils.text import slugify
-
 from datetime import datetime
 
-from main.utils import id_generator
+from django.contrib.auth import get_user_model
+from django.db import models
+from django.db.models.signals import post_save
+from django.utils.text import slugify
 from main.models import TimeStampedModel
-
+from main.utils import id_generator
 
 User = get_user_model()
 
