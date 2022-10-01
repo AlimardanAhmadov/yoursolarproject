@@ -127,7 +127,7 @@ class CreateCheckoutSessionView(View):
                 metadata={"order_id": no_generator(),'user_email': request.user.email, 'user_username': request.user.username, 'ordered_product_id': product_id},
                 customer_email=request.user.email,
                 mode='payment',
-                success_url=MY_DOMAIN + "/success?session_id={CHECKOUT_SESSION_ID}",
+                success_url=MY_DOMAIN + "success?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=cancel_url,
                 billing_address_collection="required",
                 shipping_address_collection={
@@ -281,7 +281,7 @@ class SingleProductCreateCheckoutSessionView(View):
                 metadata={"order_id": order_id,'user_email': request.user.email, 'product_id': product_id, 'ordered_product_id': product_id},
                 mode='payment',
                 customer_email=request.user.email,
-                success_url=MY_DOMAIN + "/success?session_id={CHECKOUT_SESSION_ID}",
+                success_url=MY_DOMAIN + "success?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=cancel_url,
                 billing_address_collection="required",
                 shipping_address_collection={
