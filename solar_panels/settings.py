@@ -42,7 +42,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', 'https://d650-212-47-136-169.eu.ngrok.io']
+ALLOWED_HOSTS = ['*', 'https://sopanel.herokuapp.com/']
 
 # Application definition
 
