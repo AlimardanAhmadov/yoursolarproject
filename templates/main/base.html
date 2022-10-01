@@ -121,7 +121,11 @@
             </a>
             <div class="modal-content" style="flex-direction: column;margin-bottom: 80px;text-align:center;align-items:center;gap: 20px;">
                 <img src="https://cdn.shopify.com/static/images/flags/{{ location_code }}.svg" alt="az" width="60" height="auto">
+                {% if location_code != 'UK' %}
+                <p>We don't ship to <span style="font-size:18px;font-weight: 600;"> {{ location_country }} </span></p>
+                {% else %}
                 <p>Your location is set to <span style="font-size:18px;font-weight: 600;"> {{ location_country }} </span></p>
+                {% endif %}
             </div>
             <div class="modal-actions" style="padding: 27px;">
                 <div class="button-couple" style="justify-content: center;">
