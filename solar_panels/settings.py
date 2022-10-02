@@ -152,6 +152,8 @@ else:
             'PORT': os.environ['DB_PORT'],
         }
     }
+
+    
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

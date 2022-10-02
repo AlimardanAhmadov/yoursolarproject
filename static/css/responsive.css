@@ -269,6 +269,20 @@
     .input-row {
         flex-direction: column;
     }
+
+    .btn-group-footer {
+        flex-direction: column-reverse;
+        gap: 15px;
+    }
+
+    .btn-group-footer .button-couple,
+    .btn-group-footer .btn{
+        width: 100%;
+    }
+
+    .skip-btn {
+        display: none;
+    }
 }
 
 
@@ -326,5 +340,15 @@
     header .container,
     .banner-section .container {
         max-width: 97%;
+    }
+}
+
+@media screen and (max-width: 720px) {
+    .progress-section {
+        display: none;
+    }
+
+    .section {
+        margin: 5rem auto auto;
     }
 }
