@@ -1,0 +1,57 @@
+<div class="toolbar__section">
+    <div class="toolbar__section-middle">
+        <a type="button" class="btn-back" data-back="cable-length-battery-inverter" data-href="Storage System Cable">
+            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
+            </svg>
+        </a>
+        <span class="current-step small">Storage Cable Length</span>
+        <a type="button" class="btn-next" data-href="Storage System" id="confirmStorageCable">
+            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+            </svg>
+        </a>
+    </div>
+</div>
+
+<div class="progress-section border-bottom">
+    <a class="step step-completed" data-step="Personal Information" data-page="personal-information"><span class="step-text">Personal Information</span></a>
+    <a class="step step-completed" data-step="Installation Details" data-page="installation-type"><span class="step-text">Installation Details</span></a>
+    <a class="step step-completed" data-step="Panel" data-page="parts"><span class="step-text">Panel</span></a>
+    <a class="step step-completed" data-step="Fitting" data-page="parts"><span class="step-text">Fitting</span></a>
+    <a class="step step-completed" data-step="Inverter" data-page="parts"><span class="step-text">Inverter</span></a>
+    <a class="step active" data-step="Storage System" data-page="storage-system"><span class="step-text">Storage System</span></a>
+</div>
+<div class="page-title-wrap text-center">
+    <h4 class="sub-title">
+        Storage Cable in metres
+    </h4>
+</div>
+<form style="max-width: 20rem;margin: 3rem auto auto;">
+    <div class="form__error small" role="alert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="red" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+        </svg>
+        <span class="error__content">
+        </span>
+    </div>
+    <div class="input-row">
+        <div class="input-group">
+            <div class="field">
+                <input id="storagecableField" type="number" name="storage_cable" placeholder=" " autocomplete="off">
+                <label for="storagecableField">Cable length in meters</label>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="btn-group-footer">
+    <a type="button" data-back="cable-length-battery-inverter" data-href="Storage System Cable" class="btn primary-btn btn-back">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+        </svg>
+        Back
+    </a>
+    <div class="button-couple">
+        <a data-href="Storage System" id="confirmStorageCable" type="button" class="btn button-black btn-next">Next</a>
+    </div>
+</div>
