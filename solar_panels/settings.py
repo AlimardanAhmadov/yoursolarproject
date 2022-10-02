@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import datetime
+from email.policy import default
 import os
 from datetime import timedelta
 from pathlib import Path
@@ -137,7 +138,7 @@ WSGI_APPLICATION = 'solar_panels.wsgi.application'
 DATABASES = {}
 
 if os.environ['DEBUG'] == 'False':
-    DATABASES['default'] =  dj_database_url.config('postgresql://postgres:apple_2001@database-1.cmxyn388s7si.us-east-1.rds.amazonaws.com:5432/database1?sslca=global-bundle.pem&sslmode=require&encrypt=true')
+    DATABASES['default'] =  dj_database_url.config(default='postgresql://postgres:apple_2001@database-1.cmxyn388s7si.us-east-1.rds.amazonaws.com:5432/database1?sslca=global-bundle.pem&sslmode=require&encrypt=true', conn_max_age=600)
 
     DATABASES['default']['OPTIONS'] = {
         'ssl': {'ca': os.path.join(os.path.dirname(__file__), 'global-bundle.pem')}
