@@ -137,10 +137,10 @@ WSGI_APPLICATION = 'solar_panels.wsgi.application'
 DATABASES = {}
 
 if os.environ['DEBUG'] == 'False':
-    DATABASES['default'] =  dj_database_url.config()
+    DATABASES['default'] =  dj_database_url.config('postgresql://postgres:apple_2001@database-1.cmxyn388s7si.us-east-1.rds.amazonaws.com:5432/database1?sslca=global-bundle.pem&sslmode=require&encrypt=true')
 
     DATABASES['default']['OPTIONS'] = {
-        'ssl': {'ca': os.path.join(os.path.dirname(__file__), 'rds', 'global-bundle.pem')}
+        'ssl': {'ca': os.path.join(os.path.dirname(__file__), 'global-bundle.pem')}
     }
 else:
     DATABASES = {
