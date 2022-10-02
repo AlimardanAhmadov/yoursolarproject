@@ -16,6 +16,14 @@ from product.models import ProductVariant
 from quoute_builder.models import Quote
 from user.views import get_prev_url
 
+import urllib.request
+from urllib.request import urlopen
+
+
+req = urllib.request.Request('https://v6.exchangerate-api.com/v6/07c7436812f210f455d48d84/latest/gbp')
+response = urlopen(req)
+  
+data_json = json.loads(response.read())
 
 stripe.api_key = getattr(settings, 'STRIPE_SECRET_KEY')
 
@@ -105,8 +113,8 @@ class CreateCheckoutSessionView(View):
                     line_items.append(
                         {
                             'price_data': {
-                                'currency': 'gbp',
-                                'unit_amount': int(item_price) * 100,
+                                'currency': 'usd',
+                                'unit_amount': round(int(item_price) * 100 * float(data_json['conversion_rates']['USD'])),
                                 'product_data': {
                                     'name': product.title,
                                     'images': [image, ],
@@ -139,8 +147,8 @@ class CreateCheckoutSessionView(View):
                         'shipping_rate_data': {
                             'type': 'fixed_amount',
                             'fixed_amount': {
-                            'amount': int(total_shipping) * 100,
-                            'currency': 'gbp',
+                            'amount': round(int(total_shipping) * 100 * float(data_json['conversion_rates']['USD'])),
+                            'currency': 'usd',
                             },
                             'display_name': 'Shipping price',
                         }
@@ -256,8 +264,8 @@ class SingleProductCreateCheckoutSessionView(View):
             line_items = [
                 {
                     'price_data': {
-                        'currency': 'gbp',
-                        'unit_amount': int(price) * 100,
+                        'currency': 'usd',
+                        'unit_amount': round(int(price) * 100 * float(data_json['conversion_rates']['USD'])),
                         'product_data': {
                             'name': title,
                             'images': [image,],
@@ -294,8 +302,8 @@ class SingleProductCreateCheckoutSessionView(View):
                         'shipping_rate_data': {
                             'type': 'fixed_amount',
                             'fixed_amount': {
-                            'amount': int(shipping_price) * 100,
-                            'currency': 'gbp',
+                            'amount': round(int(shipping_price) * 100 * float(data_json['conversion_rates']['USD'])),
+                            'currency': 'usd',
                             },
                             'display_name': 'Shipping price',
                         }

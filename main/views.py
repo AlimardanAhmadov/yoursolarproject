@@ -1,3 +1,4 @@
+import json
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.http import JsonResponse
@@ -12,8 +13,7 @@ from rest_framework.views import APIView
 
 from main.html_renderer import MyHTMLRenderer
 
-
-
+@cache_page(60 * 15)
 def index(request):
     return render(request, 'main/base.html')
 

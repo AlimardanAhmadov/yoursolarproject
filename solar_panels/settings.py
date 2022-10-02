@@ -82,7 +82,6 @@ INSTALLED_APPS = [
     'compressor',
 
     'allauth.socialaccount.providers.google',
-    #'social_django',
     'geoip2',
 
     'user.apps.UserConfig',

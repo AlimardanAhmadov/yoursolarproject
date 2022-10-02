@@ -7,7 +7,7 @@ from django.utils.text import slugify
 
 
 def geoip(request):
-    if settings.DEBUG == False:
+    if settings.DEBUG == True:
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
             ip = x_forwarded_for.split(',')[0]
@@ -51,9 +51,8 @@ def cart_items(request):
         if items_exists:
             cart_items = CartItem.objects.filter(cart=current_cart)
 
-            cart_item_serializer = CartItemSerializer(cart_items, many=True)
             context['cart_total'] = current_cart.total_cost
-            context['items'] = cart_item_serializer.data
+            context['cart_items'] = cart_items
 
         return context
     else:
