@@ -18,6 +18,7 @@ from pathlib import Path
 import django
 import django_heroku
 import environ
+import dj_database_url
 from django.utils.encoding import force_str, smart_str
 from django.utils.six import python_2_unicode_compatible
 from django.utils.translation import gettext_lazy
@@ -133,16 +134,25 @@ WSGI_APPLICATION = 'solar_panels.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ['DB_NAME'],
-        'USER': os.environ['DB_USER'],
-        'PASSWORD': os.environ['DB_PASSWORD'],
-        'HOST': os.environ['DB_HOST'],
-        'PORT': os.environ['DB_PORT'],
+DATABASES = {}
+
+if os.environ['DEBUG'] == 'False':
+    DATABASES['default'] =  dj_database_url.config()
+
+    DATABASES['default']['OPTIONS'] = {
+        'ssl': {'ca': os.path.join(os.path.dirname(__file__), 'rds', 'global-bundle.pem')}
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['DB_NAME'],
+            'USER': os.environ['DB_USER'],
+            'PASSWORD': os.environ['DB_PASSWORD'],
+            'HOST': os.environ['DB_HOST'],
+            'PORT': os.environ['DB_PORT'],
+        }
+    }
 
 DJRICHTEXTFIELD_CONFIG = {
     'js': ['//cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js'],
