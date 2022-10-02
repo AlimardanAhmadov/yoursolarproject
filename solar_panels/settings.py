@@ -46,7 +46,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*'] 
+ALLOWED_HOSTS = ['*', 'sopanel.herokuapp.com', 'localhost'] 
 
 # Application definition
 
@@ -186,6 +186,8 @@ LOGGING = {
         },
     }
 }
+
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
 DJRICHTEXTFIELD_CONFIG = {
     'js': ['//cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js'],
