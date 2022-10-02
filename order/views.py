@@ -105,7 +105,7 @@ class CreateCheckoutSessionView(View):
                     line_items.append(
                         {
                             'price_data': {
-                                'currency': 'usd',
+                                'currency': 'gbp',
                                 'unit_amount': int(item_price) * 100,
                                 'product_data': {
                                     'name': product.title,
@@ -140,7 +140,7 @@ class CreateCheckoutSessionView(View):
                             'type': 'fixed_amount',
                             'fixed_amount': {
                             'amount': int(total_shipping) * 100,
-                            'currency': 'usd',
+                            'currency': 'gbp',
                             },
                             'display_name': 'Shipping price',
                         }
@@ -256,7 +256,7 @@ class SingleProductCreateCheckoutSessionView(View):
             line_items = [
                 {
                     'price_data': {
-                        'currency': 'usd',
+                        'currency': 'gbp',
                         'unit_amount': int(price) * 100,
                         'product_data': {
                             'name': title,
@@ -295,7 +295,7 @@ class SingleProductCreateCheckoutSessionView(View):
                             'type': 'fixed_amount',
                             'fixed_amount': {
                             'amount': int(shipping_price) * 100,
-                            'currency': 'usd',
+                            'currency': 'gbp',
                             },
                             'display_name': 'Shipping price',
                         }

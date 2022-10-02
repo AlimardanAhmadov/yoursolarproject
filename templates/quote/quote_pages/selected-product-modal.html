@@ -7,24 +7,24 @@
         {% if product.discount %}
         <div class="price-item">
             <label for="" style="font-weight: 800;">Price</label>
-            <div class="price-item--regular" style="font-weight: 900;">$ {{ product.price }} USD</div>
+            <div class="price-item--regular" style="font-weight: 900;">£{{ product.price }} GBP</div>
         </div>
         {% endif %}
         <div class="price-item">
             {% if product.discount %}
             <label for="" style="font-weight: 800;">Discount</label>
-            <div class="price-item--discount" style="font-weight: 900;">$ {{ product.discount }} USD</div>
+            <div class="price-item--discount" style="font-weight: 900;">£{{ product.discount }} GBP</div>
             {% else %}
             <label for="" style="font-weight: 800;">Price</label>
-            <div class="price-item--discount" style="font-weight: 900;">$ {{ product.price }} USD</div>
+            <div class="price-item--discount" style="font-weight: 900;">£{{ product.price }} GBP</div>
             {% endif %}
         </div>
         <div class="price-item">
             <label for="" style="font-weight: 800;">Total Price</label>
             {% if product.discount %}
-            <div class="price-item--discount total__cost" style="font-weight: 900;">$ {{ product.discount }} USD</div>
+            <div class="price-item--discount total__cost" style="font-weight: 900;">£{{ product.discount }} GBP</div>
             {% else %}
-            <div class="price-item--discount total__cost" style="font-weight: 900;">$ {{ product.price }} USD</div>
+            <div class="price-item--discount total__cost" style="font-weight: 900;">£{{ product.price }} GBP</div>
             {% endif %}
         </div>
     </div>

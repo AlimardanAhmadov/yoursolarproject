@@ -128,7 +128,7 @@
                                 <div class="input-group">
                                     <div class="field">
                                         <input id="" type="number" name="bill_rate" placeholder=" " autocomplete="off" value="{{ data.bill_rate }}">
-                                        <label for="">Amount in USD</label>
+                                        <label for="">Amount in GBP</label>
                                     </div>
                                 </div>
                             </div>
@@ -220,7 +220,7 @@
                                     </div>
                                 </td>
                                 <td>{{ data.panels_count }}</td>
-                                <td>$ {{ data.panel_price }} USD</td>
+                                <td>£{{ data.panel_price }} GBP</td>
                             </tr>
                             <tr>
                                 <td style="display: flex; align-items: center; gap: 10px;">
@@ -233,7 +233,7 @@
                                     </div>
                                 </td>
                                 <td>1</td>
-                                <td>$ {{ data.inverter_price }} USD</td>
+                                <td>£{{ data.inverter_price }} GBP</td>
                             </tr>
                             <tr>
                                 <td style="display: flex; align-items: center; gap: 10px;">
@@ -245,7 +245,7 @@
                                     </div>
                                 </td>
                                 <td>1</td>
-                                <td>$ {{ data.fitting_price }} USD</td>
+                                <td>£{{ data.fitting_price }} GBP</td>
                             </tr>
                             <tr>
                                 <td style="display: flex; align-items: center; gap: 10px;">
@@ -257,7 +257,7 @@
                                     </div>
                                 </td>
                                 <td>{{ data.no_rails }}</td>
-                                <td>$ {{ data.rail_price }} USD</td>
+                                <td>£{{ data.rail_price }} GBP</td>
                             </tr>
                         </tbody>
                     </table>
@@ -317,7 +317,7 @@
                         Equipment Cost
                     </div>
                     <div class="pricing-value small">
-                        ${{ data.equipment_cost }} USD
+                        £{{ data.equipment_cost }} GBP
                     </div>
                 </div>
                 <div class="pricing-item">
@@ -325,7 +325,7 @@
                         Shipping
                     </div>
                     <div class="pricing-value small">
-                        ${{ data.shipping_price }} USD
+                        £{{ data.shipping_price }} GBP
                     </div>
                 </div>
                 {% if data.extra_service %}
@@ -335,7 +335,7 @@
                     </div>
                     <div class="pricing-value small">
                         {% if data.service_title == 'Complete Installation' %}
-                        2 x (${{ data.equipment_cost }} USD)
+                        2 x (£{{ data.equipment_cost }} GBP)
                         {% else %}
                         {{ data.service_price }}
                         {% endif %}
@@ -347,7 +347,7 @@
                         Total
                     </div>
                     <h5 class="pricing-value">
-                        ${{ data.total_cost }} USD
+                        £{{ data.total_cost }} GBP
                     </h5>
                 </div>
             </div>

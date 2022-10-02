@@ -141,7 +141,7 @@ post_delete.connect(Quote.invalidate_cache, sender=Quote)
 
 class Service(models.Model):
     service_title = models.CharField(max_length=250)
-    service_price = models.CharField(max_length=50, help_text="Please make sure to add $ USD")
+    service_price = models.CharField(max_length=50, help_text="Please make sure to add £ GBP")
 
     @staticmethod
     def cache_by_slug(pk):

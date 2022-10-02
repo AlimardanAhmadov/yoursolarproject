@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='service',
             name='service_price',
-            field=models.CharField(help_text='Please make sure to add $ USD', max_length=50),
+            field=models.CharField(help_text='Please make sure to add £ GBP', max_length=50),
         ),
     ]

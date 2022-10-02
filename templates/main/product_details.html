@@ -81,11 +81,11 @@
         </div>
         <div class="price__sale">
             <span class="price-item--regular">
-                ${{ product.price }} USD
+                £{{ product.price }} GBP
             </span>
             {% if product.discount %}
             <span class="price-item--discount">
-                ${ product.discount }} USD
+                £{ product.discount }} GBP
             </span>
             <div class="badge--sales">Sale</div>
             {% endif %}
@@ -170,9 +170,9 @@
                 <a href="{% url 'selected_product' item.slug %}" class="small">{{ item.title }}</a>
                 <div class="description">
                     
-                    <span class="small price">${{ item.primary_price }} USD</span>
+                    <span class="small price">£{{ item.primary_price }} GBP</span>
                     {% if item.primary_discount %}
-                    <span class="discount-price">${{ item.primary_discount }} USD</span>
+                    <span class="discount-price">£{{ item.primary_discount }} GBP</span>
                     {% endif %}
                 </div>
             </div>
