@@ -31,7 +31,7 @@ class QuoteView(APIView):
     serializer_class = QuoteSerializer
 
 
-    @method_decorator(login_required(login_url='/login/'), cache_page(60 * 15))
+    @method_decorator(login_required(login_url='/login/'))
     def dispatch(self, *args, **kwargs):
         return super(QuoteView, self).dispatch(*args, **kwargs)
 
@@ -58,7 +58,7 @@ class QuoteBuilderView(ListCreateAPIView):
     serializer_class = QuoteBuilderSerializer
     queryset = ""
 
-    @method_decorator(login_required(login_url='/login/'), cache_page(60 * 15))
+    @method_decorator(login_required(login_url='/login/'))
     def dispatch(self, *args, **kwargs):
         return super(QuoteBuilderView, self).dispatch(*args, **kwargs)
     
@@ -211,7 +211,7 @@ class QuotesAPIView(APIView):
     template_name = 'quote/quotes.html'
     renderer_classes = [MyHTMLRenderer, ]
 
-    @method_decorator(login_required(login_url='/login/'), cache_page(60 * 15))
+    @method_decorator(login_required(login_url='/login/'))
     def dispatch(self, *args, **kwargs):
         return super(QuotesAPIView, self).dispatch(*args, **kwargs)
 

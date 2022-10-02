@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 
 from main.html_renderer import MyHTMLRenderer
 
-@cache_page(60 * 15)
+#@cache_page(60 * 15)
 def index(request):
     return render(request, 'main/base.html')
 
@@ -25,7 +25,6 @@ class ProductsAPIView(APIView):
     template_name = 'main/products.html'
     renderer_classes = [MyHTMLRenderer, ]
     
-    @method_decorator(cache_page(60 * 15))
     def dispatch(self, *args, **kwargs):
         return super(ProductsAPIView, self).dispatch(*args, **kwargs)
 

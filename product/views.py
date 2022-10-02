@@ -25,7 +25,7 @@ class ProductDetailView(APIView):
     renderer_classes = [MyHTMLRenderer,]
     serializer_class = ProductSerializer
     
-    @method_decorator(cache_page(60 * 15))
+    #@method_decorator(cache_page(60 * 15))
     def dispatch(self, *args, **kwargs):
         return super(ProductDetailView, self).dispatch(*args, **kwargs)
 

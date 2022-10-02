@@ -375,7 +375,7 @@ class ProfileAPIView(APIView):
     template_name = 'user/profile.html'
     renderer_classes = [MyHTMLRenderer, ]
 
-    @method_decorator(login_required(login_url='/login/'), cache_page(60 * 15))
+    @method_decorator(login_required(login_url='/login/'))
     def dispatch(self, *args, **kwargs):
         return super(ProfileAPIView, self).dispatch(*args, **kwargs)
 
