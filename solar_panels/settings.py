@@ -137,10 +137,6 @@ DATABASES = {}
 
 if os.environ['DEBUG'] == 'False':
     DATABASES['default'] =  dj_database_url.config(default='postgresql://postgres:apple_2001@database-1.cmxyn388s7si.us-east-1.rds.amazonaws.com:5432/database1?sslrootcert=global-bundle.pem&sslmode=require', conn_max_age=600)
-
-    DATABASES['default']['OPTIONS'] = {
-        'ssl': {'ca': os.path.join(os.path.dirname(__file__), 'rds', 'global-bundle.pem')}
-    }
 else:
     DATABASES = {
         'default': {
@@ -153,7 +149,7 @@ else:
         }
     }
 
-    
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
