@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import datetime
-from email.policy import default
 import os
 from datetime import timedelta
 from pathlib import Path
@@ -44,7 +43,7 @@ environ.Env.read_env()
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*', 'sopanel.herokuapp.com', 'localhost'] 
 
