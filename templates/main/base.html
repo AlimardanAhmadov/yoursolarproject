@@ -110,29 +110,6 @@
 	</div>
 </header>
 <body>
-
-    <div id="recommendation__country-modal" class="modal-window">
-        <div class="modal-block modal-white" style="width: 500px;">
-            <a data-modal="recommendation__country-modal" title="Close" class="modal-close">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#000" class="bi bi-x-lg" viewBox="0 0 16 16">
-                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
-                </svg>
-            </a>
-            <div class="modal-content" style="flex-direction: column;margin-bottom: 80px;text-align:center;align-items:center;gap: 20px;">
-                <img src="https://cdn.shopify.com/static/images/flags/{{ location_code }}.svg" alt="az" width="60" height="auto">
-                {% if location_code != 'UK' %}
-                <p>We don't ship to <span style="font-size:18px;font-weight: 600;"> {{ location_country }} </span></p>
-                {% else %}
-                <p>Your location is set to <span style="font-size:18px;font-weight: 600;">  {{ location_country }} </span></p>
-                {% endif %}
-            </div>
-            <div class="modal-actions" style="padding: 27px;">
-                <div class="button-couple" style="justify-content: center;">
-                    <a href="{% url 'home' %}" class="btn button-black" style="border-radius: 6px;">Continue</a>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="cart-wrapper">
         <div class="cart card">
             <div class="cart__header border-bottom">
@@ -196,6 +173,29 @@
     </div>
     <div class="main">
     {% block content %}
+
+        <div id="recommendation__country-modal" class="modal-window">
+            <div class="modal-block modal-white" style="width: 500px;">
+                <a data-modal="recommendation__country-modal" title="Close" class="modal-close">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#000" class="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
+                    </svg>
+                </a>
+                <div class="modal-content" style="flex-direction: column;margin-bottom: 80px;text-align:center;align-items:center;gap: 20px;">
+                    <img src="https://cdn.shopify.com/static/images/flags/{{ location_code }}.svg" alt="az" width="60" height="auto">
+                    {% if location_code != 'UK' %}
+                    <p>We don't ship to <span style="font-size:18px;font-weight: 600;"> {{ location_country }} </span></p>
+                    {% else %}
+                    <p>Your location is set to <span style="font-size:18px;font-weight: 600;">  {{ location_country }} </span></p>
+                    {% endif %}
+                </div>
+                <div class="modal-actions" style="padding: 27px;">
+                    <div class="button-couple" style="justify-content: center;">
+                        <a href="{% url 'home' %}" class="btn button-black" style="border-radius: 6px;">Continue</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="banner-section">
             <div class="container">
                 <div class="banner-left">
