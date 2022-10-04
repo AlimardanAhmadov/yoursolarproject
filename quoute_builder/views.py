@@ -160,10 +160,8 @@ class DisplayVariantDetailsView(APIView):
 
     def get(self, request, slug):
         if is_ajax(request=request):
-            variant = ProductVariant.cache_by_slug(slug)
-
-            if variant is None:
-                variant = get_object_or_404(ProductVariant, slug=slug)
+            
+            variant = get_object_or_404(ProductVariant, slug=slug)
             
             serializer = ProductVariantSerializer(variant)
 

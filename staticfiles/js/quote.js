@@ -669,6 +669,12 @@ function validateRoofStyle(){
     }
 }
 
+$(document).on('change', '#heightField, #widthField', function(){
+    var $this = $(this);
+    var input_val = $this.val();
+    localStorage.setItem($this.attr('id'), input_val);
+})
+
 function validateRoofDimensions(){
     if (!$("#widthField").val()) {
         displayError();

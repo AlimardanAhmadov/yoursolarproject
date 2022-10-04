@@ -177,7 +177,7 @@ class ProductVariant(TimeStampedModel):
         """
         Invalidate the variant cached data when it is updated or deleted
         """
-        print("deleting cache")
+        print("product variant deleting cache")
         cache.delete(CACHED_VARIANT_BY_SLUG_KEY.format(instance.slug))
 
     @staticmethod
