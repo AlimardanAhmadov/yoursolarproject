@@ -1,5 +1,5 @@
 from cart.models import Cart, CartItem
-from cart.serializers import CartItemSerializer, CartSerializer
+from cart.serializers import CartSerializer
 from django.conf import settings
 from django.contrib.gis.geoip2 import GeoIP2
 from django.db.models import Sum
