@@ -31,10 +31,12 @@ def stripe_webhook(request):
             event = stripe.Webhook.construct_event(
                 payload, sig_header, str(stripe_webhook_token)
             )
-        except ValueError:
+        except ValueError as v:
+            print(v)
             transaction.set_rollback(True)
             return HttpResponse(status=400)
-        except stripe.error.SignatureVerificationError:
+        except stripe.error.SignatureVerificationError as s:
+            print(s)
             transaction.set_rollback(True)
             return HttpResponse(status=400)
 
@@ -42,10 +44,19 @@ def stripe_webhook(request):
             session = event['data']['object']
 
             order_id = session["metadata"]["order_id"]
-            user_email = session["metadata"]["user_email"]
+
             order_product_id = session["metadata"]["ordered_product_id"]
 
-            user = get_object_or_404(User, email=user_email)
+            if "user_pk" in session["metadata"]:
+                user_id = session["metadata"]["user_pk"]
+            
+                user_exists = User.objects.filter(id=user_id).exists()
+                if user_exists:
+                    user = User.objects.filter(id=user_id).first()
+                else:
+                    user = None
+            else:
+                user = None
 
             address_key = session['shipping_details']['address']
 
@@ -92,8 +103,6 @@ def stripe_webhook(request):
                     if not quote:
                         quote = get_object_or_404(Quote, slug=session['metadata']['product_id'])
                     
-                    print(quote)
-                    
                     quote.selected_panel.quantity -= quote.panels_count
                     quote.selected_panel.save()
 
@@ -109,12 +118,12 @@ def stripe_webhook(request):
                         CartItem.objects.filter(model_type=ContentType.objects.get_for_model(Quote), object_id=quote.id).first().delete()
 
             else:
-                if "user_username" in session["metadata"]:
-                    user_username = session["metadata"]["user_username"]
+                if "cart_slug" in session["metadata"]:
+                    cart_slug = session["metadata"]["cart_slug"]
 
-                    cart = Cart.cache_by_slug(user_username)
+                    cart = Cart.cache_by_slug(cart_slug)
                     if not cart:
-                        cart = get_object_or_404(Cart, slug=user_username)
+                        cart = get_object_or_404(Cart, slug=cart_slug)
 
                     if CartItem.objects.filter(cart=cart).exists():
 

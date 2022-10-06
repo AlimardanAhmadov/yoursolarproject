@@ -14,7 +14,6 @@ class CreateCartItemSerializer(serializers.Serializer):
         self.request = self.context.get("request")
         self.product = self.context.get("product")
         self.cart = self.context.get("cart")
-        self.user = getattr(self.request, "user", None)
     
     def get_variant(self, attrs):
         selected_variant = ProductVariant.cache_by_slug(attrs['variant_slug'])

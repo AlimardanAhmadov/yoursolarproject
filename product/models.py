@@ -29,10 +29,9 @@ AV_CHOICES = (
 CATEGORY_CHOICES = (
     ('Inverter', 'Inverter'),
     ('Panel', 'Panel'),
-    ('Rail', 'Rail'),
+    ('Rails & Clips', 'Rails & Clips'),
     ('Fitting', 'Fitting'),
     ('Battery', 'Battery'),
-    ('Clip', 'Clip'),
     ('Other', 'Other'),
 )
 

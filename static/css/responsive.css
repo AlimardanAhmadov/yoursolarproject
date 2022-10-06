@@ -352,3 +352,9 @@
         margin: 5rem auto auto;
     }
 }
+
+@media screen and (max-width: 550px) {
+    .sorry-message {
+        padding: 0 1rem;
+    }
+}

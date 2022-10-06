@@ -94,6 +94,7 @@ function updateVariantDetails(event) {
             }, delay_by_in_ms);
         },
         error: function (xhr, ajaxOptions, thrownError) {
+            console.log("not working");
         },
     });
 }
@@ -1001,7 +1002,7 @@ $(document).on("submit", "#resetPassword", function (event) {
     var url = window.location.pathname;
     var uid = url.split("/")[4];
     var token = url.split("/")[5];
-
+    console.log(token, uid);
     var input_data = { new_password1: $('input[name="new_password1"]').val(), new_password2: $('input[name="new_password2"]').val(), token: token, uid: uid };
     $(".button-black").html('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
     $.ajax({
@@ -1141,7 +1142,7 @@ $(document).on("click", "#googleAuthenticationBtn", function (event) {
         agreement: agreement,
         provider: "Google",
     };
-    
+    console.log(input_data);
     $(".button-black").html('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
     $.ajax({
         type: "POST",
@@ -1315,7 +1316,7 @@ $(document).on("click", "#resend-email", function (event) {
     $this.html('<div class="lds-ring" style="justify-content: flex-start"><div></div><div></div><div></div><div></div></div>');
     $this.addClass("disabled");
     var email = $this.data("email");
-
+    console.log(email);
     $.ajax({
         type: "POST",
         url: "/resend-verification-email/",

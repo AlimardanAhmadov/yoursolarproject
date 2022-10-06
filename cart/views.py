@@ -1,7 +1,5 @@
 import json
 import re
-from email.quoprimime import quote
-
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse
@@ -20,7 +18,7 @@ from .serializers import (CartDetailsItemSerializer, CreateCartItemSerializer,
 
 
 class CreateCartItemView(ListCreateAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
     allowed_methods = ("POST", "OPTIONS", "HEAD", "GET")
     serializer_class = CreateCartItemSerializer
     queryset = ""
@@ -36,13 +34,21 @@ class CreateCartItemView(ListCreateAPIView):
             selected_product = get_object_or_404(Product, slug=slug)
         return selected_product
     
-    def get_cart(self, variant=None):
-        username = self.request.user.username
-        print(username)
-        current_cart = Cart.cache_by_slug(slugify(username))
+    def get_cart(self, request, variant=None):
+        if request.user.is_authenticated:
+            username = self.request.user.username
+            print(username)
+            current_cart = Cart.cache_by_slug(slugify(username))
 
-        if not current_cart:
-            current_cart = get_object_or_404(Cart, slug=slugify(username))
+            if not current_cart:
+                current_cart = get_object_or_404(Cart, slug=slugify(username))
+        else:
+
+            guest = request.session['nonuser']
+            current_cart = Cart.cache_by_slug(slugify(guest))
+
+            if not current_cart:
+                current_cart = Cart.objects.get(session_id = guest, slug=guest)
         return current_cart
 
 
@@ -55,7 +61,7 @@ class CreateCartItemView(ListCreateAPIView):
                         "request": request, 
                         "product": self.get_product(slug), 
                         "variant_slug": request.POST.get('variant_slug'),
-                        "cart": self.get_cart()
+                        "cart": self.get_cart(request)
                     }
                 )
                 if serializer.is_valid():
@@ -101,7 +107,6 @@ class UpdateCartView(ListCreateAPIView):
     serializer_class = UpdateCartSerializer
     queryset = ""
 
-    @method_decorator(login_required(login_url='/login/'))
     def dispatch(self, *args, **kwargs):
         return super(UpdateCartView, self).dispatch(*args, **kwargs)
 
@@ -130,6 +135,7 @@ class UpdateCartView(ListCreateAPIView):
                     transaction.set_rollback(True)
                     data = []
                     emessage=serializer.errors
+                    print(emessage)
                     for key in emessage:
                         err_message = str(emessage[key])
                         err_string = re.search("string='(.*)', ", err_message)
@@ -155,12 +161,11 @@ class UpdateCartView(ListCreateAPIView):
 
 
 class DestroyCartItemAPIView(ListCreateAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
     serializer_class = CartDetailsItemSerializer
     queryset = ""
     allowed_methods = ("POST", "OPTIONS", "HEAD")
 
-    @method_decorator(login_required(login_url='/login/'))
     def dispatch(self, *args, **kwargs):
         return super(DestroyCartItemAPIView, self).dispatch(*args, **kwargs)
 

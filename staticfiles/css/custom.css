@@ -885,6 +885,9 @@ header {
     padding: 50px;
     cursor: pointer;
     transition: 0.1s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .category-item.selected {
@@ -905,7 +908,7 @@ header {
 }
 
 .category-item:nth-child(4) {
-    background-image: linear-gradient(rgb(0 0 0 / var(--card-gradient)), rgb(0 0 0 / var(--card-gradient))),url(/static/images/clips.webp);
+    background-image: linear-gradient(rgb(0 0 0 / var(--card-gradient)), rgb(0 0 0 / var(--card-gradient))),url(/static/images/inverter.png);
 }
 
 .category-item:nth-child(5) {
@@ -2301,6 +2304,10 @@ h6.section__title {
     color: #fff;
 }
 
+.order-list .prp-btn{ 
+    width: 62px;
+}
+
 .clearpay-card {
     max-width: 200px;
     padding: 10px 15px;
@@ -2394,4 +2401,19 @@ h6.section__title {
 
 #recover {
     align-items: center;
+}
+
+/* THE SCIENCE */
+.sorry-message {
+    font-family: 'Nunito',sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 6rem;
+    gap: 3rem;
+}
+
+.sorry-message h4{
+    margin: 0 auto 9rem;
+    max-width: 32rem;
 }

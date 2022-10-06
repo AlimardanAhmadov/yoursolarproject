@@ -45,7 +45,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*', 'sopanel.herokuapp.com', 'localhost'] 
+ALLOWED_HOSTS = ['*', 'sopanel.herokuapp.com', 'localhost', 'https://d416-212-47-136-101.eu.ngrok.io'] 
 
 # Application definition
 
@@ -233,11 +233,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+    """
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },"""
 ]
 
 

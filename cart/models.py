@@ -22,14 +22,15 @@ class NotFound:
     """ caching """
 
 class Cart(models.Model):
-    user = models.OneToOneField(User, related_name='cart', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, related_name='cart', on_delete=models.CASCADE, blank=True, null=True, editable=False)
     total_cost = models.FloatField(default=0.0)
     grand_total = models.FloatField(default=0.0)
     shipping_cost = models.FloatField(default=0.0)
-    slug = models.SlugField(blank=True, null=True)
+    slug = models.SlugField(blank=True, null=True, editable=False)
+    session_id = models.CharField(max_length = 50, blank=True, null=True, editable=False)
 
     def __str__(self):
-        return self.user.username
+        return self.slug
     
     @staticmethod
     def cache_by_slug(slug):

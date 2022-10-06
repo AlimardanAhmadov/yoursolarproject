@@ -1,4 +1,7 @@
-import json, stripe, os
+import json
+import stripe
+import os
+import uuid
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.conf import settings
@@ -7,6 +10,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from django.conf import settings
 from django.utils.decorators import method_decorator
+from django.utils.text import slugify
+
 from main.ajax_decorator import ajax_login_required
 
 from main.utils import no_generator
@@ -45,11 +50,31 @@ class CreateCheckoutSessionView(View):
 
     def post(self, request, *args, **kwargs):
         try:
-            user = request.user
 
-            cart = Cart.cache_by_slug(str(user.username))
-            if not cart:
-                cart = get_object_or_404(Cart, slug=str(user.username))
+            if request.user.is_authenticated:
+                user = request.user
+
+                cart = Cart.cache_by_slug(str(user.username))
+                if not cart:
+                    cart = get_object_or_404(Cart, slug=str(user.username))
+                
+                user_id = request.user.pk
+                customer_email = user.email
+                cart_slug = cart.slug
+            else:
+                user_id = None
+                customer_email = None
+                try:
+                    guest = request.session['nonuser']
+                    cart = Cart.cache_by_slug(slugify(guest))
+
+                    if not cart:
+                        cart = Cart.objects.get(session_id = guest, slug=guest)
+                except Exception:
+                    request.session['nonuser'] = str(uuid.uuid4())
+                    cart = Cart.objects.create(session_id = request.session['nonuser'], slug=request.session['nonuser'])
+                
+                cart_slug = cart.slug
             
             line_items = []
             order_items = CartItem.objects.filter(cart=cart).exists()
@@ -63,15 +88,6 @@ class CreateCheckoutSessionView(View):
                 inclusive=False,
             )
 
-            # create customer for successful/failed notification
-            try:
-                stripe.Customer.retrieve(request.user.email)
-            except Exception:
-                stripe.Customer.create(
-                    description=request.user.username,
-                    email=request.user.email,
-                )
-            
             total_shipping = 0
 
             if order_items:
@@ -133,8 +149,8 @@ class CreateCheckoutSessionView(View):
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card', 'afterpay_clearpay'],
                 line_items=line_items,
-                metadata={"order_id": no_generator(),'user_email': request.user.email, 'user_username': request.user.username, 'ordered_product_id': product_id},
-                customer_email=request.user.email,
+                metadata={"order_id": no_generator(), 'user_pk': user_id, 'cart_slug': cart_slug, 'ordered_product_id': product_id},
+                customer_email=customer_email,
                 mode='payment',
                 success_url=MY_DOMAIN + "success?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=cancel_url,
@@ -166,6 +182,7 @@ class CreateCheckoutSessionView(View):
                 content_type='application/json')
             response.status_code = 400
             return response
+
 
 
 class SingleProductCreateCheckoutSessionView(View):
@@ -243,15 +260,6 @@ class SingleProductCreateCheckoutSessionView(View):
                 order_id = no_generator()
                 product_id = selected_product.slug
             
-            # create customer for successful/failed notification
-            try:
-                stripe.Customer.retrieve(request.user.email)
-            except Exception:
-                stripe.Customer.create(
-                    description=request.user.username,
-                    email=request.user.email,
-                )
-
             # create tax id
             tax_id = stripe.TaxRate.create(
                 display_name="VAT",
@@ -260,6 +268,31 @@ class SingleProductCreateCheckoutSessionView(View):
                 percentage=20,
                 inclusive=False,
             )
+
+            if request.user.is_authenticated:
+                user = request.user
+
+                cart = Cart.cache_by_slug(str(user.username))
+                if not cart:
+                    cart = get_object_or_404(Cart, slug=str(user.username))
+                
+                user_id = request.user.pk
+                cart_slug = cart.slug
+                customer_email = user.email
+            else:
+                user_id = None
+                customer_email = None
+                try:
+                    guest = request.session['nonuser']
+                    cart = Cart.cache_by_slug(slugify(guest))
+
+                    if not cart:
+                        cart = Cart.objects.get(session_id = guest, slug=guest)
+                except Exception:
+                    request.session['nonuser'] = str(uuid.uuid4())
+                    cart = Cart.objects.create(session_id = request.session['nonuser'], slug=request.session['nonuser'])
+                
+                cart_slug = cart.slug
             
             line_items = [
                 {
@@ -288,9 +321,9 @@ class SingleProductCreateCheckoutSessionView(View):
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card', 'afterpay_clearpay'],
                 line_items=line_items,
-                metadata={"order_id": order_id,'user_email': request.user.email, 'product_id': product_id, 'ordered_product_id': product_id},
+                metadata={"order_id": order_id, 'user_pk': user_id, 'cart_slug': cart_slug, 'ordered_product_id': product_id},
                 mode='payment',
-                customer_email=request.user.email,
+                customer_email=customer_email,
                 success_url=MY_DOMAIN + "success?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=cancel_url,
                 billing_address_collection="required",
@@ -316,7 +349,6 @@ class SingleProductCreateCheckoutSessionView(View):
                 'code': 303
             })
         except Exception as exc:
-            print(exc)
             response = HttpResponse(json.dumps({'err': "Something went wrong! Please try again."}), 
                 content_type='application/json')
             response.status_code = 400

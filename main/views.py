@@ -17,6 +17,9 @@ from main.html_renderer import MyHTMLRenderer
 def index(request):
     return render(request, 'main/base.html')
 
+def how_to_videos(request):
+    return render(request, 'main/howtovideos.html')
+
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 

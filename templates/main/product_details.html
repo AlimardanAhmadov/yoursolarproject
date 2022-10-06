@@ -74,85 +74,66 @@
             {% endfor %}
         </div>
 
-    <div class="product-info__wrapper">
-        <p class="small" style="color: #121212BF; margin-bottom: 5px;">{{ product.brand }}</p>
-        <div class="product__title">
-            <h1>{{ product.title }}</h1>
-        </div>
-        <div class="price__sale">
-            <span class="price-item--regular">
-                £{{ product.price }} GBP
-            </span>
-            {% if product.discount %}
-            <span class="price-item--discount">
-                £{ product.discount }} GBP
-            </span>
-            <div class="badge--sales">Sale</div>
-            {% endif %}
-        </div>
-        <div class="product__tax small-label">Tax included. <a href="#"> Shipping</a> calculated at checkout.</div>
-        <span class="small-label">Quantity</span>
-        <div class="quantity-control" data-quantity="">
-            <button class="quantity-btn" data-quantity-minus="">
-                <svg viewBox="0 0 409.6 409.6">
-                    <g>
+        <div class="product-info__wrapper">
+            <p class="small" style="color: #121212BF; margin-bottom: 5px;">{{ product.brand }}</p>
+            <div class="product__title">
+                <h1>{{ product.title }}</h1>
+            </div>
+            <div class="price__sale">
+                <span class="price-item--regular">
+                    £{{ product.price }} GBP
+                </span>
+                {% if product.discount %}
+                <span class="price-item--discount">
+                    £{ product.discount }} GBP
+                </span>
+                <div class="badge--sales">Sale</div>
+                {% endif %}
+            </div>
+            <div class="product__tax small-label">Tax included. <a href="#"> Shipping</a> calculated at checkout.</div>
+            <span class="small-label">Quantity</span>
+            <div class="quantity-control" data-quantity="">
+                <button class="quantity-btn" data-quantity-minus="">
+                    <svg viewBox="0 0 409.6 409.6">
                         <g>
-                            <path d="M392.533,187.733H17.067C7.641,187.733,0,195.374,0,204.8s7.641,17.067,17.067,17.067h375.467 c9.426,0,17.067-7.641,17.067-17.067S401.959,187.733,392.533,187.733z" />
+                            <g>
+                                <path d="M392.533,187.733H17.067C7.641,187.733,0,195.374,0,204.8s7.641,17.067,17.067,17.067h375.467 c9.426,0,17.067-7.641,17.067-17.067S401.959,187.733,392.533,187.733z" />
+                            </g>
                         </g>
-                    </g>
-                </svg>
-            </button>
-            <input type="number" class="quantity-input" data-quantity-target="" value="1" step="1" min="1" max="" name="quantity">
-            <button class="quantity-btn" data-quantity-plus="">
-                <svg viewBox="0 0 426.66667 426.66667">
-                    <path d="m405.332031 192h-170.664062v-170.667969c0-11.773437-9.558594-21.332031-21.335938-21.332031-11.773437 0-21.332031 9.558594-21.332031 21.332031v170.667969h-170.667969c-11.773437 0-21.332031 9.558594-21.332031 21.332031 0 11.777344 9.558594 21.335938 21.332031 21.335938h170.667969v170.664062c0 11.777344 9.558594 21.335938 21.332031 21.335938 11.777344 0 21.335938-9.558594 21.335938-21.335938v-170.664062h170.664062c11.777344 0 21.335938-9.558594 21.335938-21.335938 0-11.773437-9.558594-21.332031-21.335938-21.332031zm0 0" />
-                </svg>
-            </button>
-        </div>
-        <div class="form__buttons">
-            <button class="btn primary-btn disabled" id="addCart">Add to Cart</button>
-            <button class="btn button-black disabled">Buy Now</button>
-        </div>
-        <div class="description">
-            {{ selected_variant.description|safe }}
-        </div>
-        <div class="accordion accordion-flush">
-            <div class="accordion-item border-top">
-                <h2 class="accordion-header" id="flush-Shipping">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
-                            <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-                        </svg> 
-                        Shipping & Return Policy
-                    </button>
-                </h2>
-                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-Shipping">
-                    <div class="accordion-body">
-                        <ul>
-                            <li class="small"><strong style="font-weight: 700;">Shipping Policy:</strong> {{ selected_variant.shipping_policy }}</li>
-                            <br>
-                            <li class="small"><strong style="font-weight: 700;">Return Policy:</strong> {{ selected_variant.return_policy }}</li>
-                        </ul>
-                    </div>
-                </div>
+                    </svg>
+                </button>
+                <input type="number" class="quantity-input" data-quantity-target="" value="1" step="1" min="1" max="" name="quantity">
+                <button class="quantity-btn" data-quantity-plus="">
+                    <svg viewBox="0 0 426.66667 426.66667">
+                        <path d="m405.332031 192h-170.664062v-170.667969c0-11.773437-9.558594-21.332031-21.335938-21.332031-11.773437 0-21.332031 9.558594-21.332031 21.332031v170.667969h-170.667969c-11.773437 0-21.332031 9.558594-21.332031 21.332031 0 11.777344 9.558594 21.335938 21.332031 21.335938h170.667969v170.664062c0 11.777344 9.558594 21.335938 21.332031 21.335938 11.777344 0 21.335938-9.558594 21.335938-21.335938v-170.664062h170.664062c11.777344 0 21.335938-9.558594 21.335938-21.335938 0-11.773437-9.558594-21.332031-21.335938-21.332031zm0 0" />
+                    </svg>
+                </button>
             </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-Dimensions">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-aspect-ratio" viewBox="0 0 16 16">
-                            <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h13A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5v-9zM1.5 3a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z"/>
-                            <path d="M2 4.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H3v2.5a.5.5 0 0 1-1 0v-3zm12 7a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H13V8.5a.5.5 0 0 1 1 0v3z"/>
-                        </svg>
-                        Dimensions
-                    </button>
-                </h2>
-                <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-Dimensions">
-                    <div class="accordion-body">
+            <div class="form__buttons">
+                <button class="btn primary-btn disabled" id="addCart">Add to Cart</button>
+                <button class="btn button-black disabled">Buy Now</button>
+            </div>
+            <div class="description">
+                {{ selected_variant.description|safe }}
+            </div>
+            <div class="accordion accordion-flush">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-Dimensions">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-aspect-ratio" viewBox="0 0 16 16">
+                                <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h13A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5v-9zM1.5 3a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z"/>
+                                <path d="M2 4.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H3v2.5a.5.5 0 0 1-1 0v-3zm12 7a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H13V8.5a.5.5 0 0 1 1 0v3z"/>
+                            </svg>
+                            Dimensions
+                        </button>
+                    </h2>
+                    <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-Dimensions">
+                        <div class="accordion-body">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </div>
 <div class="container related-products">

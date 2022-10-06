@@ -10,7 +10,7 @@ from main.utils import id_generator
 User = get_user_model()
 
 class Order(TimeStampedModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     order_number = models.CharField(max_length=250, blank=True, null=True, unique=True)
     status = models.CharField(max_length=250, blank=True, null=True)
     total = models.FloatField()

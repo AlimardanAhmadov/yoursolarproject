@@ -1,3 +1,5 @@
+import json
+import uuid
 from cart.models import Cart, CartItem
 from cart.serializers import CartSerializer
 from django.conf import settings
@@ -38,22 +40,31 @@ def cart_items(request):
         if current_cart is None:
             current_cart = Cart.objects.filter(slug=slugify(current_user.username)).first()
 
-        cart_serializer = CartSerializer(current_cart, many=False)
-
-        context = {
-            'cart': cart_serializer.data,
-            'qty': CartItem.objects.filter(cart=current_cart).aggregate(Sum('quantity'))['quantity__sum'] or 0
-        }
-
-        # cart items 
-        items_exists = CartItem.objects.filter(cart=current_cart).exists()
-
-        if items_exists:
-            cart_items = CartItem.objects.filter(cart=current_cart)
-
-            context['cart_total'] = current_cart.total_cost
-            context['cart_items'] = cart_items
-
-        return context
     else:
-        return {}
+        try:
+            guest = request.session['nonuser']
+            current_cart = Cart.cache_by_slug(slugify(guest))
+
+            if not current_cart:
+                current_cart = Cart.objects.get(session_id = guest, slug=guest)
+        except Exception:
+            request.session['nonuser'] = str(uuid.uuid4())
+            current_cart = Cart.objects.create(session_id = request.session['nonuser'], slug=request.session['nonuser'])
+    
+    cart_serializer = CartSerializer(current_cart, many=False)
+    
+    context = {
+        'cart': cart_serializer.data,
+        'qty': CartItem.objects.filter(cart=current_cart).aggregate(Sum('quantity'))['quantity__sum'] or 0
+    }
+
+    # cart items 
+    items_exists = CartItem.objects.filter(cart=current_cart).exists()
+
+    if items_exists:
+        cart_items = CartItem.objects.filter(cart=current_cart)
+
+        context['cart_total'] = current_cart.total_cost
+        context['cart_items'] = cart_items
+
+    return context
