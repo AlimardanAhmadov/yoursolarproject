@@ -57,7 +57,7 @@ class LoginAPIView(LoginView):
     template_name = "user/login.html"
     allowed_methods = ("POST", "OPTIONS", "HEAD", "GET")
 
-    @method_decorator(cache_page(60 * 15))
+    #@method_decorator(cache_page(60 * 15))
     def dispatch(self, *args, **kwargs):
         return super(LoginAPIView, self).dispatch(*args, **kwargs)
 
@@ -118,7 +118,7 @@ class RegisterAPIView(ListCreateAPIView):
     
     
     @sensitive_post_parameters_m
-    @method_decorator(cache_page(60 * 15))
+    #@method_decorator(cache_page(60 * 15))
     def dispatch(self, *args, **kwargs):
         return super(RegisterAPIView, self).dispatch(*args, **kwargs)
 
@@ -224,7 +224,7 @@ class PasswordResetConfirmView(ListCreateAPIView):
     template_name = "user/reset-password.html"
 
     @sensitive_post_parameters_m
-    @method_decorator(cache_page(60 * 15))
+    #@method_decorator(cache_page(60 * 15))
     def dispatch(self, *args, **kwargs):
         return super(PasswordResetConfirmView, self).dispatch(*args, **kwargs)
     

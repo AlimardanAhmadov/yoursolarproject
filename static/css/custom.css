@@ -255,7 +255,7 @@ header {
     position: absolute;
     bottom: 0;
     margin-bottom: 50px;
-    left: 0;
+    left: -40px;
     -webkit-transform: rotate(-90deg);
     -ms-transform: rotate(-90deg);
     transform: rotate(-90deg);
@@ -2416,4 +2416,9 @@ h6.section__title {
 .sorry-message h4{
     margin: 0 auto 9rem;
     max-width: 32rem;
+}
+
+.circle__caption {
+    padding-top: 30px;
+    color: #fff;
 }
