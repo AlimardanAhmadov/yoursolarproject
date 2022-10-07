@@ -71,30 +71,34 @@ class QuoteBuilderView(ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         with transaction.atomic(): 
-            serializer = self.get_serializer(data=request.data, context={'request': request})
-            if serializer.is_valid():
-                self.perform_create_quote(serializer)
-                context = {
-                    'data': serializer.data,
-                    'status': status.HTTP_200_OK,
-                    'redirect_url': serializer.data['slug']
-                }
-                return JsonResponse(context)
-            else:
-                data = []
-                emessage=serializer.errors
+            try:
+                serializer = self.get_serializer(data=request.data, context={'request': request})
+                if serializer.is_valid():
+                    self.perform_create_quote(serializer)
+                    context = {
+                        'data': serializer.data,
+                        'status': status.HTTP_200_OK,
+                        'redirect_url': serializer.data['slug']
+                    }
+                    return JsonResponse(context)
+                else:
+                    data = []
+                    emessage=serializer.errors
+                    print(emessage)
 
-                for key in emessage:
-                    err_message = str(emessage[key])
-                    err_string = re.search("string='(.*)', ", err_message)
-                    message_value = err_string.group(1)
-                    final_message = f"{key} - {message_value}"
-                    data.append(final_message)
+                    for key in emessage:
+                        err_message = str(emessage[key])
+                        err_string = re.search("string='(.*)', ", err_message)
+                        message_value = err_string.group(1)
+                        final_message = f"{key} - {message_value}"
+                        data.append(final_message)
 
-                response = HttpResponse(json.dumps({'err': data}), 
-                    content_type='application/json')
-                response.status_code = 400
-                return response
+                    response = HttpResponse(json.dumps({'err': data}), 
+                        content_type='application/json')
+                    response.status_code = 400
+                    return response
+            except Exception as e:
+                print(e)
 
 
     def perform_create_quote(self, serializer):

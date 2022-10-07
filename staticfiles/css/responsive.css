@@ -333,6 +333,14 @@
     .order-list table tr th:not(:first-child), .order-list table tr td:not(:first-child) {
         text-align: right;
     }
+
+    .summary__section table tr td:nth-child(1) {
+        display: none;
+    }
+
+    #parts-pricing-summary .table td {
+        text-align: end;
+    }
 }
 
 

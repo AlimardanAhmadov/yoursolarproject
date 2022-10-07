@@ -141,13 +141,7 @@
                             <tbody>
                                 <tr>
                                     <td class="small disabled">Roof Style</td>
-                                    <td class="small">{{ data.roof_style }}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td data-label="Roof Style" class="small">{{ data.roof_style }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -158,23 +152,11 @@
                             <tbody>
                                 <tr>
                                     <td class="small disabled">Width</td>
-                                    <td class="small">{{ data.roof_width }}m(metres)</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td data-label="Width" class="small">{{ data.roof_width }}m(metres)</td>
                                 </tr>
                                 <tr>
                                     <td class="small disabled">Height</td>
-                                    <td class="small">{{ data.roof_height }}m(metres)</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td data-label="Height" class="small">{{ data.roof_height }}m(metres)</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -184,14 +166,8 @@
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <td class="small disabled">Length of cable from panels to the consumer unit via the inverter</td>
-                                    <td class="small">{{ data.cable_length_panel_cons }}m</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td class="small disabled">Cable length from panels to the consumer unit via the inverter</td>
+                                    <td data-label="Cable Length" class="small">{{ data.cable_length_panel_cons }}m</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -210,7 +186,7 @@
 
                         <tbody>
                             <tr>
-                                <td style="display: flex; align-items: center; gap: 10px;">
+                                <td style="display: flex; align-items: center;">
                                     <div class="item-cover">
                                         <img src="{{ data.panel_image }}" alt="{{ data.panel_title }}" width="60" height="auto">
                                     </div>
@@ -219,11 +195,11 @@
                                         <span class="item-wattage disabled small">{{ data.panel_wattage }} Watt</span>
                                     </div>
                                 </td>
-                                <td>{{ data.panels_count }}</td>
-                                <td>£{{ data.panel_price }} GBP</td>
+                                <td data-label="Quantity">{{ data.panels_count }}</td>
+                                <td data-label="Price">£{{ data.panel_price }} GBP</td>
                             </tr>
                             <tr>
-                                <td style="display: flex; align-items: center; gap: 10px;">
+                                <td style="display: flex; align-items: center;">
                                     <div class="item-cover">
                                         <img src="{{ data.inverter_image }}" alt="{{ data.inverter_title }}" width="60" height="auto">
                                     </div>
@@ -232,11 +208,11 @@
                                         <span class="item-wattage disabled small">{{ data.inverter_wattage }} Watt</span>
                                     </div>
                                 </td>
-                                <td>1</td>
-                                <td>£{{ data.inverter_price }} GBP</td>
+                                <td data-label="Quantity">1</td>
+                                <td data-label="Price">£{{ data.inverter_price }} GBP</td>
                             </tr>
                             <tr>
-                                <td style="display: flex; align-items: center; gap: 10px;">
+                                <td style="display: flex; align-items: center;">
                                     <div class="item-cover">
                                         <img src="{{ data.fitting_image }}" alt="{{ data.fitting_title }}" width="60" height="auto">
                                     </div>
@@ -244,11 +220,11 @@
                                         <span class="item-title">{{ data.fitting_title }}</span>
                                     </div>
                                 </td>
-                                <td>1</td>
-                                <td>£{{ data.fitting_price }} GBP</td>
+                                <td data-label="Quantity">1</td>
+                                <td data-label="Price">£{{ data.fitting_price }} GBP</td>
                             </tr>
                             <tr>
-                                <td style="display: flex; align-items: center; gap: 10px;">
+                                <td style="display: flex; align-items: center;">
                                     <div class="item-cover">
                                         <img src="{% static 'images/rail_img.png' %}" alt="Rail" width="60" height="auto">
                                     </div>
@@ -256,8 +232,8 @@
                                         <span class="item-title">Rail ({{ data.rail_type }})</span>
                                     </div>
                                 </td>
-                                <td>{{ data.no_rails }}</td>
-                                <td>£{{ data.rail_price }} GBP</td>
+                                <td data-label="Quantity">{{ data.no_rails }}</td>
+                                <td data-label="Price">£{{ data.rail_price }} GBP</td>
                             </tr>
                         </tbody>
                     </table>

@@ -880,7 +880,7 @@ function confirmStorageCable(){
     }
 }
 
-$(document).on('click', '.quote-builder .modal-btn', function(e){
+$(document).on('click', '.quote-builder .select-btn-group-footer .modal-btn', function(e){
     e.preventDefault();
     var $this = $(this);
     var slug = $('.product-choice.selected').data('slug');

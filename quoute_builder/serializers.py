@@ -18,7 +18,7 @@ class QuoteBuilderSerializer(serializers.Serializer):
     no_floors = serializers.IntegerField(required=True)
     no_bedrooms = serializers.IntegerField(required=True)
     phone = serializers.CharField(required=False, allow_blank=True)
-    bill_rate = serializers.CharField(required=False, allow_blank=True)
+    bill_rate = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     roof_style = serializers.CharField(required=False, allow_blank=True)
     roof_width = serializers.FloatField(required=False, default=0.0)
     roof_height = serializers.FloatField(required=False, default=0.0)
