@@ -20,6 +20,9 @@ def index(request):
 def how_to_videos(request):
     return render(request, 'main/howtovideos.html')
 
+def thescience(request):
+    return render(request, 'main/thescience.html')
+
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
