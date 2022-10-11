@@ -3,14 +3,18 @@
     <h1>{{ selected_variant.title }}</h1>
 </div>
 <div class="price__sale">
+    {% if selected_variant.discount %}
     <span class="price-item--regular">
         £{{ selected_variant.price }} GBP
     </span>
-    {% if selected_variant.discount %}
     <span class="price-item--discount">
         £{{ selected_variant.discount }} GBP
     </span>
     <div class="badge--sales">Sale</div>
+    {% else %}
+    <span class="price-item--discount">
+        £{{ selected_variant.price }} GBP
+    </span>
     {% endif %}
 </div>
 <div class="product__tax small-label">Tax included. <a href="#"> Shipping</a> calculated at checkout.</div>
