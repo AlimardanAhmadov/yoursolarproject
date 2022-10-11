@@ -9,7 +9,7 @@ from django.utils.text import slugify
 
 
 def geoip(request):
-    if settings.DEBUG == False:
+    if settings.DEBUG == True:
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
             ip = x_forwarded_for.split(',')[0]
@@ -35,7 +35,7 @@ def cart_items(request):
     if request.user.is_authenticated:
         current_user = request.user
 
-        current_cart = Cart.cache_by_slug(slugify(current_user.username))
+        current_cart = Cart.cache_by_slug(slugify(current_user.email.split("@")[0]))
 
         if current_cart is None:
             current_cart = Cart.objects.filter(slug=slugify(current_user.username)).first()
@@ -51,10 +51,9 @@ def cart_items(request):
             request.session['nonuser'] = str(uuid.uuid4())
             current_cart = Cart.objects.create(session_id = request.session['nonuser'], slug=request.session['nonuser'])
     
-    cart_serializer = CartSerializer(current_cart, many=False)
     
     context = {
-        'cart': cart_serializer.data,
+        'cart': current_cart,
         'qty': CartItem.objects.filter(cart=current_cart).aggregate(Sum('quantity'))['quantity__sum'] or 0
     }
 

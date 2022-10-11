@@ -36,8 +36,7 @@ class CreateCartItemView(ListCreateAPIView):
     
     def get_cart(self, request, variant=None):
         if request.user.is_authenticated:
-            username = self.request.user.username
-            print(username)
+            username = self.request.user.email.split("@")[0]
             current_cart = Cart.cache_by_slug(slugify(username))
 
             if not current_cart:
@@ -135,7 +134,6 @@ class UpdateCartView(ListCreateAPIView):
                     transaction.set_rollback(True)
                     data = []
                     emessage=serializer.errors
-                    print(emessage)
                     for key in emessage:
                         err_message = str(emessage[key])
                         err_string = re.search("string='(.*)', ", err_message)

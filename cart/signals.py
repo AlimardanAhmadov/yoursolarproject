@@ -13,6 +13,6 @@ def create_user_cart(sender, created, *args, **kwargs):
     instance = kwargs.get('instance')
     if created:
         try:
-            Cart.objects.create(user=instance, slug=slugify(instance.username))
+            Cart.objects.create(user=instance, slug=slugify(instance.email.split("@")[0]))
         except:
             print("Coudn't create a cart")
