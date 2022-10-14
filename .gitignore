@@ -1,7 +1,8 @@
-.env
+solar_panels/.env
 spenv/
 db.sqlite3
 *.pyc
 geoip/
 heroku-requirements.txt
 loc-requirements.txt
+staticfiles/
