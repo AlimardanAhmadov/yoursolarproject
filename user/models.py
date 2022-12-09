@@ -20,7 +20,7 @@ PROVIDER_TYPES = (
 )
 
 class Customer(TimeStampedModel):
-    user=models.OneToOneField(User, related_name='customer', on_delete=models.CASCADE)
+    user=models.OneToOneField(User, related_name='customer', on_delete=models.CASCADE, null=True, blank=True)
     slug=models.SlugField(blank=True, null=True)
     full_name=models.CharField(max_length=250)
     provider=models.CharField(max_length=10, choices=PROVIDER_TYPES)
@@ -45,7 +45,7 @@ post_save.connect(Customer.post_save, sender=Customer)
 
 
 class Business(TimeStampedModel):
-    user=models.OneToOneField(User, related_name='business', on_delete=models.CASCADE)
+    user=models.OneToOneField(User, related_name='business', on_delete=models.CASCADE, null=True, blank=True)
     slug=models.SlugField(blank=True, null=True)
     company_name=models.CharField(max_length=250, unique=True, blank=True, null=True)
     provider=models.CharField(max_length=10, choices=PROVIDER_TYPES)

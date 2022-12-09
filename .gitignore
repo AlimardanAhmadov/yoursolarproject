@@ -5,4 +5,3 @@ db.sqlite3
 geoip/
 heroku-requirements.txt
 loc-requirements.txt
-staticfiles/

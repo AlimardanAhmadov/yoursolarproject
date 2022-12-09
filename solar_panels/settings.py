@@ -135,7 +135,7 @@ WSGI_APPLICATION = 'solar_panels.wsgi.application'
 DATABASES = {}
 
 if os.environ['DEBUG'] == 'False':
-    DATABASES['default'] =  dj_database_url.config(default='postgresql://postgres:apple_2001@database-1.cmxyn388s7si.us-east-1.rds.amazonaws.com:5432/database1?sslrootcert=global-bundle.pem&sslmode=require', conn_max_age=600)
+    DATABASES['default'] =  dj_database_url.config(default=os.environ['DEFAULT_DB'], conn_max_age=600)
 else:
     DATABASES = {
         'default': {
