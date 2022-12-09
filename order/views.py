@@ -274,9 +274,9 @@ class SingleProductCreateCheckoutSessionView(View):
             if request.user.is_authenticated:
                 user = request.user
 
-                # cart = Cart.cache_by_slug(str(user.username))
-                # if not cart:
-                cart = get_object_or_404(Cart, slug=str(user.username))
+                cart = Cart.cache_by_slug(str(user.username))
+                if not cart:
+                    cart = get_object_or_404(Cart, slug=str(user.username))
                 
                 user_id = request.user.pk
                 cart_slug = cart.slug
@@ -286,10 +286,10 @@ class SingleProductCreateCheckoutSessionView(View):
                 customer_email = None
                 try:
                     guest = request.session['nonuser']
-                    cart = Cart.cache_by_slug(slugify(guest))
+                    #cart = Cart.cache_by_slug(slugify(guest))
 
-                    if cart is None:
-                        cart = Cart.objects.get(session_id = guest, slug=guest)
+                    #if cart is None:
+                    cart = Cart.objects.get(session_id = guest, slug=guest)
                     
                     print(cart)
                 except Exception:
