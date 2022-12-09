@@ -70,6 +70,8 @@ class CreateCheckoutSessionView(View):
 
                     if not cart:
                         cart = Cart.objects.get(session_id = guest, slug=guest)
+                    
+                    print(cart)
                 except Exception:
                     request.session['nonuser'] = str(uuid.uuid4())
                     cart = Cart.objects.create(session_id = request.session['nonuser'], slug=request.session['nonuser'])
