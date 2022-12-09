@@ -349,6 +349,7 @@ class SingleProductCreateCheckoutSessionView(View):
                 'code': 303
             })
         except Exception as exc:
+            print(exc)
             response = HttpResponse(json.dumps({'err': "Something went wrong! Please try again."}), 
                 content_type='application/json')
             response.status_code = 400
