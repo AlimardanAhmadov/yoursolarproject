@@ -274,9 +274,9 @@ class SingleProductCreateCheckoutSessionView(View):
             if request.user.is_authenticated:
                 user = request.user
 
-                cart = Cart.cache_by_slug(str(user.username))
-                if not cart:
-                    cart = get_object_or_404(Cart, slug=str(user.username))
+                # cart = Cart.cache_by_slug(str(user.username))
+                # if not cart:
+                cart = get_object_or_404(Cart, slug=str(user.username))
                 
                 user_id = request.user.pk
                 cart_slug = cart.slug
