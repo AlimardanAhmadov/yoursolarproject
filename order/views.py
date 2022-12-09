@@ -68,7 +68,7 @@ class CreateCheckoutSessionView(View):
                     guest = request.session['nonuser']
                     cart = Cart.cache_by_slug(slugify(guest))
 
-                    if cart is None:
+                    if not cart:
                         cart = Cart.objects.get(session_id = guest, slug=guest)
                     
                     print(cart)
@@ -286,12 +286,10 @@ class SingleProductCreateCheckoutSessionView(View):
                 customer_email = None
                 try:
                     guest = request.session['nonuser']
-                    #cart = Cart.cache_by_slug(slugify(guest))
+                    cart = Cart.cache_by_slug(slugify(guest))
 
-                    #if cart is None:
-                    cart = Cart.objects.get(session_id = guest, slug=guest)
-                    
-                    print(cart)
+                    if not cart:
+                        cart = Cart.objects.get(session_id = guest, slug=guest)
                 except Exception:
                     request.session['nonuser'] = str(uuid.uuid4())
                     cart = Cart.objects.create(session_id = request.session['nonuser'], slug=request.session['nonuser'])
