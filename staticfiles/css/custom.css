@@ -1202,6 +1202,14 @@ header {
 .size__value {
     width: 60px;
     border-radius: 25px;
+    cursor: pointer;
+}
+
+.size__value.selected {
+    background-color: #000;
+    color: #fff;
+    border-color: #000 !important;
+    cursor: default;
 }
 
 .accordion-flush {

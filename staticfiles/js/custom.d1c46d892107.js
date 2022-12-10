@@ -59,8 +59,7 @@ function makePassword(length) {
 var checkboxes = document.querySelectorAll(".form-check-input");
 var categories = document.querySelectorAll(".category-item");
 var thumbnails = document.querySelectorAll(".thumbnail");
-var badges = document.querySelectorAll(".size__value");
-
+var badges = document.querySelectorAll(".product__size .size__value");
 const url = String(window.location.href).replaceAll("+", " ");
 let scheduled_function = false;
 const delay_by_in_ms = 500;
@@ -81,7 +80,7 @@ function updateVariantDetails(event) {
     var url = new URL(window.location);
     var id = url.href.substring(url.href.lastIndexOf("/") + 1);
     
-    if ($('.size__value').length) {
+    if ($('.product__size .badge.selected').length) {
         var selected_product = $(".product__size .badge.selected").data("slug");
     }
     else {
@@ -358,7 +357,7 @@ thumbnails.forEach(function (thumbnail) {
 badges.forEach(function (badge) {
     badge.addEventListener("click", function () {
         var newSelection = badge.dataset.big;
-        $(".size__value").removeClass("selected");
+        $(".product__size .badge").removeClass("selected");
         $(this).addClass("selected");
         var $img = $(".primary").css("background-image", "url(" + newSelection + ")");
         $(".primary").empty().append($img.hide().fadeIn("slow"));
@@ -416,7 +415,7 @@ $(document).on("click", "#up-slide", function (event) {
 });
 $(document).on("click", ".thumbnail, .product__size .badge", function (event) {
     event.preventDefault();
-    updateVariantDetails(event.target);
+    updateVariantDetails(event);
 });
 $(window).on("load", function (event) {
     if (url.includes("products")) {

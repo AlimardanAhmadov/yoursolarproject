@@ -48,6 +48,16 @@
                     </svg>
                 </button>
                 <div class="img-list">
+                    {% if product.category != category %}
+                    {% for item in product_variants %}
+                    {% if forloop.first %}
+                    <a class="selected thumbnail" data-slug="{{ item.slug }}" data-big="{{ item.image }}">
+                        <div class="thumbnail-image" style="background-image: url({{ item.image }})"></div>
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% else %}
                     {% for item in product_variants %}
                     {% if forloop.first %}
                     <a class="selected thumbnail" data-slug="{{ item.slug }}" data-big="{{ item.image }}">
@@ -59,6 +69,7 @@
                     </a>
                     {% endif %}
                     {% endfor %}
+                    {% endif %}
                 </div>
                 <button class="btn slider-btn" id="down-slide">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
@@ -91,6 +102,18 @@
                 {% endif %}
             </div>
             <div class="product__tax small-label">Tax included. <a href="#"> Shipping</a> calculated at checkout.</div>
+            {% if product.category == "Cables" %}
+            <label class="small-label">Size</label>
+            <div class="product__size">
+                {% for size in sizes %}
+                {% if forloop.first %}
+                <span class="size__value badge selected" data-slug="{{ size.slug }}" data-big="{{ size.image }}">{{ size.cable_size }}</span>
+                {% else %}
+                <span class="size__value badge" data-slug="{{ size.slug }}" data-big="{{ size.image }}">{{ size.cable_size }}</span>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
             <span class="small-label">Quantity</span>
             <div class="quantity-control" data-quantity="">
                 <button class="quantity-btn" data-quantity-minus="">

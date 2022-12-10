@@ -69,9 +69,8 @@ class ProductDetailView(APIView):
                 
                 selected_variant_serializer = ProductVariantSerializer(selected_variant)
 
-
                 if selected_variant.selected_product.category == 'Cables':
-                    context={"selected_variant": selected_variant_serializer.data, "sizes": product_variants.values('slug', 'cable_size').distinct()}
+                    context={"selected_variant": selected_variant_serializer.data, "sizes": product_variants.values('slug', 'cable_size', 'image').distinct()}
                 else:
                     context={"selected_variant": selected_variant_serializer.data}
                 

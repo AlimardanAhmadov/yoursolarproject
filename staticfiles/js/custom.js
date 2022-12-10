@@ -59,6 +59,8 @@ function makePassword(length) {
 var checkboxes = document.querySelectorAll(".form-check-input");
 var categories = document.querySelectorAll(".category-item");
 var thumbnails = document.querySelectorAll(".thumbnail");
+var badges = document.querySelectorAll(".size__value");
+
 const url = String(window.location.href).replaceAll("+", " ");
 let scheduled_function = false;
 const delay_by_in_ms = 500;
@@ -78,7 +80,14 @@ function updateVariantDetails(event) {
     $(".product").addClass("disabled");
     var url = new URL(window.location);
     var id = url.href.substring(url.href.lastIndexOf("/") + 1);
-    var selected_product = $(".thumbnail.selected").data("slug");
+    
+    if ($('.size__value').length) {
+        var selected_product = $(".product__size .badge.selected").data("slug");
+    }
+    else {
+        var selected_product = $(".thumbnail.selected").data("slug");
+    }
+
     url.searchParams.set("variant", selected_product);
     var request_parameters = { variant_slug: selected_product };
     window.history.pushState({}, "", url);
@@ -346,6 +355,18 @@ thumbnails.forEach(function (thumbnail) {
         }
     });
 });
+badges.forEach(function (badge) {
+    badge.addEventListener("click", function () {
+        var newSelection = badge.dataset.big;
+        $(".size__value").removeClass("selected");
+        $(this).addClass("selected");
+        var $img = $(".primary").css("background-image", "url(" + newSelection + ")");
+        $(".primary").empty().append($img.hide().fadeIn("slow"));
+        if (url.includes(this.value)) {
+            window.localStorage.setItem(this.id, this.dataset.slug);
+        }
+    });
+});
 $(document).ready(function () {
     var jQueryPlugin = (window.jQueryPlugin = function (ident, func) {
         return function (arg) {
@@ -393,9 +414,9 @@ $(document).on("click", "#up-slide", function (event) {
         $(".img-list").animate({ scrollTop: "-=200px" }, "slow");
     }
 });
-$(document).on("click", ".thumbnail", function (event) {
+$(document).on("click", ".thumbnail, .product__size .badge", function (event) {
     event.preventDefault();
-    updateVariantDetails(event);
+    updateVariantDetails(event.target);
 });
 $(window).on("load", function (event) {
     if (url.includes("products")) {
@@ -543,6 +564,7 @@ $(document).on("click", "button[data-remove-cart-item]", function (event) {
         },
     });
 });
+
 document.addEventListener("DOMContentLoaded", function () {
     checkboxes.forEach(function (checkbox) {
         if (url.includes(checkbox.value)) {
@@ -576,6 +598,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
     thumbnails.forEach(function (el, i) {
+        if (url.includes(el.dataset.slug)) {
+            el.classList.add("selected");
+            var newSelection = el.dataset.big;
+            var $img = $(".primary").css("background-image", "url(" + newSelection + ")");
+            $(".primary").empty().append($img.hide().fadeIn("slow"));
+            if (i !== 0) {
+                $(".thumbnail:first").removeClass("selected");
+            }
+        } else {
+            window.localStorage.removeItem(el.id);
+        }
+    });
+    badges.forEach(function (el, i) {
         if (url.includes(el.dataset.slug)) {
             el.classList.add("selected");
             var newSelection = el.dataset.big;
