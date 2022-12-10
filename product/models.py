@@ -122,7 +122,7 @@ class ProductVariant(TimeStampedModel):
     size=models.CharField(max_length=10, blank=True, null=True, help_text='For cables')
     suitable_roof_style=models.CharField(max_length=20, blank=True, null=True, choices=ROOF_TYPES, help_text='For Hooks/Fittings')
     wattage=models.CharField(max_length=10, blank=True, null=True)
-    cabel_size=models.CharField(max_length=20, blank=True, null=True, help_text='Required for cables')
+    cable_size=models.CharField(max_length=20, blank=True, null=True, help_text='Required for cables')
     tracker=FieldTracker()
 
     class Meta:
