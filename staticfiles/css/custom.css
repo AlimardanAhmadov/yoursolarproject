@@ -1192,9 +1192,10 @@ header {
 }
 
 .product__size {
-    display: flex;
-    flex-direction: column;
     margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(2.2rem,1fr));
+    grid-gap: 2rem;
 }
 
 .size__value {

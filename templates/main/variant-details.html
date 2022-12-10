@@ -19,8 +19,8 @@
 </div>
 <div class="product__tax small-label">Tax included. <a href="#"> Shipping</a> calculated at checkout.</div>
 {% if selected_variant.category == "Cables" %}
+<label class="small-label">Size</label>
 <div class="product__size">
-    <label class="small-label">Size</label>
     {% for size in sizes %}
     <span class="size__value badge">{{ size.cable_size }}</span>
     {% endfor %}
