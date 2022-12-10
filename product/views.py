@@ -68,10 +68,16 @@ class ProductDetailView(APIView):
                         selected_variant = None
                 
                 selected_variant_serializer = ProductVariantSerializer(selected_variant)
+
+
+                if selected_variant.selected_product.category == 'Cables':
+                    context={"selected_variant": selected_variant_serializer.data, "sizes": product_variants.values('slug', 'cable_size').distinct()}
+                else:
+                    context={"selected_variant": selected_variant_serializer.data}
                 
                 html = render_to_string(
                     template_name="main/variant-details.html",
-                    context={"selected_variant": selected_variant_serializer.data}
+                    context=context
                 )
                 
                 data_dict = {"html_from_view": html}
