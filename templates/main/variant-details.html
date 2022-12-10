@@ -18,7 +18,7 @@
     {% endif %}
 </div>
 <div class="product__tax small-label">Tax included. <a href="#"> Shipping</a> calculated at checkout.</div>
-{% if selected_variant.product.category == 'Cables' %}
+{% if selected_variant.category == "Cables" %}
 <div class="product__size">
     <label class="small-label">Size</label>
     <span class="size__value badge">{{ selected_variant.size }}</span>
