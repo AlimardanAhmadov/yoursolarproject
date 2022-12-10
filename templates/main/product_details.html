@@ -151,7 +151,7 @@
                 <a href="{% url 'selected_product' item.slug %}" class="small">{{ item.title }}</a>
                 <div class="description">
                     
-                    <span class="small price">£{{ item.primary_price }} GBP</span>
+                    <span class="small price" style="text-decoration: none;">£{{ item.primary_price }} GBP</span>
                     {% if item.primary_discount %}
                     <span class="discount-price">£{{ item.primary_discount }} GBP</span>
                     {% endif %}
