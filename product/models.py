@@ -113,7 +113,7 @@ class ProductVariant(TimeStampedModel):
     materials=models.TextField(blank=True, null=True)
     price=models.FloatField(default=0.0)
     discount=models.FloatField(default=0.0)
-    image=models.ImageField(upload_to=image_directory_path, default='default.png')
+    image=models.ImageField(upload_to=image_directory_path, default='default.png', max_length=500)
     sku=models.CharField(max_length=400)
     active=models.BooleanField(default=True)
     quantity=models.PositiveIntegerField(default=0)
