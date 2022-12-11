@@ -23,9 +23,9 @@
 <div class="product__size">
     {% for size in sizes %}
     {% if forloop.first %}
-    <span class="size__value badge" data-slug="{{ size.slug }}" data-big="{{ size.image }}">{{ size.cable_size }}</span>
+    <span class="size__value badge" data-slug="{{ size.slug }}" data-big="{{ size.image }}">{{ size.cable_size }}m</span>
     {% else %}
-    <span class="size__value badge" data-slug="{{ size.slug }}" data-big="{{ size.image }}">{{ size.cable_size }}</span>
+    <span class="size__value badge" data-slug="{{ size.slug }}" data-big="{{ size.image }}">{{ size.cable_size }}m</span>
     {% endif %}
     {% endfor %}
 </div>
