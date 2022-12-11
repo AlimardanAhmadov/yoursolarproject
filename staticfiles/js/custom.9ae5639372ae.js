@@ -627,14 +627,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
     // document.querySelectorAll(".size__value").forEach(function (el, i) {
-    //     $('.size__value').removeClass("selected")
     //     if (url.includes(el.dataset.slug)) {
     //         el.classList.add("selected");
     //         var newSelection = el.dataset.big;
     //         var $img = $(".primary").css("background-image", "url(" + newSelection + ")");
     //         $(".primary").empty().append($img.hide().fadeIn("slow"));
     //         if (i !== 0) {
-    //             $(".size__value:first").removeClass("selected");
+    //             $(".thumbnail:first").removeClass("selected");
     //         }
     //     } else {
     //         window.localStorage.removeItem(el.id);
@@ -657,12 +656,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // $(".size__value").on("change load ready", function(){
 $(document).ready(function(){
+    console.log("asdasd");
     setTimeout(function () {
         // console.log(document.querySelectorAll('.size__value'));
         // document.querySelectorAll('.size__value').forEach(item => {
         // console.log(item);
         // item.addEventListener('DOMContentLoaded', event => {
-        $('.size__value').removeClass("selected");
+        console.log(document.querySelectorAll('.size__value'));
         document.querySelectorAll(".size__value").forEach(function (el, i) {
             if (url.includes(el.dataset.slug)) {
                 el.classList.add("selected");
@@ -698,23 +698,24 @@ $(document).ready(function(){
     }, 2000);
 })
 
-// $(document).on("ready", ".size__value", function(){
-//     var sizes = document.querySelectorAll("size__value");
-//     console.log(thumbnails, sizes);
-//     document.querySelectorAll(".size__value").forEach(function (el, i) {
-//         if (url.includes(el.dataset.slug)) {
-//             el.classList.add("selected");
-//             var newSelection = el.dataset.big;
-//             var $img = $(".primary").css("background-image", "url(" + newSelection + ")");
-//             $(".primary").empty().append($img.hide().fadeIn("slow"));
-//             if (i !== 0) {
-//                 $(".thumbnail:first").removeClass("selected");
-//             }
-//         } else {
-//             window.localStorage.removeItem(el.id);
-//         }
-//     });
-// })
+$(document).on("ready", ".size__value", function(){
+    console.log("ASDadsasdasdas");
+    var sizes = document.querySelectorAll("size__value");
+    console.log(thumbnails, sizes);
+    document.querySelectorAll(".size__value").forEach(function (el, i) {
+        if (url.includes(el.dataset.slug)) {
+            el.classList.add("selected");
+            var newSelection = el.dataset.big;
+            var $img = $(".primary").css("background-image", "url(" + newSelection + ")");
+            $(".primary").empty().append($img.hide().fadeIn("slow"));
+            if (i !== 0) {
+                $(".thumbnail:first").removeClass("selected");
+            }
+        } else {
+            window.localStorage.removeItem(el.id);
+        }
+    });
+})
 
 checkboxes.forEach(function (checkbox) {
     checkbox.addEventListener("change", function () {
