@@ -1,11 +1,14 @@
 from django.contrib import admin
+from django.utils.text import slugify
 from .models import Product, ProductVariant
+from main.utils import id_generator
+
 
 def duplicate_event(modeladmin, request, queryset):
     for object in queryset:
         old_object = object
         variants = ProductVariant.objects.filter(selected_product=old_object)
-        
+
         print(old_object)
         object.id = None
         object.save()
@@ -34,7 +37,8 @@ def duplicate_event(modeladmin, request, queryset):
                 size = product.size,
                 suitable_roof_style = product.suitable_roof_style,
                 wattage = product.wattage,
-                cable_size = product.cable_size
+                cable_size = product.cable_size,
+                slug = slugify(str(id_generator()))
             )
             variants_array.append(variant)
         
