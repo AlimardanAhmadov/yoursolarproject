@@ -131,8 +131,8 @@ class CreateCheckoutSessionView(View):
                     line_items.append(
                         {
                             'price_data': {
-                                'currency': 'usd',
-                                'unit_amount': round(int(item_price) * 100 * float(data_json['conversion_rates']['USD'])),
+                                'currency': 'gbp',
+                                'unit_amount': round(int(item_price) * 100),
                                 'product_data': {
                                     'name': product.title,
                                     'images': [image, ],
@@ -165,8 +165,8 @@ class CreateCheckoutSessionView(View):
                         'shipping_rate_data': {
                             'type': 'fixed_amount',
                             'fixed_amount': {
-                            'amount': round(int(total_shipping) * 100 * float(data_json['conversion_rates']['USD'])),
-                            'currency': 'usd',
+                            'amount': round(int(total_shipping) * 100),
+                            'currency': 'gbp',
                             },
                             'display_name': 'Shipping price',
                         }
@@ -299,7 +299,7 @@ class SingleProductCreateCheckoutSessionView(View):
             line_items = [
                 {
                     'price_data': {
-                        'currency': 'usd',
+                        'currency': 'gbp',
                         'unit_amount': round(int(price) * 100 * float(data_json['conversion_rates']['USD'])),
                         'product_data': {
                             'name': title,
@@ -338,7 +338,7 @@ class SingleProductCreateCheckoutSessionView(View):
                             'type': 'fixed_amount',
                             'fixed_amount': {
                             'amount': round(int(shipping_price) * 100 * float(data_json['conversion_rates']['USD'])),
-                            'currency': 'usd',
+                            'currency': 'gbp',
                             },
                             'display_name': 'Shipping price',
                         }
