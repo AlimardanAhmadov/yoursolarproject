@@ -129,6 +129,7 @@ class ProductVariant(TimeStampedModel):
         verbose_name = 'Variant'
         verbose_name_plural = 'Variants'
         indexes = [models.Index(fields=['selected_product', 'slug', 'id', 'active',])]
+        ordering = ['-id']
     
 
     def __str__(self):
