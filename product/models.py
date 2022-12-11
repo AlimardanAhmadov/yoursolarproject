@@ -41,6 +41,7 @@ CATEGORY_CHOICES = (
 ROOF_TYPES = (
     ('Flat Roof', 'Flat Roof'),
     ('Pantile Roof', 'Pantile Roof'),
+    ('Plain Tile', 'Plain Tile'),
     ('Flat tile or slate', 'Flat tile or slate'),
     ('Meta Roof', 'Metal Roof'),
     ('New build', 'New build'),

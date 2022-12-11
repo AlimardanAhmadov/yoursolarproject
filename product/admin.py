@@ -43,26 +43,6 @@ def duplicate_event(modeladmin, request, queryset):
             variants_array.append(variant)
         
         ProductVariant.objects.bulk_create(variants_array)
-
-            # variant.selected_product = object
-            # variant.title = product.title
-            # variant.primary_variant = product.primary_variant
-            # variant.description = product.description
-            # variant.availability = product.availability
-            # variant.width = product.width
-            # variant.height = product.height
-            # variant.materials = product.materials
-            # variant.price = product.price
-            # variant.discount = product.discount
-            # variant.image = product.image
-            # variant.sku = product.sku
-            # variant.active = product.active
-            # variant.quantity = product.quantity
-            # variant.shipping_price = product.shipping_price
-            # variant.size = product.size
-            # variant.suitable_roof_style = product.suitable_roof_style
-            # variant.wattage = product.wattage
-            # variant.cable_size = product.cable_size
             
 
 duplicate_event.short_description = "Duplicate selected record"
@@ -80,3 +60,4 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Product, ProductAdmin)
+admin.site.register(ProductVariant)
