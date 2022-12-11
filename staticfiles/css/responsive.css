@@ -142,6 +142,12 @@
     }
 }
 
+@media screen and (max-width: 863px) {
+    .product-description {
+        max-width: 100%;
+    }
+}
+
 @media screen and (min-width: 750px) {
     .cart-notification .card {
         max-width: 24.2rem;

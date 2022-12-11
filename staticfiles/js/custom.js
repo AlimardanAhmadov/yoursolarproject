@@ -81,10 +81,12 @@ function updateVariantDetails(event) {
     var url = new URL(window.location);
     var id = url.href.substring(url.href.lastIndexOf("/") + 1);
     
-    if ($('.size__value').length) {
-        var selected_product = $(".product__size .badge.selected").data("slug");
+    if ($('.badge').length != 0) {
+        console.log("asdadsad");
+        var selected_product = $(".size__value.selected").data("slug");
     }
     else {
+        console.log("asdadsad123");
         var selected_product = $(".thumbnail.selected").data("slug");
     }
 
@@ -100,6 +102,7 @@ function updateVariantDetails(event) {
             setTimeout(function () {
                 $(".product").removeClass("disabled");
                 $(".product-info__wrapper").html(response["html_from_view"]);
+                document.querySelector('span[data-slug="' + url.searchParams.get("variant") +'"]').classList.add("selected");
             }, delay_by_in_ms);
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -355,9 +358,10 @@ thumbnails.forEach(function (thumbnail) {
         }
     });
 });
-badges.forEach(function (badge) {
-    badge.addEventListener("click", function () {
-        var newSelection = badge.dataset.big;
+
+badges.forEach(function (thumbnail) {
+    badges.addEventListener("click", function () {
+        var newSelection = thumbnail.dataset.big;
         $(".size__value").removeClass("selected");
         $(this).addClass("selected");
         var $img = $(".primary").css("background-image", "url(" + newSelection + ")");
@@ -367,6 +371,18 @@ badges.forEach(function (badge) {
         }
     });
 });
+
+$(document).on('click', '.size__value', function(){
+    var newSelection = $(this).data('big');
+    $(".size__value").removeClass("selected");
+    $(this).addClass("selected");
+    var $img = $(".primary").css("background-image", "url(" + newSelection + ")");
+    $(".primary").empty().append($img.hide().fadeIn("slow"));
+    if (url.includes(this.value)) {
+        window.localStorage.setItem(this.id, this.dataset.slug);
+    }
+})
+
 $(document).ready(function () {
     var jQueryPlugin = (window.jQueryPlugin = function (ident, func) {
         return function (arg) {
@@ -610,7 +626,83 @@ document.addEventListener("DOMContentLoaded", function () {
             window.localStorage.removeItem(el.id);
         }
     });
-    badges.forEach(function (el, i) {
+    // document.querySelectorAll(".size__value").forEach(function (el, i) {
+    //     if (url.includes(el.dataset.slug)) {
+    //         el.classList.add("selected");
+    //         var newSelection = el.dataset.big;
+    //         var $img = $(".primary").css("background-image", "url(" + newSelection + ")");
+    //         $(".primary").empty().append($img.hide().fadeIn("slow"));
+    //         if (i !== 0) {
+    //             $(".thumbnail:first").removeClass("selected");
+    //         }
+    //     } else {
+    //         window.localStorage.removeItem(el.id);
+    //     }
+    // });
+    // document.querySelectorAll(".size__value").forEach(function (el, i) {
+    //     if (url.includes(el.dataset.slug)) {
+    //         el.classList.add("selected");
+    //         var newSelection = el.dataset.big;
+    //         var $img = $(".primary").css("background-image", "url(" + newSelection + ")");
+    //         $(".primary").empty().append($img.hide().fadeIn("slow"));
+    //         if (i !== 0) {
+    //             $(".thumbnail:first").removeClass("selected");
+    //         }
+    //     } else {
+    //         window.localStorage.removeItem(el.id);
+    //     }
+    // });
+});
+
+// $(".size__value").on("change load ready", function(){
+$(document).ready(function(){
+    console.log("asdasd");
+    setTimeout(function () {
+        // console.log(document.querySelectorAll('.size__value'));
+        // document.querySelectorAll('.size__value').forEach(item => {
+        // console.log(item);
+        // item.addEventListener('DOMContentLoaded', event => {
+        console.log(document.querySelectorAll('.size__value'));
+        document.querySelectorAll(".size__value").forEach(function (el, i) {
+            if (url.includes(el.dataset.slug)) {
+                el.classList.add("selected");
+                var newSelection = el.dataset.big;
+                var $img = $(".primary").css("background-image", "url(" + newSelection + ")");
+                $(".primary").empty().append($img.hide().fadeIn("slow"));
+                if (i !== 0) {
+                    $(".thumbnail:first").removeClass("selected");
+                }
+            } else {
+                window.localStorage.removeItem(el.id);
+            }
+        });
+            // })
+        // })
+        // document.getElementsByClassName('.size__value').addEventListener('load', function(){
+        //     var sizes = document.querySelectorAll(".size__value");
+        //     console.log(thumbnails, sizes);
+        //     document.querySelectorAll(".size__value").forEach(function (el, i) {
+        //         if (url.includes(el.dataset.slug)) {
+        //             el.classList.add("selected");
+        //             var newSelection = el.dataset.big;
+        //             var $img = $(".primary").css("background-image", "url(" + newSelection + ")");
+        //             $(".primary").empty().append($img.hide().fadeIn("slow"));
+        //             if (i !== 0) {
+        //                 $(".thumbnail:first").removeClass("selected");
+        //             }
+        //         } else {
+        //             window.localStorage.removeItem(el.id);
+        //         }
+        //     });
+        // })
+    }, 2000);
+})
+
+$(document).on("ready", ".size__value", function(){
+    console.log("ASDadsasdasdas");
+    var sizes = document.querySelectorAll("size__value");
+    console.log(thumbnails, sizes);
+    document.querySelectorAll(".size__value").forEach(function (el, i) {
         if (url.includes(el.dataset.slug)) {
             el.classList.add("selected");
             var newSelection = el.dataset.big;
@@ -623,7 +715,8 @@ document.addEventListener("DOMContentLoaded", function () {
             window.localStorage.removeItem(el.id);
         }
     });
-});
+})
+
 checkboxes.forEach(function (checkbox) {
     checkbox.addEventListener("change", function () {
         if (url.includes(this.value)) {
