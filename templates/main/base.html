@@ -263,157 +263,40 @@
                     </div>
                     <div class="cta-content text-center">
                         <span class="wow">Explore The Features</span>
-                        <h2 class="wow">Special Offers Content <br> Here</h2>
+                        {% if special_offers %}
+                        <h2 class="wow">Special Offers <br> Here</h2>
+                        {% else %}
+                        <h2 class="wow">Special Offers <br> Coming Soon!</h2>
+                        {% endif %}
                         <div class="black-bg"></div>
                     </div>
                 </div>
             </section>
+            {% if special_offers %}
             <div class="slide-container swiper">
                 <div class="slide-content">
                     <div class="card-wrapper swiper-wrapper">
+                        {% for product in special_offers %}
                         <div class="card product-card swiper-slide">
                             <div class="image-content">
                                 <div class="card-image">
-                                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
+                                    <img src="{{ product.primary_image_url }}" alt="{{ product.title }}" class="card-img">
                                 </div>
                             </div>
 
                             <div class="card-content">
-                                <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
+                                <a href="{% url 'selected_product' product.slug %}" class="small">{{ product.title }}</a>
                                 <div class="description">
-                                    <span class="small price">£145.60 GBP</span>
-                                    <span class="discount-price">£98 GBP</span>
+                                    {% if item.primary_discount %}
+                                    <span class="small price">£{{ item.primary_price }} GBP</span>
+                                    <span class="discount-price">£{{ item.primary_discount }} GBP</span>
+                                    {% else %}
+                                    <span class="discount-price">£{{ item.primary_price }} GBP</span>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
-                        <div class="card product-card swiper-slide">
-                            <div class="image-content">
-                                <div class="card-image">
-                                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                                </div>
-                            </div>
-
-                            <div class="card-content">
-                                <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                                
-                                <div class="description">
-                                    <span class="small price">£145.60 GBP</span>
-                                    <span class="discount-price">£98 GBP</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card product-card swiper-slide">
-                            <div class="image-content">
-                                <div class="card-image">
-                                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                                </div>
-                            </div>
-
-                            <div class="card-content">
-                                <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                            
-                                <div class="description">
-                                    <span class="small price">£145.60 GBP</span>
-                                    <span class="discount-price">£98 GBP</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card product-card swiper-slide">
-                            <div class="image-content">
-                                <div class="card-image">
-                                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                                </div>
-                            </div>
-
-                            <div class="card-content">
-                                <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                            
-                                <div class="description">
-                                    <span class="small price">£145.60 GBP</span>
-                                    <span class="discount-price">£98 GBP</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card product-card swiper-slide">
-                            <div class="image-content">
-                                <div class="card-image">
-                                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                                </div>
-                            </div>
-
-                            <div class="card-content">
-                                <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                                
-                                <div class="description">
-                                    <span class="small price">£145.60 GBP</span>
-                                    <span class="discount-price">£98 GBP</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card product-card swiper-slide">
-                            <div class="image-content">
-                                <div class="card-image">
-                                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                                </div>
-                            </div>
-
-                            <div class="card-content">
-                                <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                                
-                                <div class="description">
-                                    <span class="small price">£145.60 GBP</span>
-                                    <span class="discount-price">£98 GBP</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card product-card swiper-slide">
-                            <div class="image-content">
-                                <div class="card-image">
-                                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                                </div>
-                            </div>
-
-                            <div class="card-content">
-                                <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                                
-                                <div class="description">
-                                    <span class="small price">£145.60 GBP</span>
-                                    <span class="discount-price">£98 GBP</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card product-card swiper-slide">
-                            <div class="image-content">
-                                <div class="card-image">
-                                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                                </div>
-                            </div>
-
-                            <div class="card-content">
-                                <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                                
-                                <div class="description">
-                                    <span class="small price">£145.60 GBP</span>
-                                    <span class="discount-price">£98 GBP</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card product-card swiper-slide">
-                            <div class="image-content">
-                                <div class="card-image">
-                                    <img src="https://cdn.shopify.com/s/files/1/0573/9439/7257/products/canadian-solar-370w-super-high-power-mono-perc-hiku-with-mc4-evo2-p536-1281_medium_267d539c-c226-43be-b5a1-c779977870d8.jpg?v=1655110977" alt="" class="card-img">
-                                </div>
-                            </div>
-
-                            <div class="card-content">
-                                <a href="#" class="small">455w JA Solar - Solar Panel - Silver Frame</a>
-                                
-                                <div class="description">
-                                    <span class="small price">£145.60 GBP</span>
-                                    <span class="discount-price">£98 GBP</span>
-                                </div>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
 
@@ -421,6 +304,7 @@
                 <div class="swiper-button-prev swiper-navBtn"></div>
                 <div class="swiper-pagination"></div>
             </div>
+            {% endif %}
         </div>
         <div class="services-container">
             <section class="services">

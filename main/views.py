@@ -11,11 +11,15 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from product.models import Product
 from main.html_renderer import MyHTMLRenderer
 
 
 def index(request):
-    return render(request, 'main/base.html')
+    context = {
+        'special_offers': Product.objects.filter(special_offer=True)
+    }
+    return render(request, 'main/base.html', context)
 
 def how_to_videos(request):
     return render(request, 'main/howtovideos.html')
