@@ -300,7 +300,7 @@ class SingleProductCreateCheckoutSessionView(View):
                 {
                     'price_data': {
                         'currency': 'gbp',
-                        'unit_amount': round(int(price) * 100 * float(data_json['conversion_rates']['USD'])),
+                        'unit_amount': round(int(price) * 100),
                         'product_data': {
                             'name': title,
                             'images': [image,],
@@ -337,7 +337,7 @@ class SingleProductCreateCheckoutSessionView(View):
                         'shipping_rate_data': {
                             'type': 'fixed_amount',
                             'fixed_amount': {
-                            'amount': round(int(shipping_price) * 100 * float(data_json['conversion_rates']['USD'])),
+                            'amount': round(int(shipping_price) * 100),
                             'currency': 'gbp',
                             },
                             'display_name': 'Shipping price',
