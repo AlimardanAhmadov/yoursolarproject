@@ -63,11 +63,11 @@ class ProductsAPIView(APIView):
 
         if is_ajax == 'True':
 
-            if remove_all is not None:
+            if remove_all == True:
                 context={"results": Product.objects.all()}
             else:
                 context={"results": matching_items}
-                
+
             html = render_to_string(
                 template_name="main/product-results.html",
                 context={"results": matching_items}

@@ -248,14 +248,14 @@ $(document).on("click", ".category-item, .close-badge", function (event) {
         url.searchParams.delete("brand");
     }
 
-    if (!url.pathname.includes("?")){
-        remove_all = true;
-    }
-    else {
-        remove_all = false;
-    }
+    const request_parameters = { "brand[]": brand, "category[]": category, q: title, is_ajax: "True" };
 
-    const request_parameters = { "brand[]": brand, "category[]": category, q: title, is_ajax: "True", remove_all: remove_all };
+    if (!url.pathname.includes("?")){
+        request_parameters.push({
+            key: 'remove_all',
+            value: "True"
+        });
+    }
 
     if (scheduled_function) {
         clearTimeout(scheduled_function);
