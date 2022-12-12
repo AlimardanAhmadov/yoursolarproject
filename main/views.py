@@ -70,7 +70,7 @@ class ProductsAPIView(APIView):
 
             html = render_to_string(
                 template_name="main/product-results.html",
-                context={"results": matching_items}
+                context=context
             )
             
             data_dict = {"html_from_view": html}
