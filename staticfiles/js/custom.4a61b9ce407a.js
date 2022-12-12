@@ -248,7 +248,7 @@ $(document).on("click", ".category-item, .close-badge", function (event) {
         url.searchParams.delete("brand");
     }
 
-    if (!$('.filter-tags .badge').length){
+    if (!url.pathname.includes("?")){
         remove_all = 'true';
     }
     else {

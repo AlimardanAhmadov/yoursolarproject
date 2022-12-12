@@ -248,20 +248,21 @@ $(document).on("click", ".category-item, .close-badge", function (event) {
         url.searchParams.delete("brand");
     }
 
-    if (!$('.filter-tags .badge').length){
-        remove_all = 'true';
-    }
-    else {
-        remove_all = 'false';
-    }
-
-    const request_parameters = { "brand[]": brand, "category[]": category, q: title, is_ajax: "True", remove_all: remove_all };
-
-    if (scheduled_function) {
-        clearTimeout(scheduled_function);
-    }
-    window.history.pushState({}, "", url);
-    scheduled_function = setTimeout(ajax_call, delay_by_in_ms, endpoint, request_parameters);
+    setTimeout(function () {
+        if (!url.pathname.includes("?")){
+            remove_all = 'true';
+        }
+        else {
+            remove_all = 'false';
+        }
+        const request_parameters = { "brand[]": brand, "category[]": category, q: title, is_ajax: "True", remove_all: remove_all };    
+        
+        if (scheduled_function) {
+            clearTimeout(scheduled_function);
+        }
+        window.history.pushState({}, "", url);
+        scheduled_function = setTimeout(ajax_call, delay_by_in_ms, endpoint, request_parameters);
+    }, delay_by_in_ms);
 });
 $(document).on("change", '.choice-input-wrapper .form-check-input, input[name="title"]', function (event) {
     event.preventDefault();

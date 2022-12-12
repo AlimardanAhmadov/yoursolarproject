@@ -67,6 +67,8 @@ class ProductsAPIView(APIView):
                 context={"results": Product.objects.all()}
             else:
                 context={"results": matching_items}
+            
+            print(remove_all)
 
             html = render_to_string(
                 template_name="main/product-results.html",

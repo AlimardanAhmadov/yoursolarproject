@@ -48,7 +48,7 @@
                     </svg>
                 </button>
                 <div class="img-list">
-                    {% if product.category != category %}
+                    {% if product.category != 'cables' %}
                     {% for item in product_variants %}
                     {% if forloop.first %}
                     <a class="selected thumbnail" data-slug="{{ item.slug }}" data-big="{{ item.image }}">

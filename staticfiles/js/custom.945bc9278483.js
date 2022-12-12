@@ -248,15 +248,16 @@ $(document).on("click", ".category-item, .close-badge", function (event) {
         url.searchParams.delete("brand");
     }
 
-    if (!$('.filter-tags .badge').length){
-        remove_all = 'true';
-    }
-    else {
-        remove_all = 'false';
-    }
+    setTimeout(function () {
+        if (!url.pathname.includes("?")){
+            remove_all = 'true';
+        }
+        else {
+            remove_all = 'false';
+        }
+    }, delay_by_in_ms);
 
-    const request_parameters = { "brand[]": brand, "category[]": category, q: title, is_ajax: "True", remove_all: remove_all };
-
+    const request_parameters = { "brand[]": brand, "category[]": category, q: title, is_ajax: "True", remove_all: remove_all };    
     if (scheduled_function) {
         clearTimeout(scheduled_function);
     }
