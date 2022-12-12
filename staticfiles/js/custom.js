@@ -206,8 +206,10 @@ $(document).on("click", ".category-item, .close-badge", function (event) {
     $(".search-button").html('<div class="lds-ring"><div></div><div></div><div></div><div></div></div>');
     $(".infinite-container").css("display", "block");
     $(".infinite-container").html('<div class="lds-ellipsis" style="display: flex;-webkit-box-pack: center;justify-content: center;margin: auto;"><div></div><div></div><div></div><div></div></div>');
+    
     const url = new URL(window.location);
     var title = $('input[name="title"]').val();
+
     if (title) {
         url.searchParams.set("q", title);
     } else {
@@ -245,7 +247,16 @@ $(document).on("click", ".category-item, .close-badge", function (event) {
             .get();
         url.searchParams.delete("brand");
     }
+
     const request_parameters = { "brand[]": brand, "category[]": category, q: title, is_ajax: "True" };
+
+    if (!url.includes("?")){
+        request_parameters.push({
+            key: remove_all,
+            value: "True"
+        });
+    }
+
     if (scheduled_function) {
         clearTimeout(scheduled_function);
     }

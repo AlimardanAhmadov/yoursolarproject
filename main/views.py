@@ -45,6 +45,7 @@ class ProductsAPIView(APIView):
         categories = request.GET.getlist('category[]')
         brand = request.GET.getlist('brand[]')
         is_ajax = request.GET.get('is_ajax')
+        remove_all = request.GET.get('remove_all')
 
         nested_list = [[q,], categories, brand]
 
@@ -57,8 +58,16 @@ class ProductsAPIView(APIView):
             product_lookup = Q(title__icontains=q) & Q(brand__in=brand) & Q(category__in=categories)
             matching_items = Product.objects.filter(product_lookup)
         
+        print(matching_items)
+        
 
         if is_ajax == 'True':
+
+            if remove_all is not None:
+                context={"results": Product.objects.all()}
+            else:
+                context={"results": matching_items}
+                
             html = render_to_string(
                 template_name="main/product-results.html",
                 context={"results": matching_items}
@@ -76,6 +85,8 @@ class ProductsAPIView(APIView):
                 products = paginator.page(1)
             except EmptyPage:
                 products = paginator.page(paginator.num_pages)
+            
+            print(products)
 
             context = {
                 "products": products,

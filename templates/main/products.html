@@ -42,9 +42,69 @@
                                 <li class="choice-item">
                                     <div class="choice-wrapper">
                                         <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="JA Solar" name="brand" id="JA Solar">
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                JA Solar
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
                                             <input class="form-check-input mt-0" type="checkbox" value="Canadian Solar" name="brand" id="Canadian Solar">
                                             <label class="form-check-label small" for="flexCheckDefault">
                                                 Canadian Solar
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="Growatt" name="brand" id="Growatt">
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                Growatt
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="Solis" name="brand" id="Solis">
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                Solis
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="Renusol" name="brand" id="Renusol">
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                Renusol
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="Solar iBoost" name="brand" id="Solar iBoost">
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                Solar iBoost
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="choice-item">
+                                    <div class="choice-wrapper">
+                                        <div class="choice-input-wrapper ">
+                                            <input class="form-check-input mt-0" type="checkbox" value="Kraus & Naimer" name="brand" id="Kraus & Naimer">
+                                            <label class="form-check-label small" for="flexCheckDefault">
+                                                Kraus & Naimer
                                             </label>
                                         </div>
                                     </div>
@@ -72,19 +132,9 @@
                                 <li class="choice-item">
                                     <div class="choice-wrapper">
                                         <div class="choice-input-wrapper ">
-                                            <input class="form-check-input mt-0" type="checkbox" value="Growatt" name="brand" id="Growatt">
+                                            <input class="form-check-input mt-0" type="checkbox" value="Eland" name="brand" id="Eland">
                                             <label class="form-check-label small" for="flexCheckDefault">
-                                                Growatt
-                                            </label>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="choice-item">
-                                    <div class="choice-wrapper">
-                                        <div class="choice-input-wrapper ">
-                                            <input class="form-check-input mt-0" type="checkbox" value="HDMSolar" name="brand" id="HDMSolar">
-                                            <label class="form-check-label small" for="flexCheckDefault">
-                                                HDMSolar
+                                                Eland
                                             </label>
                                         </div>
                                     </div>
@@ -164,7 +214,7 @@
                 <h4>Batteries</h4>
             </div>
         </div>
-        <div class="category-item" data-val="Rail" id="Rail">
+        <div class="category-item" data-val="Rails & Clips" id="Rails & Clips">
             <div class="category-title">
                 <h4>Rails & Clips</h4>
             </div>
@@ -196,9 +246,9 @@
                 <div class="description">
                     {% if item.primary_discount %}
                     <span class="small price">£{{ item.primary_price }} GBP</span>
-                    <span class="discount-price">£{{ item.primary_discount }} GBP</span>
+                    <span class="discount-price">£{{ item.primary_discount|floatformat:2 }} GBP</span>
                     {% else %}
-                    <span class="discount-price">£{{ item.primary_price }} GBP</span>
+                    <span class="discount-price">£{{ item.primary_price|floatformat:2 }} GBP</span>
                     {% endif %}
                 </div>
             </div>
@@ -218,9 +268,9 @@
                 <div class="description">
                     {% if item.primary_discount %}
                     <span class="small price">£{{ item.primary_price }} GBP</span>
-                    <span class="discount-price">£{{ item.primary_discount }} GBP</span>
+                    <span class="discount-price">£{{ item.primary_discount|floatformat:2 }} GBP</span>
                     {% else %}
-                    <span class="discount-price">£{{ item.primary_price }} GBP</span>
+                    <span class="discount-price">£{{ item.primary_price|floatformat:2 }} GBP</span>
                     {% endif %}
                 </div>
             </div>

@@ -250,7 +250,7 @@ $(document).on("click", ".category-item, .close-badge", function (event) {
 
     const request_parameters = { "brand[]": brand, "category[]": category, q: title, is_ajax: "True" };
 
-    if (!url.includes("?")){
+    if (!url.includes("?")){{
         request_parameters.push({
             key: remove_all,
             value: "True"
