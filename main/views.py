@@ -63,7 +63,7 @@ class ProductsAPIView(APIView):
 
         if is_ajax == 'True':
 
-            if remove_all == True:
+            if remove_all == 'true':
                 context={"results": Product.objects.all()}
             else:
                 context={"results": matching_items}
