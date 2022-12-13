@@ -32,11 +32,11 @@ def stripe_webhook(request):
                 payload, sig_header, str(stripe_webhook_token)
             )
         except ValueError as v:
-            print(v)
+            print("errorrrrr", v)
             transaction.set_rollback(True)
             return HttpResponse(status=400)
         except stripe.error.SignatureVerificationError as s:
-            print(s)
+            print("errorrrrr", s)
             transaction.set_rollback(True)
             return HttpResponse(status=400)
 

@@ -25,10 +25,10 @@ import urllib.request
 from urllib.request import urlopen
 
 
-req = urllib.request.Request('https://v6.exchangerate-api.com/v6/07c7436812f210f455d48d84/latest/gbp')
-response = urlopen(req)
+# req = urllib.request.Request('https://v6.exchangerate-api.com/v6/07c7436812f210f455d48d84/latest/gbp')
+# response = urlopen(req)
   
-data_json = json.loads(response.read())
+# data_json = json.loads(response.read())
 
 stripe.api_key = getattr(settings, 'STRIPE_SECRET_KEY')
 
