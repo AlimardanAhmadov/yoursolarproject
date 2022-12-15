@@ -632,7 +632,7 @@ header {
 }
 
 .modal-window .modal-block {
-    width: 400px;
+    width: 70%;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -651,7 +651,7 @@ header {
 
 .modal-content {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 15px;
     margin-top: 35px;
     overflow-y: auto;
