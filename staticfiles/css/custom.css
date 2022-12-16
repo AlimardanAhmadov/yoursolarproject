@@ -638,8 +638,8 @@ header {
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 27px;
-    background: rgba(38,38,38,.96);
-    color: #fff;
+    background: #fff;
+    color: #000;
     text-align: left;
 }
 
@@ -657,12 +657,19 @@ header {
     overflow-y: auto;
 }
 
-.modal-close {
+.white-modal-close {
     float: right;
     color: #fff;
     cursor: pointer;
 }
 
+.modal-close {
+    float: right;
+    color: #000;
+    cursor: pointer;
+}
+
+.white-modal-close:hover,
 .modal-close:hover {
     color: rgb(129, 129, 129);
     transition: 0.3s;
