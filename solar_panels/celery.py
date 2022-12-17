@@ -9,7 +9,9 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "solar_panels.settings")
 app = Celery(
     "solar_panels", 
     broker=settings.BROKER_URL, 
-    backend=settings.BACKEND_URL
+    backend=settings.BACKEND_URL, 
+    broker_use_ssl = { 'ssl_cert_reqs': ssl.CERT_REQUIRED },
+    edis_backend_use_ssl = { 'ssl_cert_reqs': ssl.CERT_REQUIRED }
 )
 #app = Celery('solar_panels', broker=os.environ['REDIS_URL'])
 
