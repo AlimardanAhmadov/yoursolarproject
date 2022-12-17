@@ -109,7 +109,7 @@ class Quote(models.Model):
             ]
         ):
             context_dict = {
-                'url': 'https://sopanel.herokuapp.com/quote/' + self.slug
+                'url': 'https://www.yoursolarproject.co.uk/quote/' + self.slug
             }
             
             subject = "New Quote"
