@@ -22,7 +22,9 @@
     <link rel="apple-touch-icon" href="">
     <link rel="icon" href="{% static 'images/favicon.ico' %}">
     <link rel="shortcut icon" type="/static/image/x-icon" href="{% static 'images/favicon.ico' %}">
-    
+
+    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
+
     <!-- Google Sing Up & In -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
@@ -202,7 +204,7 @@
             <div class="container">
                 <div class="banner-left">
                     <div class="slogan-text">
-                        Your Solar Energy
+                        Your Solar Project
                     </div>
                     <div class="seperator-wrapper">
                         <div class="wrapper-block"></div>
@@ -301,8 +303,8 @@
                     </div>
                 </div>
 
-                <div class="swiper-button-next swiper-navBtn"></div>
-                <div class="swiper-button-prev swiper-navBtn"></div>
+                <div class="swiper-button-next swipe-next swiper-navBtn"></div>
+                <div class="swiper-button-prev swipe-prev swiper-navBtn"></div>
                 <div class="swiper-pagination"></div>
             </div>
             {% else %}
@@ -318,13 +320,13 @@
                         <h5 class="circle__caption">Environment</h5>
                     </a>
                     <div id="leaves-modal" class="modal-window">
-                        <div class="modal-block" style="padding: 0">
-                            <a data-modal="leaves-modal" title="Close" class="white-modal-close" style="position: absolute; top: -30px;right: -30px;">
+                        <div style="left: 6%;" class="swiper-button-prev modal-swipe-prev swiper-navBtn" tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-f48b2df710ed8b9ae"></div>
+                        <div class="modal-block slider-modal" style="padding: 0; transform: translateX(-50%) translateY(-50%); transition: transform 300ms cubic-bezier(0.25,0.46,0.45,0.94) 0s">
+                            <a data-modal="leaves-modal" title="Close" class="white-modal-close modal-close" style="position: absolute; top: -30px;right: -30px;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                                     <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
                                 </svg>
                             </a>
-
                             <div class="modal-content" style="margin: 0">
                                 <div class="modal-img" style="width: 1450px;">
                                     <img src="{% static 'images/123451235123521352.png' %}" alt="Modal IMG" style="height: 100%; object-fit: cover">
@@ -337,6 +339,44 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="modal-block slider-modal" style="padding: 0; transform: translateX(200%) translateY(-50%); transition: transform 300ms cubic-bezier(0.25,0.46,0.45,0.94) 0s">
+                            <a data-modal="leaves-modal" title="Close" class="white-modal-close modal-close" style="position: absolute; top: -30px;right: -30px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
+                                </svg>
+                            </a>
+                            <div class="modal-content" style="padding-left: 27px;">
+                                <div class="modal-img">
+                                    <img src="{% static 'images/2346983274563.png' %}" alt="Modal IMG" style="height: 100%; object-fit: cover">
+                                </div>
+                                <div class="modal-description">
+                                    <h1>WHY THE BEE'S COUNT</h1>
+                                    <p class="small">Almost 90% of wild plants and 75% of leading global crops depend on animal pollination.
+                                        One out of every three mouthfuls of our food depends on pollinators such as bees. Crops that depend on pollination are five times more valuable than those that do not.</p>
+                                </div>
+                            </div>
+                            <div class="modal-content">
+                                <div class="modal-img">
+                                    <img src="{% static 'images/213423423423423.png' %}" alt="Modal IMG" style="height: 100%; object-fit: cover">
+                                </div>
+                                <div class="modal-description">
+                                    <h1>BRITISH SEED PAPER</h1>
+                                    <p class="small">So what can we do to help?
+                                        <br>
+                                        Here at YSP we're donating hives across the south coast to help house our bees. All our leaflets are printed on seed paper, which we encourage you to plant, and help feed our wonderful bee community.</p>
+                                </div>
+                            </div>
+                            <div class="modal-content">
+                                <div class="modal-img">
+                                    <img src="{% static 'images/124124124124124124124.png' %}" alt="Modal IMG" style="height: 100%; object-fit: cover">
+                                </div>
+                                <div class="modal-description">
+                                    <h1>HOW TO PLANT</h1>
+                                    <p class="small">To plant your seed paper we encourage you to place under a thin layer of soil, and generously water over a few weeks. Watch as your flowers germinate and you help our bee population to thrive - a big thank you from us here at YSP</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="right: 6%;" class="swiper-button-next modal-swipe-next swiper-navBtn" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-f48b2df710ed8b9ae"></div>
                     </div>
                 </div>
 
@@ -346,22 +386,65 @@
                         <h5 class="circle__caption">Recycling</h5>
                     </a>
                     <div id="recycle-modal" class="modal-window">
-                        <div class="modal-block">
-                            <a data-modal="recycle-modal" title="Close" class="modal-close">
+                        <div style="left: 6%;" class="swiper-button-prev modal-swipe-prev swiper-navBtn" tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-f48b2df710ed8b9ae"></div>
+                        <div class="modal-block slider-modal" style="padding: 0; transform: translateX(-50%) translateY(-50%); transition: transform 300ms cubic-bezier(0.25,0.46,0.45,0.94) 0s">
+                            <a data-modal="recycle-modal" title="Close" class="white-modal-close modal-close" style="position: absolute; top: -30px;right: -30px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
+                                </svg>
+                            </a>
+                            <div class="modal-content" style="margin: 0">
+                                <div class="modal-img" style="width: 1450px; flex: 1 1 0px;">
+                                    <img src="{% static 'images/panels.jpeg' %}" alt="Modal IMG" style="height: 100%; object-fit: cover">
+                                </div>
+                                <div class="modal-description" style="padding: 5rem 4.0rem 5rem 1.2rem; display: flex; flex-direction: column; gap: 3rem; position: relative; flex: 1 1 0px;">
+                                    <span class="small">Where being green is a basic foundation</span>
+                                    <h1 style="font-size: 2.65rem; font-family: 'Lora', serif;">WE USE 100% RECYCLED PACKAGING</h1>
+                                    <a class="button-dark" ><span class="small">LEARN MORE - SWIPE</span></a>
+                                    <img src="{% static 'images/bgLogo.png' %}" width="300px" alt="logo" style="position: absolute; bottom: 0; right: -47px; opacity: 0.7; z-index: -1;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-block slider-modal" style="padding: 0; transform: translateX(200%) translateY(-50%); transition: transform 300ms cubic-bezier(0.25,0.46,0.45,0.94) 0s">
+                            <a data-modal="recycle-modal" title="Close" class="white-modal-close modal-close" style="position: absolute; top: -30px;right: -30px;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                                     <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
                                 </svg>
                             </a>
 
-                            <div class="modal-content">
-                                <div class="modal-img">
-                                    <img src="https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80" alt="Modal IMG">
+                            <div class="modal-content" style="margin: 0; font-family: 'Lora', serif; background: #dee2ed;">
+                                <div class="modal-img" style="width: 0; flex: 1 1 25%;">
+                                    <h3 style="padding: 2.5rem;">Our packaging</h3>                                    
                                 </div>
-                                <div class="modal-description">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptatem placeat sit expedita culpa natus harum inventore blanditiis eaque itaque. Veritatis aliquid beatae blanditiis voluptatibus dolore sit perferendis. Necessitatibus, possimus.
+                                <div class="modal-description" style="width: 0; flex: 1 1 40%; padding: 2.5rem; display: flex; flex-direction: column; gap: 1.4rem; font-size: 18px;">
+                                    <p>Here at YSP take peace in knowing the packaging you receive is 100% recycled, everything from the box it arrives in, to the tape used to seal your panels.</p>
+                                    <p>This mind-set doesn't stop with your packaging, in fact it starts in our office. The pens we write with, the coffee we drink and the clothing we wear is all ethically sourced, local, organic and recycled. For us this isn't just a mind-set, it's a movement.</p>
+                                    <p>A little extra gift to our buyers; all promotional information is printed on British seed paper, which we thoroughly encourage you to plant and water, just another effort to support our environment.</p>
+                                    <img src="{% static 'images/nobgLogo.png' %}" width="300px" alt="logo" style="position: absolute; bottom: 0; left: -29px; opacity: 0.7;">
                                 </div>
                             </div>
                         </div>
+                        <div style="right: 6%;" class="swiper-button-next modal-swipe-next swiper-navBtn" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-f48b2df710ed8b9ae"></div>
+                        
+                        <!-- <div class="modal-block" style="padding: 0;">
+                            <a data-modal="recycle-modal" title="Close" class="white-modal-close modal-close" style="position: absolute; top: -30px;right: -30px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
+                                </svg>
+                            </a>
+
+                            <div class="modal-content" style="margin: 0; font-family: 'Lora', serif; background: #dee2ed;">
+                                <div class="modal-img" style="width: 0; flex: 1 1 25%;">
+                                    <h3 style="padding: 2.5rem;">Our packaging</h3>                                    
+                                </div>
+                                <div class="modal-description" style="width: 0; flex: 1 1 40%; padding: 2.5rem; display: flex; flex-direction: column; gap: 1.4rem; font-size: 18px;">
+                                    <p>Here at YSP take peace in knowing the packaging you receive is 100% recycled, everything from the box it arrives in, to the tape used to seal your panels.</p>
+                                    <p>This mind-set doesn't stop with your packaging, in fact it starts in our office. The pens we write with, the coffee we drink and the clothing we wear is all ethically sourced, local, organic and recycled. For us this isn't just a mind-set, it's a movement.</p>
+                                    <p>A little extra gift to our buyers; all promotional information is printed on British seed paper, which we thoroughly encourage you to plant and water, just another effort to support our environment.</p>
+                                    <img src="{% static 'images/nobgLogo.png' %}" width="300px" alt="logo" style="position: absolute; bottom: 0; left: -29px; opacity: 0.7;">
+                                </div>
+                            </div>
+                        </div> -->
                     </div>
                 </div>
 
@@ -370,20 +453,32 @@
                         <img src="{% static 'images/co2.png' %}" alt="CO2">
                         <h5 class="circle__caption">Net Zero</h5>
                     </a>
+                    
                     <div id="co2-modal" class="modal-window">
-                        <div class="modal-block">
-                            <a data-modal="co2-modal" title="Close" class="modal-close">
+                        <div class="modal-block" style="padding: 0; width: 78%;">
+                            <a data-modal="co2-modal" title="Close" class="white-modal-close modal-close" style="position: absolute; top: 0;right: -30px;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                                     <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
                                 </svg>
                             </a>
 
-                            <div class="modal-content">
-                                <div class="modal-img">
-                                    <img src="https://images.unsplash.com/photo-1615053835734-7752878e939e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2128&q=80" alt="Modal IMG">
+                            <div class="modal-content" style="margin: 0">
+                                <div class="modal-img" style="flex: 1 1 0; width: 0;">
+                                    <img src="{% static 'images/217834238764.jpeg' %}" alt="Modal IMG" style="height: 100%; object-fit: cover">
                                 </div>
-                                <div class="modal-description">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptatem placeat sit expedita culpa natus harum inventore blanditiis eaque itaque. Veritatis aliquid beatae blanditiis voluptatibus dolore sit perferendis. Necessitatibus, possimus.
+                                <div class="modal-description" style="padding: 2.2rem; display: flex; flex-direction: column; justify-content: end; position: relative; flex-grow: 1; flex: 1 1 0; width: 0; padding-top: 80px;">
+                                    <span class="small">Where being green is a basic foundation</span>
+                                    <h1 style="font-size: 2.65rem; font-family: 'Lora', serif; margin-top: 25px;">WE'RE A NET ZERO COMPANY…WITH PLANS</h1>
+                                    <p class="small">WHAT IS NET ZERO: Essentially, net-zero is a state where no incremental greenhouse gasses are added into the atmosphere.</p>
+                                    <p class="small">HOW DO WE ACHIEVE THIS:</p>
+                                    <p class="small">
+                                        1:Composing a detailed emissions inventory and analysis
+                                        2:Set net-zero targets annually - for example use of 100% electric vans by 2024, investment in carbon neutral business', evolving our own charities, and sponsorship of Russell Group University projects
+                                        3:Reduce our emissions by minimising the suppliers we use, reducing driver miles
+                                        4:Offset residual emissions - From the Amazon rainforest to the rural communities of Cambodia, we explore the 'EcoAct' portfolio of international carbon offsetting projects quarterly, we select a new project to support by researching how each project is aligned to specific Sustainable Development Goals (SDs) and providing benefits to local communities and the environment
+                                    </p>
+                                    <p class="small">OUR GOAL: Gain 'B Corporation' status in 2027.</p>
+                                    <img src="{% static 'images/bgLogo.png' %}" width="250px" alt="logo" style="position: absolute; top: -4px; right: -47px; opacity: 0.7; z-index: -1;">
                                 </div>
                             </div>
                         </div>
@@ -488,6 +583,7 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
 
     {% compress js %}
     <script src="{% static 'js/waypoints/jquery.waypoints.min.js' %}"></script>

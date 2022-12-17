@@ -30,9 +30,51 @@ var swiper = new Swiper(".slide-content", {
     fade: "true",
     grabCursor: "true",
     pagination: { el: ".swiper-pagination", clickable: true, dynamicBullets: true },
-    navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+    navigation: { nextEl: ".swipe-next", prevEl: ".swipe-prev" },
     breakpoints: { 0: { slidesPerView: 1 }, 520: { slidesPerView: 2 }, 950: { slidesPerView: 3 } },
 });
+
+var modalSwiper = new Swiper(".modal-slide-content", {
+    slidesPerView: 1,
+    spaceBetween: 25,
+    loop: true,
+    centerSlide: "true",
+    fade: "true",
+    grabCursor: "true",
+    pagination: { el: ".swiper-pagination", clickable: true, dynamicBullets: true },
+    navigation: { nextEl: ".modal-swipe-next", prevEl: ".modal-swipe-prev" },
+    breakpoints: { 0: { slidesPerView: 1 }, 520: { slidesPerView: 2 }, 950: { slidesPerView: 3 } },
+});
+
+$(document).on('click', '.modal-swipe-prev, .modal-swipe-next', function(e){
+    var parentId = $(this).parent().attr('id');
+    $('.swiper-navBtn').removeClass('disabled');
+    if (!e.target.classList.contains('disabled')) {
+        e.target.classList.add('disabled');
+        if (e.target.classList.contains('modal-swipe-prev')) {
+            if (parentId == 'leaves-modal') {
+                $('.slider-modal:first').css({'padding': '0', 'transform': 'translateX(-50%) translateY(-50%)', 'transition': 'transform 300ms cubic-bezier(0.25,0.46,0.45,0.94) 0s'});
+                $('.slider-modal').eq(1).css({'padding': '0', 'transform': 'translateX(200%) translateY(-50%)', 'transition': 'transform 300ms cubic-bezier(0.25,0.46,0.45,0.94) 0s'})
+            }
+            else {
+                $('.slider-modal').eq(2).css({'padding': '0', 'transform': 'translateX(-50%) translateY(-50%)', 'transition': 'transform 300ms cubic-bezier(0.25,0.46,0.45,0.94) 0s'});
+                $('.slider-modal').eq(3).css({'padding': '0', 'transform': 'translateX(200%) translateY(-50%)', 'transition': 'transform 300ms cubic-bezier(0.25,0.46,0.45,0.94) 0s'})
+            }
+        }
+        else {
+            if (parentId == 'leaves-modal') {
+                $('.slider-modal').eq(1).css({'padding': '0', 'transform': 'translateX(-50%) translateY(-50%)', 'transition': 'transform 300ms cubic-bezier(0.25,0.46,0.45,0.94) 0s'});
+                $('.slider-modal:first').css({'padding': '0', 'transform': 'translateX(-200%) translateY(-50%)', 'transition': 'transform 300ms cubic-bezier(0.25,0.46,0.45,0.94) 0s'})
+            }
+            else {
+                $('.slider-modal').eq(3).css({'padding': '0', 'transform': 'translateX(-50%) translateY(-50%)', 'transition': 'transform 300ms cubic-bezier(0.25,0.46,0.45,0.94) 0s'});
+                $('.slider-modal').eq(2).css({'padding': '0', 'transform': 'translateX(-200%) translateY(-50%)', 'transition': 'transform 300ms cubic-bezier(0.25,0.46,0.45,0.94) 0s'})
+            }
+        }
+    }
+})
+
+
 function getParams(url = window.location) {
     let params = {};
     new URL(url).searchParams.forEach(function (val, key) {
@@ -1481,3 +1523,6 @@ $(document).on("click", "#resend-email", function (event) {
         },
     });
 });
+
+
+// VIDEO PLAYER
