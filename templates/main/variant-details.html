@@ -5,20 +5,20 @@
 <div class="price__sale">
     {% if selected_variant.discount %}
     <span class="price-item--regular">
-        £{{ selected_variant.price }} GBP
+        £{{ selected_variant.price|floatformat:2 }} GBP
     </span>
     <span class="price-item--discount">
-        £{{ selected_variant.discount }} GBP
+        £{{ selected_variant.discount|floatformat:2 }} GBP
     </span>
     <div class="badge--sales">Sale</div>
     {% else %}
     <span class="price-item--discount">
-        £{{ selected_variant.price }} GBP
+        £{{ selected_variant.price|floatformat:2 }} GBP
     </span>
     {% endif %}
 </div>
 <div class="product__tax small-label">Tax included. <a href="#"> Shipping</a> calculated at checkout.</div>
-{% if selected_variant.category == "Cables" %}
+{% if selected_variant.has_length_variants %}
 <label class="small-label">Size</label>
 <div class="product__size">
     {% for size in sizes %}

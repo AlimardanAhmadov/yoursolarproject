@@ -48,7 +48,7 @@
                     </svg>
                 </button>
                 <div class="img-list">
-                    {% if product.category == 'Cables' %}
+                    {% if product.has_length_variants %}
                     {% for item in product_variants %}
                     {% if forloop.first %}
                     <a class="selected thumbnail" data-slug="{{ item.slug }}" data-big="{{ item.image }}">
@@ -92,11 +92,11 @@
             </div> -->
             <div class="price__sale">
                 <span class="price-item--regular">
-                    £{{ product.price }} GBP
+                    £{{ product.price|floatformat:2 }} GBP
                 </span>
                 {% if product.discount %}
                 <span class="price-item--discount">
-                    £{ product.discount }} GBP
+                    £{ product.discount|floatformat:2 }} GBP
                 </span>
                 <div class="badge--sales">Sale</div>
                 {% endif %}

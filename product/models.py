@@ -58,6 +58,7 @@ class Product(TimeStampedModel):
     primary_discount=models.FloatField(default=0.0)
     primary_image_url=models.TextField(blank=True, null=True)
     special_offer=models.BooleanField(default=True)
+    has_length_variants=models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Product'
