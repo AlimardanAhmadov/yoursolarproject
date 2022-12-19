@@ -32,7 +32,6 @@ CATEGORY_CHOICES = (
     ('Rails & Clips', 'Rails & Clips'),
     ('Fitting', 'Fitting'),
     ('Battery', 'Battery'),
-    ('Cables', 'Cables'),
     ('Hook', 'Hook'),
     ('Other', 'Other'),
 )
