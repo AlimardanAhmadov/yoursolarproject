@@ -2821,7 +2821,7 @@ h6.section__title {
 /* MODALS */
 #leaves-modal .modal-block:nth-child(3) {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  grid-template-columns: auto auto auto;
   grid-gap: 2rem;
 }
 
@@ -2848,7 +2848,6 @@ h6.section__title {
   font-family: "Lora", serif;
   color: #595e72;
 }
-
 
 /* VIDEO PLAYER */
 .video-js {
