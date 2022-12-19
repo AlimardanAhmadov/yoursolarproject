@@ -195,8 +195,8 @@
                                         <span class="item-wattage disabled small">{{ data.panel_wattage }} Watt</span>
                                     </div>
                                 </td>
-                                <td data-label="Quantity">{{ data.panels_count }}</td>
-                                <td data-label="Price">£{{ data.panel_price }} GBP</td>
+                                <td data-label="Quantity">{{ data.panels_count|floatformat:2 }}</td>
+                                <td data-label="Price">£{{ data.panel_price|floatformat:2 }} GBP</td>
                             </tr>
                             <tr>
                                 <td style="display: flex; align-items: center;">
@@ -209,7 +209,7 @@
                                     </div>
                                 </td>
                                 <td data-label="Quantity">1</td>
-                                <td data-label="Price">£{{ data.inverter_price }} GBP</td>
+                                <td data-label="Price">£{{ data.inverter_price|floatformat:2 }} GBP</td>
                             </tr>
                             <tr>
                                 <td style="display: flex; align-items: center;">
@@ -221,7 +221,7 @@
                                     </div>
                                 </td>
                                 <td data-label="Quantity">1</td>
-                                <td data-label="Price">£{{ data.fitting_price }} GBP</td>
+                                <td data-label="Price">£{{ data.fitting_price|floatformat:2 }} GBP</td>
                             </tr>
                             <tr>
                                 <td style="display: flex; align-items: center;">
@@ -233,7 +233,7 @@
                                     </div>
                                 </td>
                                 <td data-label="Quantity">{{ data.no_rails }}</td>
-                                <td data-label="Price">£{{ data.rail_price }} GBP</td>
+                                <td data-label="Price">£{{ data.rail_price|floatformat:2 }} GBP</td>
                             </tr>
                         </tbody>
                     </table>
@@ -301,7 +301,7 @@
                         Shipping
                     </div>
                     <div class="pricing-value small">
-                        £{{ data.shipping_price }} GBP
+                        £{{ data.shipping_price|floatformat:2 }} GBP
                     </div>
                 </div>
                 {% if data.extra_service %}
@@ -313,7 +313,7 @@
                         {% if data.service_title == 'Complete Installation' %}
                         2 x (£{{ data.equipment_cost }} GBP)
                         {% else %}
-                        {{ data.service_price }}
+                        {{ data.service_price|floatformat:2 }}
                         {% endif %}
                     </div>
                 </div>

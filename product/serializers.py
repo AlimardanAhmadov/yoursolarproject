@@ -15,8 +15,9 @@ class ProductVariantSerializer(serializers.ModelSerializer):
     shipping_policy = serializers.CharField(source='selected_product.shipping_policy', read_only=True)
     return_policy = serializers.CharField(source='selected_product.return_policy', read_only=True)
     category = serializers.CharField(source='selected_product.category', read_only=True)
+    has_length_variants = serializers.CharField(source='selected_product.has_length_variants', read_only=True)
     
     class Meta:
         model = ProductVariant
-        fields = ['primary_variant', 'category', 'width', 'height', 'wattage', 'shipping_policy', 'return_policy', 'cable_size', 'product_slug', 'product_title', 'title', 'brand', 'image', 'price', 'discount', 'sku', 'active', 'slug', 'quantity', 'description']
+        fields = ['primary_variant', 'category', 'width', 'height', 'wattage', 'shipping_policy', 'return_policy', 'cable_size', 'product_slug', 'product_title', 'title', 'brand', 'image', 'price', 'discount', 'sku', 'active', 'slug', 'quantity', 'description', 'has_length_variants']
         

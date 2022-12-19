@@ -45,7 +45,7 @@
                     {% for order in orders %}
                     <tr>
                         <td data-label="ORDER ID">{{ order.order_number }}</td>
-                        <td data-label="GRAND TOTAL">£{{ order.total }} GBP</td>
+                        <td data-label="GRAND TOTAL">£{{ order.total|floatformat:2 }} GBP</td>
                         <td data-label="ADDRESS">{{ order.address }}</td>
                         <td data-label="STATUS"><span class="small-badge">{{ order.status }}</span></td>
                         <td data-label="CREATED">{{ order.created|date:'Y-m-d H:i' }}</td>

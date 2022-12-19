@@ -30,8 +30,8 @@
                     {% for quote in quotes %}
                     <tr>
                         <td data-label="TITLE"> <span>{{ quote.title }}</span></td>
-                        <td data-label="SHIPPING PRICE"> <span>£{{ quote.shipping_price }} GBP</span></td>
-                        <td data-label="EQUIPMENT COST"> <span>£{{ quote.equipment_cost }} GBP</span></td>
+                        <td data-label="SHIPPING PRICE"> <span>£{{ quote.shipping_price|floatformat:2 }} GBP</span></td>
+                        <td data-label="EQUIPMENT COST"> <span>£{{ quote.equipment_cost|floatformat:2 }} GBP</span></td>
                         <td data-label="TAX"> <span>%20</span></td>
                         <td data-label="TOTAL COST"> <span>£{{ quote.total_cost }} GBP</span></td>
                         <td data-label="CREATED"> <span>{{ quote.created|date:'Y-m-d H:i' }}</span></td>

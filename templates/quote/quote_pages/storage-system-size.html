@@ -30,7 +30,7 @@
         {% for item in objects %}
         <button class="btn primary-btn" data-slug="{{ item.id }}" type="button" style="border-radius: 3px;padding: 15px 50px;border: 1px solid #a3a3a3;flex-direction: column;gap: 1px;">
             {{ item.storage_size }}
-            <span class="small-price disabled" style="font-size: 13px;">Price: £{{ item.storage_price }} GBP</span>
+            <span class="small-price disabled" style="font-size: 13px;">Price: £{{ item.storage_price|floatformat:2 }} GBP</span>
         </button>
         {% endfor %}
     </div>

@@ -43,8 +43,8 @@
         <div class="card-content">
             <a class="small">{{ item.title }}</a>
             <div class="description">
-                <span class="small price">£{{ item.price }} GBP</span>
-                <span class="discount-price">£{{ item.discount }} GBP</span>
+                <span class="small price">£{{ item.price|floatformat:2 }} GBP</span>
+                <span class="discount-price">£{{ item.discount|floatformat:2 }} GBP</span>
             </div>
             <span class="small">Wattage: {{ item.wattage }} Watt</span>
         </div>

@@ -147,9 +147,9 @@
                                 <input type="number" class="quantity-input" data-update-quantity="{{ i.slug }}" value="{{ i.quantity }}" step="1" min="1" name="quantity">
                             </div>
                             {% if i.content_object.price %}
-                            <span class="notification-product__feature">Price: £{{ i.content_object.price }}</span>
+                            <span class="notification-product__feature">Price: £{{ i.content_object.price|floatformat:2 }}</span>
                             {% else %}
-                            <span class="notification-product__feature">Price: £{{ i.content_object.total_cost }}</span>
+                            <span class="notification-product__feature">Price: £{{ i.content_object.total_cost|floatformat:2 }}</span>
                             {% endif %}
                             <button class="plain-btn notification__product-remove" data-remove-cart-item="{{ i.slug }}">Remove</button>
                         </div>
@@ -292,9 +292,9 @@
                                 <div class="description">
                                     {% if item.primary_discount %}
                                     <span class="small price">£{{ item.primary_price }} GBP</span>
-                                    <span class="discount-price">£{{ item.primary_discount }} GBP</span>
+                                    <span class="discount-price">£{{ item.primary_discount|floatformat:2 }} GBP</span>
                                     {% else %}
-                                    <span class="discount-price">£{{ item.primary_price }} GBP</span>
+                                    <span class="discount-price">£{{ item.primary_price|floatformat:2 }} GBP</span>
                                     {% endif %}
                                 </div>
                             </div>
