@@ -37,17 +37,17 @@ class CreateCartItemView(ListCreateAPIView):
     def get_cart(self, request, variant=None):
         if request.user.is_authenticated:
             username = self.request.user.email.split("@")[0]
-            print(username)
+            print(slugify(username))
             current_cart = Cart.cache_by_slug(slugify(username))
 
-            if not current_cart:
+            if current_cart is None:
                 current_cart = get_object_or_404(Cart, slug=slugify(username))
         else:
 
             guest = request.session['nonuser']
             current_cart = Cart.cache_by_slug(slugify(guest))
 
-            if not current_cart:
+            if current_cart is None:
                 current_cart = Cart.objects.get(session_id = guest, slug=guest)
         return current_cart
 
