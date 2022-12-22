@@ -37,6 +37,7 @@ class CreateCartItemView(ListCreateAPIView):
     def get_cart(self, request, variant=None):
         if request.user.is_authenticated:
             username = self.request.user.email.split("@")[0]
+            print(username)
             current_cart = Cart.cache_by_slug(slugify(username))
 
             if not current_cart:

@@ -15,8 +15,6 @@ def duplicate_event(modeladmin, request, queryset):
 
         variants_array = []
 
-        print(variants)
-
         for product in variants:
             variant = ProductVariant(
                 selected_product = object,
