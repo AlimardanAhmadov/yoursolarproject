@@ -45,7 +45,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*', 'sopanel.herokuapp.com', 'localhost', 'https://7120-212-47-138-228.eu.ngrok.io'] 
+ALLOWED_HOSTS = ['localhost', 'https://yoursolarproject.co.uk'] 
 
 # Application definition
 
@@ -379,7 +379,7 @@ REST_USE_JWT = True
 # GEOLOCAITON CONFIGS
 GEOIP_PATH =os.path.join('geoip')
 
-SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = True
 
 # AWS S3 Configuration
 AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
