@@ -54,9 +54,9 @@ class CreateCheckoutSessionView(View):
             if request.user.is_authenticated:
                 user = request.user
 
-                cart = Cart.cache_by_slug(str(user.username))
+                cart = Cart.cache_by_slug(str(user.email.split("@")[0]))
                 if not cart:
-                    cart = get_object_or_404(Cart, slug=str(user.username))
+                    cart = get_object_or_404(Cart, slug=str(user.email.split("@")[0]))
                 
                 user_id = request.user.pk
                 customer_email = user.email
@@ -274,9 +274,9 @@ class SingleProductCreateCheckoutSessionView(View):
             if request.user.is_authenticated:
                 user = request.user
 
-                cart = Cart.cache_by_slug(str(user.username))
+                cart = Cart.cache_by_slug(str(user.email.split("@")[0]))
                 if not cart:
-                    cart = get_object_or_404(Cart, slug=str(user.username))
+                    cart = get_object_or_404(Cart, slug=str(user.email.split("@")[0]))
                 
                 user_id = request.user.pk
                 cart_slug = cart.slug
