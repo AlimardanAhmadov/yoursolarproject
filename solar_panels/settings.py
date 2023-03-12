@@ -134,7 +134,7 @@ WSGI_APPLICATION = 'solar_panels.wsgi.application'
 
 DATABASES = {}
 
-if os.environ['DEBUG'] == 'True':
+if os.environ['DEBUG'] == 'False':
     DATABASES['default'] =  dj_database_url.config(default=os.environ['DEFAULT'], conn_max_age=600)
 else:
     DATABASES = {
